@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Designer source (Figma export - source of truth, not for deployment)
+designer-src/
