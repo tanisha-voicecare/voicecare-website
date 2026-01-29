@@ -30,10 +30,18 @@ export const metadata: Metadata = generatePageMetadata({
 export default function PlatformPage() {
   return (
     <>
-      <PlatformHero />
-      <PlatformEHRContent />
-      <PlatformTabbedCapabilities />
-      <PlatformBenefits />
+      <div id="platform-hero">
+        <PlatformHero />
+      </div>
+      <div id="platform-ehr">
+        <PlatformEHRContent />
+      </div>
+      <div id="platform-solutions">
+        <PlatformTabbedCapabilities />
+      </div>
+      <div id="platform-benefits">
+        <PlatformBenefits />
+      </div>
     </>
   );
 }

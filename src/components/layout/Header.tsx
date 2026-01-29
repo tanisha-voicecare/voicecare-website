@@ -50,11 +50,12 @@
  *           hover:brightness-110 shadow-sm
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { motion } from 'motion/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronDown } from 'lucide-react';
 
 // ============================================
 // Types
@@ -74,6 +75,14 @@ const navigation: NavItem[] = [
   { label: 'Company', href: '/company' },
   { label: 'Partner with Us', href: '/partner-with-us' },
   { label: 'Schedule a Demo', href: '/schedule-demo' },
+];
+
+// Platform dropdown items for section navigation
+const platformDropdownItems = [
+  { label: 'Overview', href: '/platform#platform-hero' },
+  { label: 'Enterprise Administration', href: '/platform#platform-ehr' },
+  { label: 'Our Solutions', href: '/platform#platform-solutions' },
+  { label: 'Platform Benefits', href: '/platform#platform-benefits' },
 ];
 
 // ============================================
@@ -125,7 +134,12 @@ function CloseIcon({ className = '' }: { className?: string }) {
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
+  const [isMobilePlatformExpanded, setIsMobilePlatformExpanded] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,6 +149,55 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsPlatformDropdownOpen(false);
+      }
+    };
+
+    if (isPlatformDropdownOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isPlatformDropdownOpen]);
+
+  // Handle dropdown hover with delay to prevent flickering
+  const handleDropdownMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setIsPlatformDropdownOpen(true);
+  };
+
+  const handleDropdownMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setIsPlatformDropdownOpen(false);
+    }, 150);
+  };
+
+  // Handle anchor navigation with smooth scroll
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsPlatformDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobilePlatformExpanded(false);
+
+    const [path, hash] = href.split('#');
+    
+    if (pathname === path) {
+      // Already on Platform page, just scroll
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to Platform page then scroll
+      router.push(href);
+    }
+  };
 
   return (
     <motion.header
@@ -181,7 +244,56 @@ export function Header() {
         {/* Desktop Navigation - EXACT from designer-src */}
         <div className="hidden md:flex items-center gap-8 text-[14px] font-medium text-[#06003F]/60">
           {navigation.map((item) =>
-            item.isDisabled ? (
+            item.label === 'Platform' ? (
+              // Platform with dropdown
+              <div
+                key={item.label}
+                className="relative"
+                ref={dropdownRef}
+                onMouseEnter={handleDropdownMouseEnter}
+                onMouseLeave={handleDropdownMouseLeave}
+              >
+                <button
+                  type="button"
+                  className={`text-[14px] hover:text-[#06003F] transition-colors flex items-center gap-1 ${
+                    pathname === item.href || pathname?.startsWith('/platform') ? 'text-[#FF4E3A]' : ''
+                  }`}
+                  onClick={() => router.push(item.href)}
+                  aria-expanded={isPlatformDropdownOpen}
+                  aria-haspopup="true"
+                >
+                  {item.label}
+                  <ChevronDown 
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      isPlatformDropdownOpen ? 'rotate-180' : ''
+                    }`} 
+                  />
+                </button>
+                
+                <AnimatePresence>
+                  {isPlatformDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                      className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-[#06003F]/10 py-2 z-50"
+                    >
+                      {platformDropdownItems.map((dropdownItem) => (
+                        <a
+                          key={dropdownItem.href}
+                          href={dropdownItem.href}
+                          onClick={(e) => handleAnchorClick(e, dropdownItem.href)}
+                          className="block px-4 py-2.5 text-[14px] text-[#06003F]/70 hover:text-[#FF4E3A] hover:bg-[#06003F]/[0.02] transition-colors"
+                        >
+                          {dropdownItem.label}
+                        </a>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : item.isDisabled ? (
               <span
                 key={item.label}
                 className="text-[14px] text-[#06003F]/40 cursor-not-allowed"
@@ -261,7 +373,51 @@ export function Header() {
           <div className="px-6 py-4">
             <div className="flex flex-col gap-1">
               {navigation.map((item) =>
-                item.isDisabled ? (
+                item.label === 'Platform' ? (
+                  // Platform with accordion on mobile
+                  <div key={item.label}>
+                    <button
+                      type="button"
+                      onClick={() => setIsMobilePlatformExpanded(!isMobilePlatformExpanded)}
+                      className={`w-full px-4 py-3 text-[14px] font-medium hover:bg-[#06003F]/5 rounded-lg transition-colors flex items-center justify-between ${
+                        pathname === item.href || pathname?.startsWith('/platform')
+                          ? 'text-[#FF4E3A]'
+                          : 'text-[#06003F]/70'
+                      }`}
+                    >
+                      {item.label}
+                      <ChevronDown 
+                        className={`w-4 h-4 transition-transform duration-200 ${
+                          isMobilePlatformExpanded ? 'rotate-180' : ''
+                        }`} 
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {isMobilePlatformExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pl-4 py-1">
+                            {platformDropdownItems.map((dropdownItem) => (
+                              <a
+                                key={dropdownItem.href}
+                                href={dropdownItem.href}
+                                onClick={(e) => handleAnchorClick(e, dropdownItem.href)}
+                                className="block px-4 py-2.5 text-[13px] text-[#06003F]/60 hover:text-[#FF4E3A] hover:bg-[#06003F]/5 rounded-lg transition-colors"
+                              >
+                                {dropdownItem.label}
+                              </a>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : item.isDisabled ? (
                   <span
                     key={item.label}
                     className="px-4 py-3 text-[14px] font-medium text-[#06003F]/40 cursor-not-allowed"
