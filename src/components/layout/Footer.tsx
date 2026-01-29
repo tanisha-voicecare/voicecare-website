@@ -56,16 +56,16 @@ import { Linkedin, ArrowRight } from 'lucide-react';
 const companyLinks = [
   { name: 'About Us', href: '/company' },
   { name: 'Our Platform', href: '/platform' },
-  { name: 'Who We Serve', href: '/services' },
-  { name: 'Schedule a Demo', href: '#' },
-  { name: 'Press', href: '#' },
+  // { name: 'Who We Serve', href: '/services' }, // TODO: Re-enable when services page is fully implemented
+  { name: 'Press', href: '/press' },
+  { name: 'Careers', href: '/careers' },
 ];
 
 const resourcesLinks = [
   { name: 'Pricing', href: '#' },
   { name: 'Security', href: '/security' },
   { name: 'Careers', href: '/careers' },
-  { name: 'Blogs', href: '/blog' },
+  // { name: 'Blogs', href: '/blog' }, // TODO: Re-enable when WordPress CMS is connected
 ];
 
 const legalLinks = [

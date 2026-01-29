@@ -63,9 +63,9 @@ const navigation: NavItem[] = [
   { label: 'Platform', href: '/platform' },
   { label: 'Security', href: '/security' },
   { label: 'Company', href: '/company' },
-  { label: 'Blogs', href: '/blog' },
+  // { label: 'Blogs', href: '/blog' }, // TODO: Re-enable when WordPress CMS is connected
   { label: 'Press', href: '/press' },
-  { label: 'Docs', href: '/docs' },
+  // { label: 'Docs', href: '/docs' }, // TODO: Re-enable when docs are available
 ];
 
 // ============================================

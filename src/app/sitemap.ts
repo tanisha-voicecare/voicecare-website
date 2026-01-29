@@ -4,8 +4,15 @@ import { siteConfig } from '@/lib/seo';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;
 
-  // Static routes
-  const routes = ['', '/platform', '/security', '/company'].map((route) => ({
+  // Static routes - all implemented pages
+  const routes = [
+    '',
+    '/platform',
+    '/security',
+    '/company',
+    '/careers',
+    '/press',
+  ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
