@@ -31,7 +31,8 @@
  * - p: text-[17px] text-[#06003F]/70 leading-relaxed
  *
  * Video Block:
- * - w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10
+ * - Container: aspect-square w-full rounded-[12px] overflow-hidden
+ * - Video: w-full h-full object-cover
  * - autoPlay, loop, muted, playsInline (behaves like GIF)
  *
  * Animations:
@@ -139,14 +140,16 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <video
-              src={benefits[0].video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
-            />
+            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+              <video
+                src={benefits[0].video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
         </div>
 
@@ -160,14 +163,16 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <video
-              src={benefits[1].video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
-            />
+            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+              <video
+                src={benefits[1].video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
 
           {/* Right: Content */}
@@ -211,14 +216,16 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <video
-              src={benefits[2].video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
-            />
+            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+              <video
+                src={benefits[2].video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
         </div>
 
@@ -232,14 +239,16 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <video
-              src={benefits[3].video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
-            />
+            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+              <video
+                src={benefits[3].video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
 
           {/* Right: Content */}

@@ -14,7 +14,7 @@
  *
  * Section Heading:
  * - text-center mb-12
- * - h2: text-[48px] md:text-[56px] font-bold text-[#06003F] tracking-tight leading-[1.05]
+ * - h2: text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]
  *
  * Tabbed Interface Grid:
  * - grid md:grid-cols-[300px_1fr] gap-12
@@ -186,7 +186,7 @@ export function PlatformTabbedCapabilities() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-[48px] md:text-[56px] font-bold text-[#06003F] tracking-tight leading-[1.05]">
+          <h2 className="text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]">
             Our Solutions
           </h2>
         </motion.div>
