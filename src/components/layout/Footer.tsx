@@ -53,7 +53,7 @@ import { Linkedin, ArrowRight } from 'lucide-react';
 // ============================================
 // Pages that should NOT render Footer (per designer-src)
 // ============================================
-const PAGES_WITHOUT_FOOTER = ['/schedule-demo', '/partner-with-us'];
+const PAGES_WITHOUT_FOOTER = ['/schedule-demo', '/partner-with-us', '/privacy-policy'];
 
 // ============================================
 // Footer Navigation Data - EXACT from designer-src
@@ -84,9 +84,9 @@ const resourcesLinks: FooterLink[] = [
 
 // Legal links - Privacy Policy & Terms of Service from designer-src, Cookie Policy added for compliance
 const legalLinks: FooterLink[] = [
-  { name: 'Privacy Policy', href: '/privacy' },
+  { name: 'Privacy Policy', href: '/privacy-policy' },
   { name: 'Terms of Service', href: '/terms' },
-  { name: 'Cookie Policy', href: '/cookies' },
+  // { name: 'Cookie Policy', href: '/cookies' },
 ];
 
 // ============================================
