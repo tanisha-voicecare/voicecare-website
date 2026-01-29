@@ -64,7 +64,7 @@ const companyLinks = [
 const resourcesLinks = [
   { name: 'Pricing', href: '#' },
   { name: 'Security', href: '/security' },
-  { name: 'Careers', href: '#' },
+  { name: 'Careers', href: '/careers' },
   { name: 'Blogs', href: '/blog' },
 ];
 

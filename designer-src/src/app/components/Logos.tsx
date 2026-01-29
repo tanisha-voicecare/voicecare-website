@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { createScrollAnimation } from "@/utils/animations";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 import americanSpecialtyHealth from "figma:asset/81116975e04518d4138c9b496b8b163130326944.png";
 import anthem from "figma:asset/10d47d5e4a1a6e2e6ed27dfa13c5bc10c3695fdb.png";
@@ -50,7 +51,7 @@ export const Logos = () => {
         >
           {/* Render logos multiple times for seamless loop */}
           {[...LOGOS, ...LOGOS, ...LOGOS].map((logo, index) => (
-            <img 
+            <ImageWithFallback 
               key={`${logo.name}-${index}`}
               src={logo.src}
               alt={logo.name}

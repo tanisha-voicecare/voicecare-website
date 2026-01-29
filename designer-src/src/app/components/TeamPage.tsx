@@ -5,7 +5,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Footer } from "./Footer";
 
 interface TeamPageProps {
-  onNavigate: (page: 'home' | 'about' | 'team' | 'platform' | 'solutions') => void;
+  onNavigate: (page: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers') => void;
 }
 
 export const TeamPage = ({ onNavigate }: TeamPageProps) => {
@@ -204,7 +204,7 @@ export const TeamPage = ({ onNavigate }: TeamPageProps) => {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer onNavigate={onNavigate} />
     </>
   );
 };

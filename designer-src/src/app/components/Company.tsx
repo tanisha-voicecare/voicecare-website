@@ -8,7 +8,7 @@ import { Footer } from "@/app/components/Footer";
 
 interface CompanyProps {
   onNavigate: (
-    page: "home" | "about" | "team" | "platform" | "solutions",
+    page: "home" | "about" | "team" | "platform" | "solutions" | "blogs" | "press" | "careers",
   ) => void;
 }
 
@@ -43,7 +43,7 @@ export const Company = ({ onNavigate }: CompanyProps) => {
       <CEOQuoteSection />
       <PrinciplesSection />
       <AdvisorsSection />
-      <Footer />
+      <Footer onNavigate={onNavigate} />
     </div>
   );
 };

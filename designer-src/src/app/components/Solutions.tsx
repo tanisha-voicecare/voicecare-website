@@ -4,8 +4,9 @@ import { Shield, Lock, Eye, FileCheck, Database, Server, ShieldCheck, Globe, Key
 import { Footer } from "./Footer";
 import { createScrollAnimation, ANIMATION_DURATION, EASING } from "@/utils/animations";
 import certificationShields from "figma:asset/8e7f562df772a665047e6fdd0dcb28b63e0c271c.png";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' | 'team' | 'platform' | 'solutions') => void }) => {
+export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers') => void }) => {
   const [activeTab, setActiveTab] = React.useState<'infrastructure' | 'organizational' | 'product' | 'internal' | 'data'>('infrastructure');
 
   const securityCategories = {
@@ -169,7 +170,7 @@ export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' 
                 backgroundPosition: 'center center'
               }}
             >
-              <img 
+              <ImageWithFallback 
                 src={certificationShields} 
                 alt="HIPAA Compliant and AICPA SOC 2 Certifications" 
                 className="w-full max-w-[450px] h-auto relative z-10"
@@ -320,7 +321,7 @@ export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' 
         </div>
       </section>
 
-      <Footer />
+      <Footer onNavigate={onNavigate} />
     </div>
   );
 };

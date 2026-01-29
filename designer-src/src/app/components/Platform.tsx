@@ -4,7 +4,7 @@ import { ArrowRight, Phone, FileText, Globe, Search, BarChart3, Settings, CheckC
 import { Footer } from "./Footer";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-export const Platform = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' | 'team' | 'platform' | 'solutions') => void }) => {
+export const Platform = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers') => void }) => {
   const [activeTab, setActiveTab] = useState("benefit-verification");
 
   const capabilities = [
@@ -195,14 +195,14 @@ export const Platform = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' |
                           <div className="w-3 h-3 rounded-full bg-yellow-400" />
                           <div className="w-3 h-3 rounded-full bg-green-400" />
                         </div>
-                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                          <iframe
-                            src={cap.videoUrl}
-                            className="absolute top-0 left-0 w-full h-full rounded-[8px]"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
+                        <div className="relative w-full bg-gradient-to-br from-[#06003F] to-[#02007F] rounded-[8px] flex items-center justify-center" style={{ paddingBottom: '56.25%' }}>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center">
+                              <Play className="w-16 h-16 text-white/40 mx-auto mb-4" />
+                              <p className="text-white/60 text-sm font-medium">Demo Video</p>
+                              <p className="text-white/40 text-xs mt-1">{cap.description}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -361,7 +361,7 @@ export const Platform = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' |
         </div>
       </section>
 
-      <Footer />
+      <Footer onNavigate={onNavigate} />
     </div>
   );
 };

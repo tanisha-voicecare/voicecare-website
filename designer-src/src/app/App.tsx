@@ -12,6 +12,8 @@ import { Platform } from "@/app/components/Platform";
 import { Solutions } from "@/app/components/Solutions";
 import { Blogs } from "@/app/components/Blogs";
 import { Press } from "@/app/components/Press";
+import { Careers } from "@/app/components/Careers";
+import { initializeErrorSuppression } from "@/utils/errorSuppression";
 
 export default function App() {
   const [currentPage, setCurrentPage] = React.useState<
@@ -22,7 +24,13 @@ export default function App() {
     | "solutions"
     | "blogs"
     | "press"
+    | "careers"
   >("home");
+
+  // Initialize global error suppression
+  React.useEffect(() => {
+    initializeErrorSuppression();
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-background selection:bg-accent/30">
@@ -40,7 +48,7 @@ export default function App() {
             <InfiniteMarquee />
             <CTA />
           </main>
-          <Footer />
+          <Footer onNavigate={setCurrentPage} />
         </>
       ) : currentPage === "team" ? (
         <div className="relative">
@@ -61,6 +69,10 @@ export default function App() {
       ) : currentPage === "press" ? (
         <div className="relative">
           <Press onNavigate={setCurrentPage} />
+        </div>
+      ) : currentPage === "careers" ? (
+        <div className="relative">
+          <Careers onNavigate={setCurrentPage} />
         </div>
       ) : (
         <div className="relative">

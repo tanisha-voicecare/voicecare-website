@@ -27,9 +27,6 @@ export const CTA = () => {
           className="absolute top-[20%] left-[10%] w-[50%] h-[50%] opacity-50 blur-[120px] rounded-full"
           style={{ background: 'radial-gradient(circle, #0A005F 0%, transparent 70%)' }}
         />
-
-        {/* Noise Overlay */}
-        <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
       
       <div className="container mx-auto px-6 md:px-16 max-w-7xl relative z-10 text-center">

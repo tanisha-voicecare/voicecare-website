@@ -2,15 +2,19 @@ import React from "react";
 import { Linkedin, ArrowRight } from "lucide-react";
 import logoImage from "figma:asset/7777640f2ec56ab6c56e228f0ad9cc9c159f022e.png";
 import complianceBadges from "figma:asset/a36ee370307f31a82faca8dd90dd34580f180fe2.png";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-export const Footer = () => {
+interface FooterProps {
+  onNavigate?: (page: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers') => void;
+}
+
+export const Footer = ({ onNavigate }: FooterProps) => {
   const [email, setEmail] = React.useState("");
   const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle newsletter subscription
-    console.log("Newsletter subscription:", email);
     setIsSubmitted(true);
     setEmail("");
     setTimeout(() => setIsSubmitted(false), 3000);
@@ -24,7 +28,7 @@ export const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
             {/* Logo & Tagline */}
             <div className="md:col-span-4">
-              <img src={logoImage} alt="VoiceCare AI" className="h-20 mb-8" />
+              <ImageWithFallback src={logoImage} alt="VoiceCare AI" className="h-20 mb-8" />
               
               {/* Social Section */}
               <div>
@@ -49,19 +53,28 @@ export const Footer = () => {
               </h5>
               <ul className="space-y-4">
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('about')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     About Us
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('platform')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Our Platform
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('solutions')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Who We Serve
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
@@ -69,9 +82,12 @@ export const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('press')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Press
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -88,19 +104,31 @@ export const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('solutions')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Security
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => {
+                      onNavigate?.('careers');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Careers
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group">
+                  <button 
+                    onClick={() => onNavigate?.('blogs')}
+                    className="text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors inline-flex items-center group cursor-pointer bg-transparent border-none p-0 text-left"
+                  >
                     Blogs
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -157,7 +185,11 @@ export const Footer = () => {
               © 2025 VoiceCare AI. All rights reserved.
             </p>
             
-            <img src={complianceBadges} alt="SOC and HIPAA Compliant" className="h-20" />
+            <ImageWithFallback
+              src={complianceBadges}
+              alt="SOC and HIPAA Compliant"
+              className="h-20"
+            />
             
             <div className="flex items-center gap-6">
               <a href="#" className="text-[14px] text-[#06003F]/40 hover:text-[#FF4E3A] transition-colors">

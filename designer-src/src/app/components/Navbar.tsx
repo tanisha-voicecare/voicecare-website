@@ -1,10 +1,11 @@
 import React from "react";
 import { motion } from "motion/react";
 import logoImage from "figma:asset/7777640f2ec56ab6c56e228f0ad9cc9c159f022e.png";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface NavbarProps {
-  currentPage: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press';
-  onNavigate: (page: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press') => void;
+  currentPage: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers';
+  onNavigate: (page: 'home' | 'about' | 'team' | 'platform' | 'solutions' | 'blogs' | 'press' | 'careers') => void;
 }
 
 export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
@@ -37,7 +38,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
       className="fixed top-0 left-0 right-0 z-50 h-14 bg-background/80 backdrop-blur-md border-b border-border/50 flex items-center justify-between"
     >
       <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNavigate('home')}>
-        <img src={logoImage} alt="VoiceCare AI" className="h-12" />
+        <ImageWithFallback src={logoImage} alt="VoiceCare AI" className="h-12" />
       </div>
       
       <div className="hidden md:flex items-center gap-8 text-[14px] font-medium text-muted-foreground">
