@@ -1,13 +1,47 @@
+'use client';
+
 /**
  * TrustedBySection Component
  * PIXEL-PERFECT implementation from designer-src/src/app/components/Logos.tsx
  *
- * DESIGNER EXACT VALUES:
- * - Container: border-y border-border/50 py-10 bg-background/50
- * - Title: text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60 mb-8 text-center
- * - Logo container: flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale contrast-125
- * - Logo text: text-xl font-bold tracking-tighter
+ * DESIGNER EXACT VALUES (DO NOT CHANGE):
+ *
+ * Container:
+ * - border-y border-black/[0.04] (border-border/50 resolved)
+ * - py-10 (40px)
+ * - bg-white/50 (bg-background/50 resolved)
+ * - mt-[-123px] (overlaps hero)
+ * - overflow-hidden
+ *
+ * Logo Track:
+ * - flex gap-12 md:gap-16 items-center
+ * - Animated x: [0, -1200], 25s, linear, infinite
+ * - Pauses on hover
+ *
+ * Logo Sizing:
+ * - Normal: h-7 md:h-8 (28px / 32px)
+ * - Large: h-10 md:h-12 (40px / 48px)
+ * - w-auto object-contain flex-shrink-0
+ *
+ * Logo Visual Treatment:
+ * - Default: grayscale brightness-75
+ * - Hover: grayscale-0 brightness-100
+ * - transition-all duration-300
+ *
+ * Entry Animation:
+ * - initial: opacity 0, y 20
+ * - whileInView: opacity 1, y 0
+ * - viewport: once true, margin -100px
+ * - duration: 0.8s, ease: [0.23, 1, 0.32, 1]
+ *
+ * ASSET PATHS:
+ * - All logos must be placed in /public/images/logos/
+ * - Use semantic kebab-case names
  */
+
+import { useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'motion/react';
 
 // ============================================
 // Types
@@ -17,62 +51,117 @@ interface TrustedBySectionProps {
   className?: string;
 }
 
+interface Logo {
+  name: string;
+  src: string;
+  size: 'normal' | 'large';
+}
+
 // ============================================
-// Data - Enterprise logos as per designer
+// Data - Healthcare Partner Logos
+// Local assets from /public/images/logos/
 // ============================================
 
-const ENTERPRISE_LOGOS = [
-  { name: 'Anthropic', id: 'anthropic' },
-  { name: 'Scale', id: 'scale' },
-  { name: 'Linear', id: 'linear' },
-  { name: 'Vercel', id: 'vercel' },
-  { name: 'Retool', id: 'retool' },
-  { name: 'Ramp', id: 'ramp' },
-] as const;
+const LOGOS: Logo[] = [
+  {
+    name: 'American Specialty Health',
+    src: '/images/logos/american-specialty-health.png',
+    size: 'normal',
+  },
+  {
+    name: 'Anthem',
+    src: '/images/logos/anthem.png',
+    size: 'normal',
+  },
+  {
+    name: 'Aetna',
+    src: '/images/logos/aetna.png',
+    size: 'normal',
+  },
+  {
+    name: 'Blue Shield of California',
+    src: '/images/logos/blue-shield-california.png',
+    size: 'large',
+  },
+  {
+    name: 'Cigna Healthcare',
+    src: '/images/logos/cigna-healthcare.png',
+    size: 'large',
+  },
+  {
+    name: 'Quantum Health',
+    src: '/images/logos/quantum-health.png',
+    size: 'normal',
+  },
+  {
+    name: 'UMR',
+    src: '/images/logos/umr.png',
+    size: 'normal',
+  },
+  {
+    name: 'United Healthcare',
+    src: '/images/logos/united-healthcare.png',
+    size: 'normal',
+  },
+];
 
 // ============================================
 // Component
 // ============================================
 
 export function TrustedBySection({ className = '' }: TrustedBySectionProps) {
-  return (
-    <section
-      className={`py-10 bg-white/50 ${className}`}
-      style={{
-        borderTop: '1px solid rgba(0,0,0,0.05)',
-        borderBottom: '1px solid rgba(0,0,0,0.05)',
-      }}
-      aria-labelledby="trusted-by-heading"
-    >
-      <div className="container mx-auto px-6 md:px-12">
-        {/* Section Title - EXACT designer values */}
-        <p
-          id="trusted-by-heading"
-          className="text-[10px] uppercase tracking-[0.2em] font-bold mb-8 text-center"
-          style={{ color: 'rgba(102, 102, 128, 0.6)' }}
-        >
-          Trusted by the next generation of enterprises
-        </p>
+  const [isPaused, setIsPaused] = useState(false);
 
-        {/* Logo Grid - EXACT designer values */}
-        <div 
-          className="flex flex-wrap justify-center items-center gap-12 md:gap-24"
-          style={{ 
-            opacity: 0.4,
-            filter: 'grayscale(1) contrast(1.25)',
+  // Render logos 3x for seamless infinite loop
+  const repeatedLogos = [...LOGOS, ...LOGOS, ...LOGOS];
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+      className={`border-y border-black/[0.04] py-10 bg-white/50 mt-[-123px] mr-[0px] mb-[0px] ml-[0px] overflow-hidden ${className}`}
+      aria-label="Trusted by leading healthcare organizations"
+    >
+      <div className="relative">
+        <motion.div
+          className="flex gap-12 md:gap-16 items-center"
+          animate={{
+            x: isPaused ? undefined : [0, -1200],
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: 'loop',
+              duration: 25,
+              ease: 'linear',
+            },
           }}
         >
-          {ENTERPRISE_LOGOS.map((logo) => (
-            <span
-              key={logo.id}
-              className="text-xl font-bold tracking-tighter"
+          {repeatedLogos.map((logo, index) => (
+            <div
+              key={`${logo.name}-${index}`}
+              className="flex-shrink-0"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
             >
-              {logo.name}
-            </span>
+              <Image
+                src={logo.src}
+                alt={logo.name}
+                width={logo.size === 'large' ? 160 : 120}
+                height={logo.size === 'large' ? 48 : 32}
+                className={`w-auto object-contain grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-300 cursor-pointer ${
+                  logo.size === 'large'
+                    ? 'h-10 md:h-12 max-h-10 md:max-h-12'
+                    : 'h-7 md:h-8 max-h-7 md:max-h-8'
+                }`}
+              />
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

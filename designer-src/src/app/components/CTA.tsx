@@ -32,7 +32,7 @@ export const CTA = () => {
         <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
       
-      <div className="container mx-auto px-6 md:px-12 relative z-10 text-center">
+      <div className="container mx-auto px-6 md:px-16 max-w-7xl relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

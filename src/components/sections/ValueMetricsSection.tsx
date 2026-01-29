@@ -1,107 +1,100 @@
 'use client';
 
 /**
- * ValueMetricsSection Component
- * "Why VoiceCare" - Business outcomes and ROI metrics
- * EXACT copy from designer-src/src/app/components/WhyUs.tsx
+ * ValueMetricsSection Component (Why VoiceCare)
+ * PIXEL-PERFECT implementation from designer-src/src/app/components/WhyUs.tsx
  *
- * Uses Framer Motion for hover effects exactly as designer implemented
+ * DESIGNER EXACT VALUES (DO NOT CHANGE):
+ *
+ * Section Container:
+ * - max-w-7xl (1280px)
+ * - py-24 (96px)
+ * - px-6 md:px-12 (24px / 48px)
+ * - bg-background (#FFFFFF)
+ *
+ * Header:
+ * - Wrapper: text-center mb-16
+ * - Heading: text-[48px] font-bold tracking-tight text-[#06003F] mb-8
+ * - Paragraph: text-lg font-medium leading-relaxed text-[#06003F]/60
+ *              max-w-3xl mx-auto mt-[-30px]
+ *
+ * Grid:
+ * - grid-cols-1 md:grid-cols-3
+ * - gap-12 (48px)
+ * - Dividers: md:border-r md:border-[#06003F]/10 md:pr-12 (columns 1-2 only)
+ *
+ * Cards:
+ * - cursor-pointer
+ * - hover: y: -8px, duration: 0.3s, ease: [0.23, 1, 0.32, 1]
+ *
+ * Icon Box:
+ * - w-16 h-16 rounded-[12px] mb-6
+ * - flex items-center justify-center
+ * - transition-all duration-300
+ * - hover: scale(1.05) rotate(3deg)
+ * - Higher ROI: bg-[#06003F]
+ * - Faster: bg-[#FF4E3A]
+ * - Better Data Quality: bg-[#06003F]
+ *
+ * Icon: w-7 h-7 text-white strokeWidth={2}
+ *
+ * Typography:
+ * - Percentage: text-5xl font-bold tracking-tight text-[#06003F] hover:text-[#FF4E3A]
+ * - Title: text-2xl font-bold tracking-tight text-[#06003F] hover:text-[#FF4E3A]
+ * - Row: flex items-baseline gap-3 mb-4
+ * - Description: text-[16px] leading-relaxed text-[#06003F]/60 hover:text-[#06003F]/80
+ *
+ * Animations:
+ * - Header: opacity 0→1, y 20→0, duration 0.7s, ease [0.23,1,0.32,1]
+ * - Cards: opacity 0→1, y 30→0, duration 0.6s, stagger index*0.1
  */
 
 import { motion } from 'motion/react';
+import { TrendingUp, Zap, CheckCircle } from 'lucide-react';
 
 // ============================================
-// Icons (matching designer's lucide-react icons)
+// Types
 // ============================================
 
-function TrendingUpIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-      <polyline points="17 6 23 6 23 12" />
-    </svg>
-  );
-}
-
-function ZapIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-    </svg>
-  );
-}
-
-function CheckCircleIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
+interface ValueMetricsSectionProps {
+  className?: string;
 }
 
 // ============================================
-// Data - EXACT from designer-src
+// Data - EXACT from designer-src WhyUs.tsx
 // ============================================
 
 const benefits = [
   {
     title: 'Higher ROI',
-    description:
-      'Significantly reduce overhead while increasing billing accuracy and practice throughput.',
-    icon: TrendingUpIcon,
+    description: 'Returns within a few months, not years.',
+    icon: TrendingUp,
     bgColor: '#06003F',
     percentage: '70%',
   },
   {
     title: 'Faster',
-    description:
-      'Instantly collect, initiate, and transfer data between patients and clinical systems.',
-    icon: ZapIcon,
+    description: 'Collect, initiate, and transfer data',
+    icon: Zap,
     bgColor: '#FF4E3A',
     percentage: '40%',
   },
   {
     title: 'Better Data Quality',
-    description:
-      'Eliminate human error with consistent, structured data output for every single conversation.',
-    icon: CheckCircleIcon,
+    description: 'Consistent data output with every conversation',
+    icon: CheckCircle,
     bgColor: '#06003F',
     percentage: '20%',
   },
 ];
 
 // ============================================
-// Component - EXACT from designer-src/src/app/components/WhyUs.tsx
+// Component
 // ============================================
 
-export function ValueMetricsSection({ className = '' }: { className?: string }) {
+export function ValueMetricsSection({ className = '' }: ValueMetricsSectionProps) {
   return (
-    <section className={`py-24 bg-background ${className}`}>
+    <section className={`py-24 bg-white ${className}`}>
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         {/* Header */}
         <motion.div
@@ -109,15 +102,15 @@ export function ValueMetricsSection({ className = '' }: { className?: string }) 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
-          <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-[#06003F] mb-8">
+          <h2 className="text-[48px] font-bold tracking-tight text-[#06003F] mb-8">
             Why VoiceCare.
           </h2>
 
-          <p className="text-lg text-[#06003F]/60 leading-relaxed font-medium max-w-3xl">
-            Transform complex and variable administrative conversations and tasks into structured
-            notes, in one click, in near real-time.
+          <p className="text-lg text-[#06003F]/60 leading-relaxed font-medium max-w-3xl mx-auto mt-[-30px] mr-[208px] mb-[0px] ml-[208px]">
+            Our agentic AI goes beyond traditional automation to take meaningful action, delivering
+            measurable outcomes that transform healthcare operations.
           </p>
         </motion.div>
 
@@ -139,7 +132,9 @@ export function ValueMetricsSection({ className = '' }: { className?: string }) 
                 transition: { duration: 0.3, ease: [0.23, 1, 0.32, 1] },
               }}
               className={`group cursor-pointer ${
-                index !== benefits.length - 1 ? 'md:border-r md:border-[#06003F]/10 md:pr-12' : ''
+                index !== benefits.length - 1
+                  ? 'md:border-r md:border-[#06003F]/10 md:pr-12'
+                  : ''
               }`}
             >
               {/* Icon */}
@@ -148,7 +143,7 @@ export function ValueMetricsSection({ className = '' }: { className?: string }) 
                 style={{ backgroundColor: benefit.bgColor }}
                 whileHover={{ scale: 1.05, rotate: 3 }}
               >
-                <benefit.icon className="w-7 h-7 text-white" />
+                <benefit.icon className="w-7 h-7 text-white" strokeWidth={2} />
               </motion.div>
 
               {/* Percentage + Title on same line */}

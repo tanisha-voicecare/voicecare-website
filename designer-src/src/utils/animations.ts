@@ -8,6 +8,8 @@ export const ANIMATION_DURATION = {
 };
 
 export const EASING = {
+  // Premium smooth easing - preferred for most animations
+  premium: [0.23, 1, 0.32, 1], // cubic-bezier(0.23, 1, 0.32, 1)
   // Smooth easing for most animations
   smooth: [0.4, 0, 0.2, 1], // cubic-bezier(0.4, 0, 0.2, 1)
   // Smooth entrance

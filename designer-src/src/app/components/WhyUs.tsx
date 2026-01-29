@@ -5,21 +5,21 @@ import { TrendingUp, Zap, CheckCircle } from "lucide-react";
 const benefits = [
   {
     title: "Higher ROI",
-    description: "Significantly reduce overhead while increasing billing accuracy and practice throughput.",
+    description: "Returns within a few months, not years.",
     icon: TrendingUp,
     bgColor: "#06003F",
     percentage: "70%"
   },
   {
     title: "Faster",
-    description: "Instantly collect, initiate, and transfer data between patients and clinical systems.",
+    description: "Collect, initiate, and transfer data",
     icon: Zap,
     bgColor: "#FF4E3A",
     percentage: "40%"
   },
   {
     title: "Better Data Quality",
-    description: "Eliminate human error with consistent, structured data output for every single conversation.",
+    description: "Consistent data output with every conversation",
     icon: CheckCircle,
     bgColor: "#06003F",
     percentage: "20%"
@@ -103,14 +103,14 @@ export const WhyUs = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-            className="mb-16"
+            className="mb-16 text-center"
           >
-            <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-[#06003F] mb-8">
+            <h2 className="text-[48px] font-bold tracking-tight text-[#06003F] mb-8">
               Why VoiceCare.
             </h2>
             
-            <p className="text-lg text-[#06003F]/60 leading-relaxed font-medium max-w-3xl">
-              Transform complex and variable administrative conversations and tasks into structured notes, in one click, in near real-time.
+            <p className="text-lg text-[#06003F]/60 leading-relaxed font-medium max-w-3xl mx-auto mt-[-30px] mr-[208px] mb-[0px] ml-[208px]">
+              Our agentic AI goes beyond traditional automation to take meaningful action, delivering measurable outcomes that transform healthcare operations.
             </p>
           </motion.div>
 

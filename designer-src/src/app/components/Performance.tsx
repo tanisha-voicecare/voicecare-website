@@ -6,7 +6,7 @@ export const Performance = () => {
   return (
     <>
       <section className="py-20 border-y border-border/50 bg-background overflow-hidden">
-        <div className="container mx-auto px-6 md:px-12">
+        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
           <motion.div 
             initial="hidden"
             whileInView="visible"

@@ -3,7 +3,6 @@ import Lenis from "lenis";
 
 export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
-    // Initialize Lenis with enhanced smooth scrolling
     const lenis = new Lenis({
       duration: 1.5,
       smoothWheel: true,
@@ -11,7 +10,6 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
       touchMultiplier: 1.5,
     });
 
-    // Animation frame loop
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -19,7 +17,6 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
 
     requestAnimationFrame(raf);
 
-    // Cleanup
     return () => {
       lenis.destroy();
     };

@@ -1,54 +1,44 @@
 import React from "react";
-import { Navbar } from "./components/Navbar";
-import { Hero } from "./components/Hero";
-import { Logos } from "./components/Logos";
-import { Features } from "./components/Features";
-import { Performance } from "./components/Performance";
-import { Showcase } from "./components/Showcase";
-import { ParallaxSection } from "./components/ParallaxSection";
-import { HorizontalScrollSection } from "./components/HorizontalScrollSection";
-import { Industries } from "./components/Industries";
-import { Integrations } from "./components/Integrations";
-import { Testimonials } from "./components/Testimonials";
-import { WhyUs } from "./components/WhyUs";
-import { FAQ } from "./components/FAQ";
-import { CTA } from "./components/CTA";
-import { Footer } from "./components/Footer";
-import { InfiniteMarquee } from "./components/InfiniteMarquee";
-import { Company } from "./components/Company";
-import { TeamPage } from "./components/TeamPage";
-import { Platform } from "./components/Platform";
-import { Solutions } from "./components/Solutions";
-import { RadicalEfficiencies } from "./components/RadicalEfficiencies";
+import { Navbar } from "@/app/components/Navbar";
+import { Hero } from "@/app/components/Hero";
+import { Logos } from "@/app/components/Logos";
+import { WhyUs } from "@/app/components/WhyUs";
+import { CTA } from "@/app/components/CTA";
+import { Footer } from "@/app/components/Footer";
+import { InfiniteMarquee } from "@/app/components/InfiniteMarquee";
+import { Company } from "@/app/components/Company";
+import { TeamPage } from "@/app/components/TeamPage";
+import { Platform } from "@/app/components/Platform";
+import { Solutions } from "@/app/components/Solutions";
+import { Blogs } from "@/app/components/Blogs";
+import { Press } from "@/app/components/Press";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = React.useState<"home" | "about" | "team" | "platform" | "solutions">("home");
+  const [currentPage, setCurrentPage] = React.useState<
+    | "home"
+    | "about"
+    | "team"
+    | "platform"
+    | "solutions"
+    | "blogs"
+    | "press"
+  >("home");
 
   return (
     <div className="relative min-h-screen bg-background selection:bg-accent/30">
-      <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
-      
+      <Navbar
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
+      />
+
       {currentPage === "home" ? (
         <>
           <Hero />
           <main className="relative">
             <Logos />
-            <Performance />
-            {/* REMOVED: Features - "AI agents that do real work" */}
-            {/* <Features /> */}
             <WhyUs />
-            {/* REMOVED: RadicalEfficiencies - duplicate content now in InfiniteMarquee */}
-            {/* <RadicalEfficiencies /> */}
             <InfiniteMarquee />
             <CTA />
-            {/* REMOVED SECTIONS */}
-            {/* <Showcase /> */}
-            {/* <ParallaxSection /> */}
-            {/* <Integrations /> */}
-            {/* <HorizontalScrollSection /> */}
-            {/* <Industries /> */}
-            {/* <Testimonials /> */}
-            {/* <FAQ /> */}
           </main>
           <Footer />
         </>
@@ -63,6 +53,14 @@ export default function App() {
       ) : currentPage === "solutions" ? (
         <div className="relative">
           <Solutions onNavigate={setCurrentPage} />
+        </div>
+      ) : currentPage === "blogs" ? (
+        <div className="relative">
+          <Blogs onNavigate={setCurrentPage} />
+        </div>
+      ) : currentPage === "press" ? (
+        <div className="relative">
+          <Press onNavigate={setCurrentPage} />
         </div>
       ) : (
         <div className="relative">

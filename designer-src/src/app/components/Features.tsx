@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Cpu, Network, Layers, Shield, Globe, Zap } from "lucide-react";
+import { createScrollAnimation, createStaggeredAnimation, EASING } from "@/utils/animations";
 
 const FEATURES = [
   {

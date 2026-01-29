@@ -1,12 +1,71 @@
 import React from "react";
 import { motion } from "motion/react";
-import { ArrowRight, Shield, Lock, Eye, FileCheck, CheckCircle2, Database, Server, ShieldCheck, Globe, Key, Bell, Activity } from "lucide-react";
+import { Shield, Lock, Eye, FileCheck, Database, Server, ShieldCheck, Globe, Key, Bell, Activity } from "lucide-react";
 import { Footer } from "./Footer";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { ExpandableCards } from "./figma/ExpandableCards";
 import { createScrollAnimation, ANIMATION_DURATION, EASING } from "@/utils/animations";
+import certificationShields from "figma:asset/8e7f562df772a665047e6fdd0dcb28b63e0c271c.png";
 
 export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' | 'team' | 'platform' | 'solutions') => void }) => {
+  const [activeTab, setActiveTab] = React.useState<'infrastructure' | 'organizational' | 'product' | 'internal' | 'data'>('infrastructure');
+
+  const securityCategories = {
+    infrastructure: {
+      icon: Server,
+      title: "Infrastructure Security",
+      features: [
+        { text: "We maintain our service infrastructure", icon: Server },
+        { text: "We conduct regular backups of production data", icon: Database },
+        { text: "Multi-factor authentication (MFA) is enforced on all systems", icon: Key },
+        { text: "Firewalls and intrusion prevention and detection systems protect our network", icon: ShieldCheck }
+      ]
+    },
+    organizational: {
+      icon: ShieldCheck,
+      title: "Organizational Security",
+      features: [
+        { text: "All endpoints are encrypted", icon: Lock },
+        { text: "Anti-malware technology is utilized", icon: ShieldCheck },
+        { text: "Password policy is enforced", icon: Key },
+        { text: "Security training is implemented", icon: Activity },
+        { text: "Contractors sign Confidentiality Agreements and BAAs", icon: FileCheck },
+        { text: "Production inventory is maintained", icon: Database },
+        { text: "Employees acknowledge Confidentiality Agreements", icon: FileCheck }
+      ]
+    },
+    product: {
+      icon: Lock,
+      title: "Product Security",
+      features: [
+        { text: "Data is encrypted both at rest and in transit", icon: Lock },
+        { text: "Vulnerability and system monitoring procedures have been established", icon: Eye }
+      ]
+    },
+    internal: {
+      icon: Key,
+      title: "Internal Security",
+      features: [
+        { text: "Scanned for and remediated vulnerabilities", icon: Eye },
+        { text: "Tested the incident response plan", icon: Bell },
+        { text: "Processed access requests as required", icon: Key },
+        { text: "Restricted production deployment access", icon: Lock },
+        { text: "Enforced change management procedures", icon: FileCheck },
+        { text: "Established a configuration management system", icon: Server },
+        { text: "Provided an available support system", icon: Bell },
+        { text: "Established third-party agreements", icon: FileCheck },
+        { text: "Maintained cybersecurity insurance", icon: Shield },
+        { text: "Reviewed system capacity", icon: Activity }
+      ]
+    },
+    data: {
+      icon: Database,
+      title: "Data and Privacy",
+      features: [
+        { text: "Established privacy policy", icon: FileCheck },
+        { text: "Security awareness and privacy training", icon: Activity }
+      ]
+    }
+  };
+
   const features = [
     {
       icon: Shield,
@@ -44,254 +103,219 @@ export const Solutions = ({ onNavigate }: { onNavigate: (view: 'home' | 'about' 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 bg-white">
-        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-20 items-start mb-24">
-            {/* Left Column */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#06003F]/10 rounded-full mb-10"
-              >
-                <span className="text-[13px] font-medium text-[#06003F]/70">SOC 2 Type II Certified</span>
-              </motion.div>
+      <section className="relative pt-40 pb-24 overflow-hidden">
+        {/* Simple Gradient Background */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute inset-y-0 left-12 right-12 bg-gradient-to-br from-[#FF4E3A] via-[#06003F] via-50% to-[#02007F] rounded-b-[29px]"
+        />
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8"
-              >
-                <h1 className="text-[68px] md:text-[80px] font-bold tracking-tight leading-[1.05] bg-clip-text text-transparent bg-linear-to-r from-[#06003F] via-[#06003F] to-[#FF4E3A] via-50%">
-                  Security &<br />Compliance
-                </h1>
-              </motion.div>
-            </div>
-
-            {/* Right Column */}
+        <div className="container mx-auto px-6 md:px-16 max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="max-w-4xl mx-auto text-center"
+          >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-col justify-end space-y-8 pt-12"
+              transition={{ duration: 0.4, delay: 0.2 }}
+              whileHover={{ scale: 1.02 }}
+              className="text-[18px] text-white/80 mb-6 tracking-wide"
             >
-              <p className="text-[17px] text-[#06003F]/60 leading-relaxed">
-                Built with healthcare in mind. Our platform delivers bank-level security with comprehensive compliance certifications, protecting patient data at every layer.
-              </p>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#FF4E3A]" />
-                  <span className="text-[14px] font-medium text-[#06003F]">HIPAA Compliant</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#FF4E3A]" />
-                  <span className="text-[14px] font-medium text-[#06003F]">100% Secure</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#FF4E3A]" />
-                  <span className="text-[14px] font-medium text-[#06003F]">SOC 2 Certified</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#FF4E3A]" />
-                  <span className="text-[14px] font-medium text-[#06003F]">24/7 Monitoring</span>
-                </div>
-              </div>
+              We are SOC 2 Type II attested, HIPAA-compliant.
             </motion.div>
-          </div>
-
-          {/* Large Gradient Card */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              whileHover={{ scale: 1.01 }}
+              className="text-[84px] font-bold tracking-[-0.04em] leading-[1.1] text-white inline-block px-2 pb-4"
+            >
+              Healthcare Data. Maximum Security.
+            </motion.h1>
+          </motion.div>
         </div>
       </section>
 
-      {/* Security Features Grid */}
-      <section className="relative py-24 bg-[#FAFAFA] mt-[-110px] mr-[0px] mb-[0px] ml-[0px]">
-        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                number: "01",
-                title: "Compliance Management",
-                description: "Automated compliance monitoring and reporting across HIPAA, SOC 2, and GDPR requirements with real-time alerts."
-              },
-              {
-                number: "02",
-                title: "Threat Detection",
-                description: "AI-powered threat intelligence with behavioral analysis to identify and neutralize security risks in real-time."
-              },
-              {
-                number: "03",
-                title: "Data Encryption",
-                description: "End-to-end AES-256 encryption for all data at rest and in transit, with automated key rotation and management."
-              },
-              {
-                number: "04",
-                title: "Access Control",
-                description: "Role-based access control with multi-factor authentication and granular permission management across all systems."
-              },
-              {
-                number: "05",
-                title: "Audit Logging",
-                description: "Comprehensive activity tracking and immutable audit trails for complete visibility into all system operations."
-              },
-              {
-                number: "06",
-                title: "Incident Response",
-                description: "24/7 security operations center with automated incident detection, response protocols, and recovery procedures."
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-                transition={{ duration: ANIMATION_DURATION.normal, delay: index * 0.08, ease: EASING.smooth }}
-                className="bg-white border border-[#06003F]/10 rounded-[12px] p-8 hover:border-[#06003F]/20 transition-all duration-300"
-              >
-                <div className="text-[15px] font-bold text-[#FF4E3A] mb-4">
-                  {feature.number}
-                </div>
-                <h3 className="text-[24px] font-bold text-[#06003F] mb-4 leading-tight">
-                  {feature.title}
-                </h3>
-                <p className="text-[15px] text-[#06003F]/60 leading-relaxed">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Expandable Security Pillars */}
+      {/* Certification Shields Section */}
       <section className="relative py-32 bg-white overflow-hidden">
+        {/* Subtle radial glow effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,78,58,0.03)_0%,_transparent_50%)]" />
+        
+        <div className="container mx-auto px-6 md:px-16 max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+            transition={{ duration: 0.8, ease: EASING.smooth }}
+            className="flex flex-col items-center"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2, ease: EASING.smooth }}
+              className="relative"
+              style={{
+                backgroundImage: `
+                  linear-gradient(rgba(255, 78, 58, 0.03) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255, 78, 58, 0.03) 1px, transparent 1px)
+                `,
+                backgroundSize: '40px 40px',
+                backgroundPosition: 'center center'
+              }}
+            >
+              <img 
+                src={certificationShields} 
+                alt="HIPAA Compliant and AICPA SOC 2 Certifications" 
+                className="w-full max-w-[450px] h-auto relative z-10"
+              />
+            </motion.div>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4, ease: EASING.smooth }}
+              className="text-[#06003F]/60 text-[18px] text-center mt-12 max-w-3xl leading-relaxed"
+            >
+              Independently verified and certified to meet the highest standards of healthcare data security and compliance.
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Compliance and Monitoring Section */}
+      <section className="relative bg-white p-[0px]">
         <div className="container mx-auto px-6 md:px-16 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "0px 0px -100px 0px" }}
             transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
-            className="text-center mb-20"
+            className="text-center mb-20 max-w-4xl mx-auto"
           >
-            <h2 className="text-[56px] md:text-[64px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-6">
-              Security Pillars
+            <h2 className="text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-6">
+              Compliance and Monitoring
             </h2>
-            <p className="text-[17px] text-[#06003F]/60 max-w-2xl mx-auto">
-              Four foundational layers protecting your healthcare data
+            <p className="text-[17px] text-[#06003F]/60 leading-relaxed">
+              We provide an overview of our dedication to compliance and security, offering access to certifications, documentation, and details on our strict control adherence.
             </p>
           </motion.div>
 
-          <ExpandableCards />
-        </div>
-      </section>
-
-      {/* Content + Image Section 1 - Content Left */}
-      <section className="relative py-32 bg-white">
-        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
-            >
-              <h2 className="text-[56px] md:text-[64px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-8">
-                Real-Time Threat Intelligence
-              </h2>
-              <p className="text-[17px] text-[#06003F]/60 leading-relaxed">
-                Our advanced security monitoring system operates 24/7, leveraging machine learning algorithms to detect and neutralize threats before they impact your operations. With real-time alerts and automated response protocols, your healthcare data remains protected against emerging vulnerabilities and sophisticated attack vectors.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
-              className="relative"
-            >
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1706248504630-d165ae5f7134?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWN1cml0eSUyMG1vbml0b3JpbmclMjBkYXNoYm9hcmQ8ZW58MXx8fHwxNzY4MjgyMTQ5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Security monitoring dashboard"
-                className="w-full h-[500px] object-cover rounded-[12px] border border-[#06003F]/10"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Content + Image Section 2 - Content Right */}
-      <section className="relative py-32 bg-[#FAFAFA]">
-        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
-              className="relative order-2 lg:order-1"
-            >
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXRhJTIwZW5jcnlwdGlvbiUyMG5ldHdvcmt8ZW58MXx8fHwxNzY4MzE2NTc4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Data encryption network"
-                className="w-full h-[500px] object-cover rounded-[12px] border border-[#06003F]/10"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-              transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
-              className="order-1 lg:order-2"
-            >
-              <h2 className="text-[56px] md:text-[64px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-8">
-                Enterprise-Grade Encryption
-              </h2>
-              <p className="text-[17px] text-[#06003F]/60 leading-relaxed">
-                Every piece of data is protected with military-grade AES-256 encryption, both at rest and in transit. Our automated key management system ensures seamless rotation and compliance, while zero-knowledge architecture guarantees that only authorized parties can access sensitive healthcare information.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="relative py-32 bg-[#FAFAFA]">
-        <div className="container mx-auto px-6 md:px-16 max-w-7xl">
+          {/* Tabs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
+            viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+            transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth, delay: 0.1 }}
+            className="flex flex-wrap justify-center gap-3 mb-16"
           >
-            <h2 className="text-[56px] md:text-[64px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-6">
-              Questions About Security?
-            </h2>
-            <p className="text-[18px] text-[#06003F]/60 mb-12 leading-relaxed">
-              Our security team is here to answer your questions and provide detailed documentation.
-            </p>
+            <motion.button
+              onClick={() => setActiveTab('infrastructure')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300 ${
+                activeTab === 'infrastructure'
+                  ? 'bg-[#06003F] text-white'
+                  : 'bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30'
+              }`}
+            >
+              Infrastructure
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveTab('organizational')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300 ${
+                activeTab === 'organizational'
+                  ? 'bg-[#06003F] text-white'
+                  : 'bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30'
+              }`}
+            >
+              Organizational
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveTab('product')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300 ${
+                activeTab === 'product'
+                  ? 'bg-[#06003F] text-white'
+                  : 'bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30'
+              }`}
+            >
+              Product
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveTab('internal')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300 ${
+                activeTab === 'internal'
+                  ? 'bg-[#06003F] text-white'
+                  : 'bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30'
+              }`}
+            >
+              Internal
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveTab('data')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300 ${
+                activeTab === 'data'
+                  ? 'bg-[#06003F] text-white'
+                  : 'bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30'
+              }`}
+            >
+              Data & Privacy
+            </motion.button>
+          </motion.div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-12 py-5 bg-[#06003F] text-white rounded-full font-semibold text-[15px] hover:bg-[#06003F]/90 transition-all shadow-xl shadow-[#06003F]/20 flex items-center gap-2 group"
-              >
-                Schedule Security Review
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-12 py-5 bg-white border border-[#06003F]/10 text-[#06003F] rounded-full font-semibold text-[15px] hover:bg-black/5 transition-all shadow-sm"
-              >
-                Download Documentation
-              </motion.button>
-            </div>
+          {/* Tab Content - Cards Grid */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: EASING.smooth }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-[0px] mr-[0px] mb-[70px] ml-[0px]"
+          >
+            {securityCategories[activeTab].features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05, ease: EASING.smooth }}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="bg-[#F8F9FA] rounded-[12px] p-8 hover:bg-[#FF4E3A]/5 hover:border hover:border-[#FF4E3A]/20 transition-all duration-300 cursor-pointer group"
+                >
+                  {/* Icon Container */}
+                  <motion.div 
+                    className="w-12 h-12 rounded-[8px] bg-[#06003F]/5 group-hover:bg-[#FF4E3A]/10 flex items-center justify-center mb-6 transition-all duration-300"
+                    whileHover={{ rotate: [0, -5, 5, 0], transition: { duration: 0.5 } }}
+                  >
+                    <Icon className="w-6 h-6 text-[#06003F] group-hover:text-[#FF4E3A] transition-colors duration-300" strokeWidth={1.5} />
+                  </motion.div>
+                  
+                  {/* Feature Text */}
+                  <p className="text-[15px] text-[#06003F] font-medium leading-relaxed">
+                    {feature.text}
+                  </p>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>

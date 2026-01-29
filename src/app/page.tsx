@@ -6,7 +6,6 @@
 import type { Metadata } from 'next';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { TrustedBySection } from '@/components/sections/TrustedBySection';
-import { PerformanceMetricsSection } from '@/components/sections/PerformanceMetricsSection';
 import { ValueMetricsSection } from '@/components/sections/ValueMetricsSection';
 import { InfiniteMarqueeSection } from '@/components/sections/InfiniteMarqueeSection';
 import { ProductIntroSection } from '@/components/sections/ProductIntroSection';
@@ -47,9 +46,6 @@ export default function HomePage() {
 
         {/* Trusted By Section */}
         <TrustedBySection />
-
-        {/* Performance Metrics Section */}
-        <PerformanceMetricsSection />
 
         {/* Value Metrics Section - Why VoiceCare */}
         <ValueMetricsSection />
