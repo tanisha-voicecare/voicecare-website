@@ -30,16 +30,16 @@
  * - h3: text-[32px] font-bold text-[#06003F] mb-6 tracking-tight leading-[1.2]
  * - p: text-[17px] text-[#06003F]/70 leading-relaxed
  *
- * Image Block:
+ * Video Block:
  * - w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10
+ * - autoPlay, loop, muted, playsInline (behaves like GIF)
  *
  * Animations:
- * - Content/Image from left: initial x: -30, animate x: 0
- * - Content/Image from right: initial x: 30, animate x: 0
+ * - Content/Video from left: initial x: -30, animate x: 0
+ * - Content/Video from right: initial x: 30, animate x: 0
  * - All: opacity 0→1, duration 0.6, viewport once: true
  */
 
-import Image from 'next/image';
 import { motion } from 'motion/react';
 
 // ============================================
@@ -50,7 +50,7 @@ interface Benefit {
   id: string;
   title: string;
   description: string;
-  image: string;
+  video: string;
   alt: string;
 }
 
@@ -64,7 +64,7 @@ const benefits: Benefit[] = [
     title: 'Automate tasks and conversations',
     description:
       'Schedule one-time or recurring automated phone conversations and tasks in one click.',
-    image: '/images/platform/benefits/automate-tasks.jpg',
+    video: '/images/platform/benefits/automate-tasks.mp4',
     alt: 'Healthcare automation dashboard',
   },
   {
@@ -72,7 +72,7 @@ const benefits: Benefit[] = [
     title: 'Search for conversations',
     description:
       'Find structured data across every conversational audio and transcript, and get use-case specific call summary.',
-    image: '/images/platform/benefits/search-conversations.jpg',
+    video: '/images/platform/benefits/search-conversations.mp4',
     alt: 'Search conversations interface',
   },
   {
@@ -80,7 +80,7 @@ const benefits: Benefit[] = [
     title: 'AI-powered call analytics',
     description:
       "Generate knowledge grounded in your back-office information – with drill-down analytics for every conversation on what's working, and where to improve.",
-    image: '/images/platform/benefits/ai-analytics.jpg',
+    video: '/images/platform/benefits/ai-analytics.mp4',
     alt: 'AI-powered analytics dashboard',
   },
   {
@@ -88,7 +88,7 @@ const benefits: Benefit[] = [
     title: 'Customize conversations',
     description:
       'For use-case specific conversations, ask the questions that matter to deliver healthcare outcomes for your patients.',
-    image: '/images/platform/benefits/customize-conversations.jpg',
+    video: '/images/platform/benefits/customize-conversations.mp4',
     alt: 'Customize conversations interface',
   },
 ];
@@ -131,7 +131,7 @@ export function PlatformBenefits() {
             </p>
           </motion.div>
 
-          {/* Right: Image */}
+          {/* Right: Video */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -139,19 +139,20 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <Image
-              src={benefits[0].image}
-              alt={benefits[0].alt}
-              width={600}
-              height={400}
+            <video
+              src={benefits[0].video}
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
             />
           </motion.div>
         </div>
 
-        {/* Benefit 2: Image LEFT, Content RIGHT */}
+        {/* Benefit 2: Video LEFT, Content RIGHT */}
         <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-          {/* Left: Image */}
+          {/* Left: Video */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -159,11 +160,12 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <Image
-              src={benefits[1].image}
-              alt={benefits[1].alt}
-              width={600}
-              height={400}
+            <video
+              src={benefits[1].video}
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
             />
           </motion.div>
@@ -184,7 +186,7 @@ export function PlatformBenefits() {
           </motion.div>
         </div>
 
-        {/* Benefit 3: Content LEFT, Image RIGHT */}
+        {/* Benefit 3: Content LEFT, Video RIGHT */}
         <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
           {/* Left: Content */}
           <motion.div
@@ -201,7 +203,7 @@ export function PlatformBenefits() {
             </p>
           </motion.div>
 
-          {/* Right: Image */}
+          {/* Right: Video */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -209,19 +211,20 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <Image
-              src={benefits[2].image}
-              alt={benefits[2].alt}
-              width={600}
-              height={400}
+            <video
+              src={benefits[2].video}
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
             />
           </motion.div>
         </div>
 
-        {/* Benefit 4: Image LEFT, Content RIGHT */}
+        {/* Benefit 4: Video LEFT, Content RIGHT */}
         <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-          {/* Left: Image */}
+          {/* Left: Video */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -229,11 +232,12 @@ export function PlatformBenefits() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <Image
-              src={benefits[3].image}
-              alt={benefits[3].alt}
-              width={600}
-              height={400}
+            <video
+              src={benefits[3].video}
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full h-[400px] object-cover rounded-[12px] border border-[#06003F]/10"
             />
           </motion.div>
