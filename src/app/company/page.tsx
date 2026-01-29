@@ -1,5 +1,3 @@
-'use client';
-
 /**
  * Company Page
  * Implementation from designer-src/src/app/components/Company.tsx
@@ -14,6 +12,7 @@
  * NOTE: Header and Footer are rendered by root layout.tsx
  */
 
+import type { Metadata } from 'next';
 import {
   CompanyHero,
   AboutUsSection,
@@ -21,6 +20,11 @@ import {
   PrinciplesSection,
   AdvisorsSection,
 } from '@/components/company';
+
+export const metadata: Metadata = {
+  title: 'Company',
+  description: 'Learn about VoiceCare AI - Supercharging healthcare administration with Artificial Intelligence. Meet our team, advisors, and investors.',
+};
 
 export default function CompanyPage() {
   return (

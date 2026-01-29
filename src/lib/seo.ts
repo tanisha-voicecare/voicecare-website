@@ -11,15 +11,15 @@ import { absoluteUrl } from './utils';
 // ============================================
 
 export const siteConfig = {
-  name: 'HealthCare Plus',
-  shortName: 'HealthCare+',
+  name: 'VoiceCare AI',
+  shortName: 'VoiceCare',
   description:
-    'Comprehensive healthcare services with compassionate care. Expert doctors, modern facilities, and patient-centered approach.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://healthcare-plus.com',
+    'Supercharging Healthcare Workers with Care and AI. Automating administrative burdens, creating time for care teams, and improving patient outcomes.',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://voicecare.ai',
   ogImage: '/og-image.jpg',
-  twitterHandle: '@healthcareplus',
+  twitterHandle: '@voicecareai',
   locale: 'en_US',
-  themeColor: '#0891b2', // Primary-600
+  themeColor: '#06003F', // Primary brand color
 };
 
 // ============================================
@@ -120,13 +120,13 @@ export function generateSiteMetadata(): Metadata {
     applicationName: siteConfig.name,
     referrer: 'origin-when-cross-origin',
     keywords: [
-      'healthcare',
-      'medical services',
-      'doctors',
-      'hospital',
-      'clinic',
-      'health',
-      'wellness',
+      'healthcare AI',
+      'RCM automation',
+      'healthcare administration',
+      'AI agents',
+      'voice AI',
+      'healthcare technology',
+      'medical billing',
       'patient care',
     ],
     authors: [{ name: siteConfig.name }],
@@ -173,8 +173,8 @@ export function generateSiteMetadata(): Metadata {
       },
     },
     icons: {
-      icon: '/favicon.ico',
-      shortcut: '/favicon-16x16.png',
+      icon: '/icons/png/logo.png',
+      shortcut: '/icons/png/logo.png',
       apple: '/apple-touch-icon.png',
     },
     manifest: '/site.webmanifest',
