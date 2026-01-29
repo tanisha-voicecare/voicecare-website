@@ -35,27 +35,20 @@ export const revalidate = 600; // Revalidate every 10 minutes
 export default function HomePage() {
   return (
     <>
-      {/* Skip to main content link for accessibility */}
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
+      {/* Hero Section */}
+      <HeroSection />
 
-      <main id="main-content">
-        {/* Hero Section */}
-        <HeroSection />
+      {/* Trusted By Section */}
+      <TrustedBySection />
 
-        {/* Trusted By Section */}
-        <TrustedBySection />
+      {/* Value Metrics Section - Why VoiceCare */}
+      <ValueMetricsSection />
 
-        {/* Value Metrics Section - Why VoiceCare */}
-        <ValueMetricsSection />
+      {/* Infinite Marquee Section - Real-World Impact */}
+      <InfiniteMarqueeSection />
 
-        {/* Infinite Marquee Section - Real-World Impact */}
-        <InfiniteMarqueeSection />
-
-        {/* Product Intro Section - Introducing Joy */}
-        <ProductIntroSection />
-      </main>
+      {/* Product Intro Section - Introducing Joy */}
+      <ProductIntroSection />
     </>
   );
 }
