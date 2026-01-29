@@ -68,6 +68,12 @@ interface NavItem {
   isDisabled?: boolean;
 }
 
+interface DropdownItem {
+  label: string;
+  href: string;
+  isDisabled?: boolean;
+}
+
 // Navigation items EXACT from designer-src/src/app/components/Navbar.tsx
 const navigation: NavItem[] = [
   { label: 'Platform', href: '/platform' },
@@ -78,11 +84,11 @@ const navigation: NavItem[] = [
 ];
 
 // Platform dropdown items - EXACT from designer-src/src/app/components/Navbar.tsx
-const platformDropdownItems = [
+const platformDropdownItems: DropdownItem[] = [
   { label: 'What we do', href: '/platform#platform-hero' },
   { label: 'Benefits', href: '/platform#platform-benefits' },
   { label: 'Our Solutions', href: '/platform#platform-solutions' },
-  { label: 'Who we serve', href: '#', isDisabled: true }, // Page not implemented yet
+  { label: 'Who we serve', href: '/who-we-serve' },
 ];
 
 // ============================================

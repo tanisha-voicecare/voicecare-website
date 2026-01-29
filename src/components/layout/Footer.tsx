@@ -69,7 +69,7 @@ interface FooterLink {
 const companyLinks: FooterLink[] = [
   { name: 'About Us', href: '/company' },
   { name: 'Our Platform', href: '/platform' },
-  { name: 'Who We Serve', href: '#' }, // Page not implemented yet
+  { name: 'Who We Serve', href: '/who-we-serve' },
   { name: 'Schedule a Demo', href: '/schedule-demo' },
   { name: 'Press', href: '/press' },
 ];
