@@ -227,7 +227,7 @@ export default async function ServicesPage() {
               <span className="inline-block text-sm font-semibold tracking-wider uppercase text-primary-600 mb-3">
                 Why Choose Us
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#06003F] mb-6">
                 Excellence in Every Aspect of Care
               </h2>
               <p className="text-lg text-neutral-600 mb-8 leading-relaxed">

@@ -147,7 +147,7 @@ export function ServiceCard({ icon, title, description, href }: ServiceCardProps
       <div className="w-14 h-14 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center mb-5">
         {icon}
       </div>
-      <h3 className="text-xl font-semibold text-neutral-900 mb-3">{title}</h3>
+      <h3 className="text-xl font-semibold text-[#06003F] mb-3">{title}</h3>
       <p className="text-neutral-600 leading-relaxed">{description}</p>
     </>
   );
@@ -209,7 +209,7 @@ export function BlogCard({
       )}
       <div className="flex flex-col flex-1 p-6">
         <Link href={href}>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          <h3 className="text-xl font-semibold text-[#06003F] mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
             {title}
           </h3>
         </Link>

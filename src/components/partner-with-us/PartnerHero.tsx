@@ -38,7 +38,7 @@ export function PartnerHero() {
         transition={{ duration: 0.6 }}
         className="text-center max-w-4xl mx-auto mb-16"
       >
-        <h1 className="text-[48px] leading-[1.1] mb-[24px] font-bold mt-[-45px] mr-[0px] ml-[0px]">
+        <h1 className="text-[48px] leading-[1.1] mb-[24px] font-bold text-[#06003F] mt-[-45px] mr-[0px] ml-[0px]">
           Partner with Us
         </h1>
         <p className="text-[16px] text-[#06003F]/60 leading-relaxed">

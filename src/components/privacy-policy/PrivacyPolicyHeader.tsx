@@ -29,7 +29,7 @@ export function PrivacyPolicyHeader() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-[48px] leading-[1.1] mb-[48px] font-bold text-center mt-[-45px] mr-[0px] ml-[0px]">
+        <h1 className="text-[48px] leading-[1.1] mb-[48px] font-bold text-[#06003F] text-center mt-[-45px] mr-[0px] ml-[0px]">
           Privacy Policy
         </h1>
       </motion.div>

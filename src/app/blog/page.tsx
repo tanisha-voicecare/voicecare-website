@@ -84,7 +84,7 @@ function PlaceholderPostCard({ post, index }: { post: ProcessedPost; index: numb
       
       <div className="flex flex-col flex-1 p-6">
         <Link href={`/blog/${post.slug}`}>
-          <h3 className="text-xl font-semibold text-neutral-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          <h3 className="text-xl font-semibold text-[#06003F] mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
             {post.title}
           </h3>
         </Link>
