@@ -72,7 +72,7 @@ const navigation: NavItem[] = [
   { label: 'Platform', href: '/platform' },
   { label: 'Security', href: '/security' },
   { label: 'Company', href: '/company' },
-  { label: 'Partner with Us', href: '/' }, // Page not implemented yet
+  { label: 'Partner with Us', href: '/partner-with-us' },
   { label: 'Schedule a Demo', href: '/schedule-demo' },
 ];
 

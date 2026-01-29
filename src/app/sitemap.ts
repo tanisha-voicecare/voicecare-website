@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/careers',
     '/press',
     '/schedule-demo',
+    '/partner-with-us',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

@@ -53,7 +53,7 @@ import { Linkedin, ArrowRight } from 'lucide-react';
 // ============================================
 // Pages that should NOT render Footer (per designer-src)
 // ============================================
-const PAGES_WITHOUT_FOOTER = ['/schedule-demo'];
+const PAGES_WITHOUT_FOOTER = ['/schedule-demo', '/partner-with-us'];
 
 // ============================================
 // Footer Navigation Data - EXACT from designer-src
