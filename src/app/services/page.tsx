@@ -191,8 +191,8 @@ export default async function ServicesPage() {
       : defaultServices;
 
   return (
-    <>
-      <Section background="gradient" spacing="xl" className="pt-32">
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+      <Section background="gradient" spacing="xl" className="pt-20 sm:pt-24 md:pt-32">
         <Container>
           <SectionHeader
             eyebrow="What We Offer"
@@ -222,45 +222,45 @@ export default async function ServicesPage() {
       {/* Why Choose Our Services */}
       <Section background="white" spacing="lg">
         <Container>
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="inline-block text-sm font-semibold tracking-wider uppercase text-primary-600 mb-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+            <div className="text-center lg:text-left">
+              <span className="inline-block text-xs sm:text-sm font-semibold tracking-wider uppercase text-primary-600 mb-2 sm:mb-3">
                 Why Choose Us
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#06003F] mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6">
                 Excellence in Every Aspect of Care
               </h2>
-              <p className="text-lg text-neutral-600 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Our healthcare services are designed with you in mind. We combine 
                 medical expertise with compassionate care to ensure the best 
                 possible outcomes for every patient.
               </p>
 
-              <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 {[
                   { stat: '50+', label: 'Expert Physicians' },
                   { stat: '15k+', label: 'Patients Treated' },
                   { stat: '25+', label: 'Years Experience' },
                   { stat: '98%', label: 'Satisfaction Rate' },
                 ].map((item, index) => (
-                  <div key={index} className="text-center p-6 bg-neutral-50 rounded-2xl">
-                    <div className="text-3xl font-bold text-primary-600 mb-1">
+                  <div key={index} className="text-center p-4 sm:p-5 md:p-6 bg-neutral-50 rounded-xl sm:rounded-2xl">
+                    <div className="text-2xl sm:text-3xl font-bold text-primary-600 mb-0.5 sm:mb-1">
                       {item.stat}
                     </div>
-                    <div className="text-sm text-neutral-600">{item.label}</div>
+                    <div className="text-xs sm:text-sm text-neutral-600">{item.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary-100 to-accent-100 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <svg className="w-20 h-20 mx-auto text-primary-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="relative order-first lg:order-last">
+              <div className="aspect-square max-w-[320px] sm:max-w-[400px] md:max-w-none mx-auto rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-primary-100 to-accent-100 flex items-center justify-center">
+                <div className="text-center p-6 sm:p-8">
+                  <svg className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto text-primary-400 mb-3 sm:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  <p className="text-primary-700 font-medium">Healthcare Excellence</p>
-                  <p className="text-sm text-primary-600/80">Add image via WordPress CMS</p>
+                  <p className="text-sm sm:text-base text-primary-700 font-medium">Healthcare Excellence</p>
+                  <p className="text-xs sm:text-sm text-primary-600/80">Add image via WordPress CMS</p>
                 </div>
               </div>
             </div>
@@ -278,6 +278,6 @@ export default async function ServicesPage() {
         }}
         variant="gradient"
       />
-    </>
+    </div>
   );
 }

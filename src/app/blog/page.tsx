@@ -63,42 +63,42 @@ async function getBlogData() {
 function PlaceholderPostCard({ post, index }: { post: ProcessedPost; index: number }) {
   return (
     <article
-      className="group flex flex-col h-full rounded-2xl overflow-hidden bg-white shadow-soft-md hover:shadow-soft-xl transition-all duration-300"
+      className="group flex flex-col h-full rounded-2xl overflow-hidden bg-white shadow-soft-md hover:shadow-soft-xl transition-all duration-300 w-full min-w-0"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <Link href={`/blog/${post.slug}`} className="relative aspect-video overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
           <div className="text-center">
-            <svg className="w-12 h-12 mx-auto text-primary-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-primary-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-sm text-primary-600">Blog Image</p>
+            <p className="text-xs sm:text-sm text-primary-600">Blog Image</p>
           </div>
         </div>
         {post.categories[0] && (
-          <span className="absolute top-4 left-4 px-3 py-1 text-sm font-medium bg-white/90 backdrop-blur-sm rounded-full text-primary-700">
+          <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-white/90 backdrop-blur-sm rounded-full text-primary-700">
             {post.categories[0].name}
           </span>
         )}
       </Link>
       
-      <div className="flex flex-col flex-1 p-6">
+      <div className="flex flex-col flex-1 p-4 sm:p-5 md:p-6">
         <Link href={`/blog/${post.slug}`}>
-          <h3 className="text-xl font-semibold text-[#06003F] mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          <h3 className="text-lg sm:text-xl font-semibold text-[#06003F] mb-2 sm:mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
             {post.title}
           </h3>
         </Link>
-        <p className="text-neutral-600 mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
+        <p className="text-sm sm:text-base text-neutral-600 mb-3 sm:mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
         
-        <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
-          <time dateTime={post.date} className="text-sm text-neutral-500">
+        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-neutral-100 text-xs sm:text-sm text-neutral-500">
+          <time dateTime={post.date}>
             {new Date(post.date).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
               year: 'numeric',
             })}
           </time>
-          <span className="text-sm text-neutral-500">{post.readingTime} min read</span>
+          <span>{post.readingTime} min read</span>
         </div>
       </div>
     </article>
@@ -111,10 +111,10 @@ function PlaceholderPostCard({ post, index }: { post: ProcessedPost; index: numb
 
 function CategoryFilter({ categories }: { categories: WPCategory[] }) {
   return (
-    <div className="flex flex-wrap gap-2 justify-center mb-12">
+    <div className="flex flex-wrap gap-2 justify-center mb-8 sm:mb-10 md:mb-12 px-2">
       <Link
         href="/blog"
-        className="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-full transition-colors"
+        className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-primary-600 text-white rounded-full transition-colors"
       >
         All Posts
       </Link>
@@ -122,7 +122,7 @@ function CategoryFilter({ categories }: { categories: WPCategory[] }) {
         <Link
           key={category.id}
           href={`/blog/category/${category.slug}`}
-          className="px-4 py-2 text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-primary-100 hover:text-primary-700 rounded-full transition-colors"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-primary-100 hover:text-primary-700 rounded-full transition-colors"
         >
           {category.name}
         </Link>
@@ -184,7 +184,8 @@ export default async function BlogPage() {
   const displayPosts = posts.length > 0 ? posts : defaultPosts;
 
   return (
-    <Section background="light" spacing="xl" className="pt-32">
+    <div className="min-h-screen bg-neutral-50 w-full overflow-x-hidden">
+    <Section background="light" spacing="xl" className="pt-20 sm:pt-24 md:pt-32">
       <Container>
         <SectionHeader
           eyebrow="Our Blog"
@@ -214,24 +215,25 @@ export default async function BlogPage() {
         </Grid>
 
         {/* Pagination placeholder */}
-        <div className="flex justify-center mt-12 gap-2">
+        <div className="flex flex-wrap justify-center mt-8 sm:mt-10 md:mt-12 gap-1.5 sm:gap-2">
           <button
             disabled
-            className="px-4 py-2 text-sm font-medium bg-neutral-200 text-neutral-400 rounded-lg cursor-not-allowed"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-200 text-neutral-400 rounded-lg cursor-not-allowed"
           >
             Previous
           </button>
-          <span className="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-lg">
+          <span className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-primary-600 text-white rounded-lg">
             1
           </span>
-          <button className="px-4 py-2 text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
+          <button className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
             2
           </button>
-          <button className="px-4 py-2 text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
+          <button className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
             Next
           </button>
         </div>
       </Container>
     </Section>
+    </div>
   );
 }
