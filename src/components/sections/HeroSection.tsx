@@ -122,10 +122,10 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
 
   return (
     <section
-      className={`relative pt-5 pb-20 overflow-hidden bg-white ${className}`}
+      className={`relative pt-3 sm:pt-5 pb-12 sm:pb-20 overflow-hidden bg-white ${className}`}
       aria-labelledby="hero-heading"
     >
-      <div className="w-full px-5">
+      <div className="w-full px-3 sm:px-5">
         {/* Rounded Rectangle Background Container */}
         <div className="relative rounded-[24px] overflow-hidden w-full">
           {/* Vibrant Gradient Background */}
@@ -214,8 +214,8 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
           </div>
 
           {/* Content Container - Centered */}
-          <div className="relative py-24 md:py-32 flex items-center justify-center">
-            <div className="w-[1000px] max-w-full mx-auto px-6">
+          <div className="relative py-16 sm:py-20 md:py-24 lg:py-32 flex items-center justify-center">
+            <div className="w-[1000px] max-w-full mx-auto px-4 sm:px-6">
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -237,7 +237,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
                     hidden: { opacity: 0, y: 10 },
                     visible: { opacity: 1, y: 0 },
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-[10px] font-bold uppercase tracking-[0.1em] mb-12 text-[#06003F] border border-black/5"
+                  className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-white text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] mb-6 sm:mb-8 md:mb-12 text-[#06003F] border border-black/5"
                   style={{
                     boxShadow:
                       '0 2px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05)',
@@ -253,13 +253,13 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
                     hidden: { opacity: 0, y: 10 },
                     visible: { opacity: 1, y: 0 },
                   }}
-                  className="text-[18px] md:text-[22px] font-medium text-white/90 mb-4 tracking-tight"
+                  className="text-[14px] sm:text-[16px] md:text-[18px] lg:text-[22px] font-medium text-white/90 mb-4 tracking-tight px-2"
                 >
                   Supercharging Healthcare Workers with Care and AI by
                 </motion.p>
 
                 {/* Rotating Headlines */}
-                <div className="relative h-[140px] md:h-[200px] flex items-center justify-center w-full">
+                <div className="relative h-[100px] sm:h-[120px] md:h-[160px] lg:h-[200px] flex items-center justify-center w-full">
                   <AnimatePresence mode="wait">
                     <motion.h1
                       id="hero-heading"
@@ -271,7 +271,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
                         duration: 0.8,
                         ease: [0.16, 1, 0.3, 1],
                       }}
-                      className="absolute text-[44px] md:text-[84px] font-bold tracking-[-0.04em] leading-[1.1] text-white text-center"
+                      className="absolute text-[28px] sm:text-[36px] md:text-[52px] lg:text-[84px] font-bold tracking-[-0.04em] leading-[1.1] text-white text-center px-2"
                     >
                       {HEADLINES[currentHeadingIndex]}
                     </motion.h1>
@@ -285,12 +285,12 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
                     visible: { opacity: 1, scale: 1 },
                   }}
                   transition={{ delay: 0.2 }}
-                  className="flex flex-wrap gap-4 justify-center mt-[40px] mr-[0px] mb-[0px] ml-[0px]"
+                  className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-[40px] w-full sm:w-auto px-4 sm:px-0"
                 >
                   {/* Primary CTA */}
                   <Link
                     href="#experience"
-                    className="inline-flex items-center gap-2 bg-[#FF4E3A] text-white px-8 py-3.5 rounded-[6px] text-sm font-semibold hover:bg-[#FF4E3A]/90 transition-all group shadow-xl shadow-[#FF4E3A]/20"
+                    className="inline-flex items-center justify-center gap-2 bg-[#FF4E3A] text-white px-6 sm:px-8 py-3.5 rounded-[6px] text-sm font-semibold hover:bg-[#FF4E3A]/90 transition-all group shadow-xl shadow-[#FF4E3A]/20 min-h-[48px]"
                   >
                     Experience it
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -299,7 +299,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
                   {/* Secondary CTA */}
                   <Link
                     href="#demo"
-                    className="inline-flex items-center bg-white border border-white/20 text-[#06003F] px-8 py-3.5 rounded-[6px] text-sm font-semibold hover:bg-white/90 transition-all shadow-sm"
+                    className="inline-flex items-center justify-center bg-white border border-white/20 text-[#06003F] px-6 sm:px-8 py-3.5 rounded-[6px] text-sm font-semibold hover:bg-white/90 transition-all shadow-sm min-h-[48px]"
                   >
                     Schedule a Demo
                   </Link>

@@ -11,7 +11,7 @@ export const metadata: Metadata = generatePageMetadata({
 
 export default function ScheduleDemoPage() {
   return (
-    <div className="min-h-screen bg-white pt-14">
+    <div className="min-h-screen bg-white">
       <ScheduleDemoHero />
       <ScheduleDemoForm />
     </div>

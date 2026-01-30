@@ -85,7 +85,7 @@ interface ProductIntroSectionProps {
 
 export function ProductIntroSection({ className = '' }: ProductIntroSectionProps) {
   return (
-    <section className={`py-40 bg-[#06003F] relative overflow-hidden ${className}`}>
+    <section className={`py-20 sm:py-28 md:py-32 lg:py-40 bg-[#06003F] relative overflow-hidden ${className}`}>
       {/* High-Impact Vibrant Gradient Background */}
       <div className="absolute inset-0 z-0">
         {/* Base Gradient */}
@@ -124,7 +124,7 @@ export function ProductIntroSection({ className = '' }: ProductIntroSectionProps
         />
       </div>
 
-      <div className="container mx-auto px-6 md:px-16 max-w-7xl relative z-10 text-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export function ProductIntroSection({ className = '' }: ProductIntroSectionProps
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] mb-10 text-white"
+            className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tighter leading-[0.95] mb-6 sm:mb-8 md:mb-10 text-white"
           >
             Introducing Joy
           </motion.h2>
@@ -162,7 +162,7 @@ export function ProductIntroSection({ className = '' }: ProductIntroSectionProps
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="text-white/80 mb-14 text-xl md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-white/80 mb-8 sm:mb-10 md:mb-14 text-base sm:text-lg md:text-xl lg:text-2xl font-medium max-w-2xl mx-auto leading-relaxed px-2"
           >
             Your automated Voice AI Agent, designed to optimize and ease administrative burden by
             supercharging your workflow to be more efficient and empathetic.

@@ -11,7 +11,7 @@ export const metadata: Metadata = generatePageMetadata({
 
 export default function PartnerWithUsPage() {
   return (
-    <div className="min-h-screen bg-white pt-14">
+    <div className="min-h-screen bg-white">
       <PartnerHero />
       <PartnerForm />
     </div>

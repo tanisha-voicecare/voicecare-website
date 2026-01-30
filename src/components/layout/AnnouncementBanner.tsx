@@ -4,7 +4,13 @@
  * AnnouncementBanner Component
  * PIXEL-PERFECT implementation from designer-src/src/app/components/AnnouncementBanner.tsx
  *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
+ * HEADER OFFSET SYSTEM:
+ * This component's mt-14 is the SINGLE SOURCE OF TRUTH for header offset.
+ * - Fixed header: h-14 (56px) - defined in Header.tsx
+ * - This banner: mt-14 (56px) - positions content below fixed header
+ * - DO NOT add pt-14/mt-14 to page wrappers - it's handled here
+ *
+ * DESIGNER EXACT VALUES:
  *
  * Wrapper:
  * - relative mt-14 (positions below fixed h-14 navbar)
@@ -14,17 +20,17 @@
  * - Duration: 0.6s, ease: [0.23, 1, 0.32, 1]
  *
  * Container:
- * - container mx-auto px-6 md:px-16 max-w-7xl
+ * - container mx-auto px-4 sm:px-6 lg:px-16 max-w-7xl
  *
  * Inner:
- * - flex items-center justify-center gap-3 py-3
+ * - flex items-center justify-start xl:justify-center gap-3 py-3
  * - overflow-x-auto scrollbar-hide
  *
  * Icon:
  * - Sparkles w-4 h-4 text-[#FF4E3A] flex-shrink-0
  *
  * Text:
- * - text-sm text-white/90 text-center whitespace-nowrap
+ * - text-sm text-white/90 xl:text-center xl:whitespace-nowrap
  * - Bold part: font-semibold text-white
  */
 

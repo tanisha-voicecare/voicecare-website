@@ -116,10 +116,10 @@ export function SupportedEHRIntegrationsSection({
 }: SupportedEHRIntegrationsSectionProps) {
   return (
     <section
-      className={`py-16 md:py-20 bg-white ${className}`}
+      className={`py-12 sm:py-16 md:py-20 bg-white ${className}`}
       aria-labelledby="ehr-integrations-heading"
     >
-      <div className="max-w-[1100px] mx-auto px-6 md:px-12">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 md:px-12">
         {/* Title - matches Figma exactly */}
         <motion.h2
           id="ehr-integrations-heading"
@@ -127,19 +127,18 @@ export function SupportedEHRIntegrationsSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="text-[36px] md:text-[48px] font-bold text-[#06003F] tracking-[-0.02em] text-center mb-12 md:mb-16"
+          className="text-[28px] sm:text-[36px] lg:text-[48px] font-bold text-[#06003F] tracking-[-0.02em] text-center mb-8 sm:mb-12 md:mb-16"
         >
           Supported EHR Integrations
         </motion.h2>
 
         {/* Logo Grid - 2 columns mobile, 4 columns desktop */}
-        {/* Figma: gap = 12 * 0.25rem = 3rem (48px) */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center justify-items-center"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center justify-items-center"
         >
           {EHR_LOGOS.map((logo, index) => (
             <motion.div
@@ -160,7 +159,7 @@ export function SupportedEHRIntegrationsSection({
                 width={200}
                 height={60}
                 loading="lazy"
-                className="h-[50px] md:h-[60px] w-auto max-w-[200px] object-contain"
+                className="h-[40px] sm:h-[50px] lg:h-[60px] w-auto max-w-[140px] sm:max-w-[160px] lg:max-w-[200px] object-contain"
               />
             </motion.div>
           ))}
