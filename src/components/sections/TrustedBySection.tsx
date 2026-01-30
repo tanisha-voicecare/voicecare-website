@@ -121,7 +121,7 @@ export function TrustedBySection({ className = '' }: TrustedBySectionProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-      className={`border-y border-black/[0.04] py-10 bg-white/50 mt-[-123px] mr-[0px] mb-[0px] ml-[0px] overflow-hidden ${className}`}
+      className={`border-y border-black/[0.04] py-10 bg-white/50 mt-[-60px] mr-[0px] mb-[0px] ml-[0px] overflow-hidden ${className}`}
       aria-label="Trusted by leading healthcare organizations"
     >
       <div className="relative">

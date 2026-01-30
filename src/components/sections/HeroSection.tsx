@@ -122,7 +122,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
 
   return (
     <section
-      className={`relative pt-5 pb-20 overflow-hidden bg-white flex items-center justify-center min-h-screen ${className}`}
+      className={`relative pt-5 pb-20 overflow-hidden bg-white ${className}`}
       aria-labelledby="hero-heading"
     >
       <div className="w-full px-5">
@@ -214,7 +214,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
           </div>
 
           {/* Content Container - Centered */}
-          <div className="relative py-32 md:py-40 flex items-center justify-center min-h-[800px]">
+          <div className="relative py-24 md:py-32 flex items-center justify-center">
             <div className="w-[1000px] max-w-full mx-auto px-6">
               <motion.div
                 initial="hidden"
