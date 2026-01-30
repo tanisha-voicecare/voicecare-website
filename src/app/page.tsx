@@ -8,6 +8,7 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { TrustedBySection } from '@/components/sections/TrustedBySection';
 import { ValueMetricsSection } from '@/components/sections/ValueMetricsSection';
 import { InfiniteMarqueeSection } from '@/components/sections/InfiniteMarqueeSection';
+import { SupportedEHRIntegrationsSection } from '@/components/sections/SupportedEHRIntegrationsSection';
 import { ProductIntroSection } from '@/components/sections/ProductIntroSection';
 import { generatePageMetadata } from '@/lib/seo';
 
@@ -44,7 +45,10 @@ export default function HomePage() {
       {/* Value Metrics Section - Why VoiceCare */}
       <ValueMetricsSection />
 
-      {/* Infinite Marquee Section - Real-World Impact */}
+      {/* Supported EHR Integrations Section */}
+      <SupportedEHRIntegrationsSection />
+
+      {/* Infinite Marquee Section - Real-World Impact / Radical Efficiencies */}
       <InfiniteMarqueeSection />
 
       {/* Product Intro Section - Introducing Joy */}
