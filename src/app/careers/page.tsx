@@ -25,10 +25,10 @@ export const metadata: Metadata = generatePageMetadata({
 
 export default function CareersPage() {
   return (
-    <>
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
       <CareersHero />
       <CareersValues />
       <OpenPositions />
-    </>
+    </div>
   );
 }
