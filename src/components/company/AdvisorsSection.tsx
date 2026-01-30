@@ -42,10 +42,10 @@
  * - Animation: opacity/scale/y with AnimatePresence
  */
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // ============================================
 // Advisors Data (EXACT from designer-src/company-data.ts)
@@ -161,6 +161,45 @@ const advisors: Advisor[] = [
 
 export function AdvisorsSection() {
   const [selectedAdvisor, setSelectedAdvisor] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  // Check scroll position and update arrow visibility
+  const checkScrollPosition = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  // Scroll handler
+  const scroll = (direction: 'left' | 'right') => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = 300; // Scroll by 300px
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  // Initialize and add scroll listener
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      checkScrollPosition();
+      container.addEventListener('scroll', checkScrollPosition);
+      window.addEventListener('resize', checkScrollPosition);
+      return () => {
+        container.removeEventListener('scroll', checkScrollPosition);
+        window.removeEventListener('resize', checkScrollPosition);
+      };
+    }
+  }, []);
 
   return (
     <section className="relative py-10 sm:py-12 md:py-[60px] bg-white overflow-x-hidden">
@@ -194,74 +233,106 @@ export function AdvisorsSection() {
           </motion.p>
         </motion.div>
 
-        {/* Horizontal Scroll Container */}
-        <div className="overflow-x-auto scrollbar-hide overscroll-x-contain -mx-4 sm:-mx-6 md:-mx-12 lg:-mx-16 px-4 sm:px-6 md:px-12 lg:px-16 [-webkit-overflow-scrolling:touch]">
-          <div className="flex gap-4 sm:gap-5 md:gap-6 pb-4 sm:pb-6 pr-4 sm:pr-6" style={{ width: 'max-content' }}>
-            {advisors.map((advisor, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.06 }}
-                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
-                className="group flex-shrink-0 cursor-pointer w-[220px] sm:w-[250px] md:w-[280px]"
-                onClick={() => setSelectedAdvisor(index)}
-              >
-                {/* Photo Card */}
-                <div className="relative bg-white rounded-[12px] overflow-hidden mb-4 sm:mb-5 transition-all duration-200">
-                  <div className="aspect-[3/4] relative">
-                    <Image
-                      src={advisor.image}
-                      alt={`Photo of ${advisor.name}`}
-                      fill
-                      sizes="(max-width: 640px) 220px, (max-width: 768px) 250px, 280px"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+        {/* Horizontal Scroll Container with Navigation */}
+        <div className="relative flex items-start">
+          {/* Left Navigation Button - Desktop only, positioned outside carousel */}
+          <button
+            type="button"
+            onClick={() => scroll('left')}
+            className={`hidden lg:flex flex-shrink-0 w-12 h-12 items-center justify-center rounded-full bg-white shadow-lg border border-neutral-200 text-[#06003F] hover:bg-[#06003F] hover:text-white transition-all duration-200 mr-4 ${
+              canScrollLeft ? 'opacity-100 cursor-pointer' : 'opacity-30 cursor-not-allowed'
+            }`}
+            style={{ marginTop: 'calc(280px * 4 / 3 / 2 - 24px)' }} /* Center on photo height (aspect 3/4 of 280px width) */
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#06003F]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          {/* Scrollable Content - full width carousel */}
+          <div 
+            ref={scrollContainerRef}
+            className="overflow-x-auto scrollbar-hide overscroll-x-contain [-webkit-overflow-scrolling:touch] flex-1 min-w-0"
+          >
+            <div className="flex gap-4 sm:gap-5 md:gap-6 pb-4 sm:pb-6 px-1" style={{ width: 'max-content' }}>
+              {advisors.map((advisor, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.06 }}
+                  whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
+                  className="group flex-shrink-0 cursor-pointer w-[220px] sm:w-[250px] md:w-[280px]"
+                  onClick={() => setSelectedAdvisor(index)}
+                >
+                  {/* Photo Card */}
+                  <div className="relative bg-white rounded-[12px] overflow-hidden mb-4 sm:mb-5 transition-all duration-200">
+                    <div className="aspect-[3/4] relative">
+                      <Image
+                        src={advisor.image}
+                        alt={`Photo of ${advisor.name}`}
+                        fill
+                        sizes="(max-width: 640px) 220px, (max-width: 768px) 250px, 280px"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
 
-                    {/* "View Details" text on hover */}
-                    <div className="absolute bottom-4 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <span className="text-white text-[12px] sm:text-[13px] font-semibold">
-                        View Details
-                      </span>
+                      {/* Gradient overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#06003F]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+                      {/* "View Details" text on hover */}
+                      <div className="absolute bottom-4 left-0 right-0 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <span className="text-white text-[12px] sm:text-[13px] font-semibold">
+                          View Details
+                        </span>
+                      </div>
                     </div>
+
+                    {/* Role chip */}
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-3 left-3 sm:top-4 sm:left-4"
+                    >
+                      <span
+                        className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
+                          advisor.role === 'Investor'
+                            ? 'bg-[#FF4E3A] text-white'
+                            : advisor.role === 'Board Member'
+                              ? 'bg-[#06003F] text-white'
+                              : 'bg-white text-[#06003F]'
+                        }`}
+                      >
+                        {advisor.role}
+                      </span>
+                    </motion.div>
                   </div>
 
-                  {/* Role chip */}
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-3 left-3 sm:top-4 sm:left-4"
-                  >
-                    <span
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
-                        advisor.role === 'Investor'
-                          ? 'bg-[#FF4E3A] text-white'
-                          : advisor.role === 'Board Member'
-                            ? 'bg-[#06003F] text-white'
-                            : 'bg-white text-[#06003F]'
-                      }`}
-                    >
-                      {advisor.role}
-                    </span>
-                  </motion.div>
-                </div>
-
-                {/* Info Section */}
-                <div>
-                  <h3 className="text-[17px] sm:text-[18px] md:text-[20px] font-bold text-[#06003F] mb-1 group-hover:text-[#FF4E3A] transition-colors duration-200">
-                    {advisor.name}
-                  </h3>
-                  <p className="text-[12px] sm:text-[13px] text-[#06003F]/50 leading-relaxed line-clamp-2">
-                    {advisor.designation}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+                  {/* Info Section */}
+                  <div>
+                    <h3 className="text-[17px] sm:text-[18px] md:text-[20px] font-bold text-[#06003F] mb-1 group-hover:text-[#FF4E3A] transition-colors duration-200">
+                      {advisor.name}
+                    </h3>
+                    <p className="text-[12px] sm:text-[13px] text-[#06003F]/50 leading-relaxed line-clamp-2">
+                      {advisor.designation}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
+
+          {/* Right Navigation Button - Desktop only, positioned outside carousel */}
+          <button
+            type="button"
+            onClick={() => scroll('right')}
+            className={`hidden lg:flex flex-shrink-0 w-12 h-12 items-center justify-center rounded-full bg-white shadow-lg border border-neutral-200 text-[#06003F] hover:bg-[#06003F] hover:text-white transition-all duration-200 ml-4 ${
+              canScrollRight ? 'opacity-100 cursor-pointer' : 'opacity-30 cursor-not-allowed'
+            }`}
+            style={{ marginTop: 'calc(280px * 4 / 3 / 2 - 24px)' }} /* Center on photo height (aspect 3/4 of 280px width) */
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
 

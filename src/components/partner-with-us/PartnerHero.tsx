@@ -41,11 +41,10 @@ export function PartnerHero() {
         <h1 className="text-[32px] sm:text-[40px] md:text-[48px] leading-[1.1] mb-[16px] sm:mb-[20px] md:mb-[24px] font-bold text-[#06003F] mt-[-25px] sm:mt-[-35px] md:mt-[-45px]">
           Partner with Us
         </h1>
-        <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 leading-relaxed max-w-[60ch] mx-auto px-2">
-          Collaborating with VoiceCare will drive mutual growth and success. Fill out the form below to explore
-          <span className="hidden sm:inline"><br /></span>
-          <span className="sm:hidden"> </span>
-          partnership opportunities and embark on a journey toward shaping the future of healthcare together.
+        <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 leading-relaxed mx-auto px-2">
+          <span className="block sm:inline">Collaborating with VoiceCare will drive mutual growth and success. Fill out the form below to explore</span>
+          <span className="hidden sm:inline"> </span>
+          <span className="block sm:inline">partnership opportunities and embark on a journey toward shaping the future of healthcare together.</span>
         </p>
       </motion.div>
     </section>

@@ -218,20 +218,20 @@ export function Footer() {
               </p>
 
               <form onSubmit={handleSubmit}>
-                {/* Desktop: inline input+button, Mobile/Tablet: stacked and centered */}
-                <div className="flex flex-col lg:flex-row gap-3 lg:gap-0 lg:relative max-w-sm mx-auto lg:mx-0 lg:max-w-none">
+                {/* Stacked input + button layout on all screen sizes */}
+                <div className="flex flex-col gap-3 max-w-sm mx-auto lg:mx-0 lg:max-w-md">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
-                    className="w-full px-4 lg:px-5 py-3.5 text-[15px] bg-[#06003F]/[0.02] border border-[#06003F]/10 rounded-[8px] focus:outline-none focus:border-[#FF4E3A] focus:bg-white transition-all placeholder:text-[#06003F]/30 lg:pr-32 text-center lg:text-left"
+                    className="w-full px-4 lg:px-5 py-3.5 text-[15px] bg-[#06003F]/[0.02] border border-[#06003F]/10 rounded-[8px] focus:outline-none focus:border-[#FF4E3A] focus:bg-white transition-all placeholder:text-[#06003F]/30 text-center lg:text-left"
                   />
                   <button
                     type="submit"
                     disabled={isSubmitted}
-                    className="w-full lg:w-auto lg:absolute lg:right-1.5 lg:top-1.5 lg:bottom-1.5 bg-[#FF4E3A] text-white px-5 py-3 lg:py-0 rounded-[6px] font-semibold hover:bg-[#FF4E3A]/90 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 min-h-[44px]"
+                    className="w-full bg-[#FF4E3A] text-white px-5 py-3 rounded-[6px] font-semibold hover:bg-[#FF4E3A]/90 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 min-h-[44px]"
                   >
                     {isSubmitted ? (
                       'Subscribed!'

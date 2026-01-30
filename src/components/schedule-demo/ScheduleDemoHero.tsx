@@ -41,11 +41,10 @@ export function ScheduleDemoHero() {
           <h1 className="text-[32px] sm:text-[40px] md:text-[48px] leading-[1.1] mb-[16px] sm:mb-[20px] md:mb-[24px] font-bold text-[#06003F] mt-[-25px] sm:mt-[-35px] md:mt-[-50px]">
             Schedule a Demo
           </h1>
-          <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 leading-relaxed max-w-[60ch] mx-auto px-2">
-            Gain a comprehensive understanding of how our AI-driven solutions can revolutionize your operations.
-            <span className="hidden sm:inline"><br /></span>
-            <span className="sm:hidden"> </span>
-            Our team will reach out promptly to arrange a tailored demonstration that aligns with your needs and objectives.
+          <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 leading-relaxed mx-auto px-2">
+            <span className="block sm:inline">Gain a comprehensive understanding of how our AI-driven solutions can revolutionize your operations.</span>
+            <span className="hidden sm:inline"> </span>
+            <span className="block sm:inline">Our team will reach out promptly to arrange a tailored demonstration that aligns with your needs and objectives.</span>
           </p>
         </motion.div>
     </section>

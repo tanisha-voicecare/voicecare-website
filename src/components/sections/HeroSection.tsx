@@ -298,7 +298,7 @@ export function HeroSection({ className = '' }: HeroSectionProps) {
 
                   {/* Secondary CTA */}
                   <Link
-                    href="#demo"
+                    href="/schedule-demo"
                     className="inline-flex items-center justify-center bg-white border border-white/20 text-[#06003F] px-6 sm:px-8 py-3.5 rounded-[6px] text-sm font-semibold hover:bg-white/90 transition-all shadow-sm min-h-[48px]"
                   >
                     Schedule a Demo
