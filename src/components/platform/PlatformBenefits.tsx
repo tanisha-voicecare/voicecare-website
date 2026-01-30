@@ -100,47 +100,48 @@ const benefits: Benefit[] = [
 
 export function PlatformBenefits() {
   return (
-    <section className="relative py-24 bg-white">
-      <div className="container mx-auto px-6 md:px-16 max-w-7xl">
+    <section className="relative py-14 sm:py-18 md:py-24 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
         {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]">
             Benefits
           </h2>
         </motion.div>
 
         {/* Benefit 1: Content LEFT, Image RIGHT */}
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Left: Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
+          {/* Content - appears first on mobile */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="text-center md:text-left order-2 md:order-1"
           >
-            <h3 className="text-[32px] font-bold text-[#06003F] mb-6 tracking-tight leading-[1.2]">
+            <h3 className="text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6 tracking-tight leading-[1.2]">
               {benefits[0].title}
             </h3>
-            <p className="text-[17px] text-[#06003F]/70 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/70 leading-relaxed">
               {benefits[0].description}
             </p>
           </motion.div>
 
-          {/* Right: Video */}
+          {/* Video */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative"
+            className="relative order-1 md:order-2"
           >
-            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+            <div className="aspect-[16/10] md:aspect-square w-full rounded-[12px] overflow-hidden">
               <video
                 src={benefits[0].video}
                 autoPlay
@@ -154,16 +155,16 @@ export function PlatformBenefits() {
         </div>
 
         {/* Benefit 2: Video LEFT, Content RIGHT */}
-        <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-          {/* Left: Video */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center mt-12 sm:mt-16 md:mt-24">
+          {/* Video */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative"
+            className="relative order-1"
           >
-            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+            <div className="aspect-[16/10] md:aspect-square w-full rounded-[12px] overflow-hidden">
               <video
                 src={benefits[1].video}
                 autoPlay
@@ -175,48 +176,50 @@ export function PlatformBenefits() {
             </div>
           </motion.div>
 
-          {/* Right: Content */}
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="text-center md:text-left order-2"
           >
-            <h3 className="text-[32px] font-bold text-[#06003F] mb-6 tracking-tight leading-[1.2]">
+            <h3 className="text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6 tracking-tight leading-[1.2]">
               {benefits[1].title}
             </h3>
-            <p className="text-[17px] text-[#06003F]/70 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/70 leading-relaxed">
               {benefits[1].description}
             </p>
           </motion.div>
         </div>
 
         {/* Benefit 3: Content LEFT, Video RIGHT */}
-        <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-          {/* Left: Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center mt-12 sm:mt-16 md:mt-24">
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="text-center md:text-left order-2 md:order-1"
           >
-            <h3 className="text-[32px] font-bold text-[#06003F] mb-6 tracking-tight leading-[1.2]">
+            <h3 className="text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6 tracking-tight leading-[1.2]">
               {benefits[2].title}
             </h3>
-            <p className="text-[17px] text-[#06003F]/70 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/70 leading-relaxed">
               {benefits[2].description}
             </p>
           </motion.div>
 
-          {/* Right: Video */}
+          {/* Video */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative"
+            className="relative order-1 md:order-2"
           >
-            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+            <div className="aspect-[16/10] md:aspect-square w-full rounded-[12px] overflow-hidden">
               <video
                 src={benefits[2].video}
                 autoPlay
@@ -230,16 +233,16 @@ export function PlatformBenefits() {
         </div>
 
         {/* Benefit 4: Video LEFT, Content RIGHT */}
-        <div className="grid md:grid-cols-2 gap-16 items-center mt-24">
-          {/* Left: Video */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center mt-12 sm:mt-16 md:mt-24">
+          {/* Video */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative"
+            className="relative order-1"
           >
-            <div className="aspect-square w-full rounded-[12px] overflow-hidden">
+            <div className="aspect-[16/10] md:aspect-square w-full rounded-[12px] overflow-hidden">
               <video
                 src={benefits[3].video}
                 autoPlay
@@ -251,17 +254,18 @@ export function PlatformBenefits() {
             </div>
           </motion.div>
 
-          {/* Right: Content */}
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="text-center md:text-left order-2"
           >
-            <h3 className="text-[32px] font-bold text-[#06003F] mb-6 tracking-tight leading-[1.2]">
+            <h3 className="text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6 tracking-tight leading-[1.2]">
               {benefits[3].title}
             </h3>
-            <p className="text-[17px] text-[#06003F]/70 leading-relaxed">
+            <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/70 leading-relaxed">
               {benefits[3].description}
             </p>
           </motion.div>

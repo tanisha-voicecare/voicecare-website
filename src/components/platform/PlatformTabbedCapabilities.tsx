@@ -176,25 +176,25 @@ export function PlatformTabbedCapabilities() {
   const [activeTab, setActiveTab] = useState('benefit-verification');
 
   return (
-    <section className="relative pt-12 pb-24 bg-white">
-      <div className="container mx-auto px-6 md:px-16 max-w-7xl">
+    <section className="relative pt-8 sm:pt-10 md:pt-12 pb-16 sm:pb-20 md:pb-24 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
         {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-10 md:mb-12"
         >
-          <h2 className="text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1]">
             Our Solutions
           </h2>
         </motion.div>
 
         {/* Tabbed Interface */}
-        <div className="grid md:grid-cols-[300px_1fr] gap-12">
-          {/* Left: Tab Navigation */}
-          <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr] gap-6 sm:gap-8 md:gap-12">
+          {/* Tab Navigation - horizontal scroll on mobile, vertical on md+ */}
+          <div className="flex md:flex-col gap-2 md:gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0 scrollbar-hide">
             {capabilities.map((cap, index) => (
               <motion.button
                 key={cap.id}
@@ -203,19 +203,19 @@ export function PlatformTabbedCapabilities() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 onClick={() => setActiveTab(cap.id)}
-                className={`group flex items-center gap-3 px-6 py-4 rounded-[6px] text-left transition-all ${
+                className={`group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 md:px-6 py-3 sm:py-3.5 md:py-4 rounded-[6px] text-left transition-all whitespace-nowrap md:whitespace-normal flex-shrink-0 md:flex-shrink ${
                   activeTab === cap.id
                     ? 'bg-[#06003F] text-white shadow-lg'
-                    : 'bg-transparent text-[#06003F]/60 hover:bg-[#F5F5F7]'
+                    : 'bg-[#F5F5F7] md:bg-transparent text-[#06003F]/60 hover:bg-[#F5F5F7]'
                 }`}
               >
-                <cap.icon className="w-5 h-5" />
-                <span className="font-semibold text-[15px]">{cap.label}</span>
+                <cap.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="font-semibold text-[13px] sm:text-[14px] md:text-[15px]">{cap.label}</span>
               </motion.button>
             ))}
           </div>
 
-          {/* Right: Content Area */}
+          {/* Content Area */}
           <AnimatePresence mode="wait">
             {capabilities.map(
               (cap) =>
@@ -226,17 +226,17 @@ export function PlatformTabbedCapabilities() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className="bg-[#FAFAFA] rounded-[12px] p-10 border border-[#06003F]/5"
+                    className="bg-[#FAFAFA] rounded-[12px] p-4 sm:p-6 md:p-8 lg:p-10 border border-[#06003F]/5"
                   >
-                    <h3 className="text-[32px] font-bold text-[#06003F] mb-4">{cap.title}</h3>
+                    <h3 className="text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#06003F] mb-3 sm:mb-4">{cap.title}</h3>
 
                     {/* Video Player Container */}
-                    <div className="bg-white rounded-[12px] p-6 border border-[#06003F]/10">
+                    <div className="bg-white rounded-[8px] sm:rounded-[10px] md:rounded-[12px] p-3 sm:p-4 md:p-6 border border-[#06003F]/10">
                       {/* Mac-style window buttons */}
-                      <div className="flex items-center gap-3 mb-4 pb-4 border-b border-[#06003F]/5">
-                        <div className="w-3 h-3 rounded-full bg-red-400" />
-                        <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                        <div className="w-3 h-3 rounded-full bg-green-400" />
+                      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-[#06003F]/5">
+                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400" />
+                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400" />
+                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400" />
                       </div>
 
                       {/* Video Player */}

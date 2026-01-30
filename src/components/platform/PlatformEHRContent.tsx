@@ -33,8 +33,8 @@ import { motion } from 'motion/react';
 
 export function PlatformEHRContent() {
   return (
-    <section className="relative py-[90px] bg-white px-[0px]">
-      <div className="container mx-auto px-6 md:px-16 max-w-5xl">
+    <section className="relative py-16 sm:py-20 md:py-[90px] bg-white">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -42,12 +42,12 @@ export function PlatformEHRContent() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="text-[48px] font-bold text-[#06003F] mb-8 tracking-tight leading-[1.1]">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-6 sm:mb-8 tracking-tight leading-[1.1] max-w-[20ch] mx-auto md:max-w-none">
             We Are Enterprise
             <br />
             Administration platform
           </h2>
-          <div className="text-[17px] text-[#06003F]/70 leading-relaxed space-y-6 max-w-4xl mx-auto">
+          <div className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/70 leading-relaxed space-y-4 sm:space-y-6 max-w-4xl mx-auto">
             <p>
               One secure conversational platform, powered by advanced and constantly improving
               generative models for healthcare professionals to complete 1000s of calls and tasks in
@@ -58,7 +58,7 @@ export function PlatformEHRContent() {
               Our AI-powered analytics gives you actionable insights to measure the performance of
               every conversation.
             </p>
-            <p className="font-bold text-[18px]">
+            <p className="font-bold text-[16px] sm:text-[17px] md:text-[18px]">
               Automate the back office to improve patient experience with every conversation.
             </p>
           </div>
