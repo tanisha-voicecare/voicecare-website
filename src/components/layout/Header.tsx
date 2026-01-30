@@ -4,7 +4,7 @@
  * Header/Navbar Component
  * PIXEL-PERFECT implementation from designer-src/src/app/components/Navbar.tsx
  *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
+ * DESIGNER EXACT VALUES (DO NOT CHANGE for desktop lg+):
  *
  * Layout:
  * - fixed top-0 left-0 right-0 z-50
@@ -16,7 +16,7 @@
  * - backdrop-blur-md
  * - border-b border-border/50
  *
- * Scroll Behavior:
+ * Scroll Behavior (desktop lg+ only):
  * - Threshold: scrollY > 20
  * - Default padding: px-[96px]
  * - Scrolled padding: px-[48px]
@@ -30,8 +30,8 @@
  * Logo:
  * - h-12 (48px)
  *
- * Nav Links (EXACT from designer-src):
- * - hidden md:flex items-center gap-8
+ * Nav Links (EXACT from designer-src, desktop lg+ only):
+ * - hidden lg:flex items-center gap-8
  * - text-[14px] font-medium text-muted-foreground
  * - Hover: text-foreground
  * - Active: text-[#FF4E3A]
@@ -48,9 +48,14 @@
  * - Login: text-sm font-medium text-[#06003F] hover:text-[#FF4E3A]
  * - Button: bg-[#FF4E3A] text-white px-4 py-1.5 rounded-[4px] text-sm font-medium
  *           hover:brightness-110 shadow-sm
+ *
+ * RESPONSIVE BREAKPOINTS:
+ * - Mobile (<768px): Hamburger menu, px-4 padding
+ * - Tablet (768-1023px): Hamburger menu, px-6 padding
+ * - Desktop (>=1024px): Full nav, animated padding (48-96px)
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -142,10 +147,44 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPlatformDropdownOpen, setIsPlatformDropdownOpen] = useState(false);
   const [isMobilePlatformExpanded, setIsMobilePlatformExpanded] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [isLargeDesktop, setIsLargeDesktop] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+
+  // Check if viewport is desktop (lg: 1024px+) or large desktop (xl: 1280px+)
+  useEffect(() => {
+    const lgQuery = window.matchMedia('(min-width: 1024px)');
+    const xlQuery = window.matchMedia('(min-width: 1280px)');
+    
+    const handleLgChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsDesktop(e.matches);
+      // Close mobile menu when switching to desktop
+      if (e.matches) {
+        setIsMobileMenuOpen(false);
+        setIsMobilePlatformExpanded(false);
+      }
+    };
+    
+    const handleXlChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsLargeDesktop(e.matches);
+    };
+    
+    // Set initial values
+    handleLgChange(lgQuery);
+    handleXlChange(xlQuery);
+    
+    // Listen for changes
+    lgQuery.addEventListener('change', handleLgChange);
+    xlQuery.addEventListener('change', handleXlChange);
+    return () => {
+      lgQuery.removeEventListener('change', handleLgChange);
+      xlQuery.removeEventListener('change', handleXlChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -156,19 +195,32 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown on Escape key
+  // Close mobile menu on Escape key and return focus to hamburger
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobilePlatformExpanded(false);
+    // Return focus to hamburger button
+    hamburgerRef.current?.focus();
+  }, []);
+
+  // Close dropdown and mobile menu on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsPlatformDropdownOpen(false);
+        if (isMobileMenuOpen) {
+          closeMobileMenu();
+        }
+        if (isPlatformDropdownOpen) {
+          setIsPlatformDropdownOpen(false);
+        }
       }
     };
 
-    if (isPlatformDropdownOpen) {
+    if (isPlatformDropdownOpen || isMobileMenuOpen) {
       window.addEventListener('keydown', handleKeyDown);
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
-  }, [isPlatformDropdownOpen]);
+  }, [isPlatformDropdownOpen, isMobileMenuOpen, closeMobileMenu]);
 
   // Handle dropdown hover with delay to prevent flickering
   const handleDropdownMouseEnter = () => {
@@ -219,19 +271,21 @@ export function Header() {
       className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 backdrop-blur-md border-b border-black/[0.04]"
     >
       <motion.nav
-        initial={{
-          paddingLeft: 96,
-          paddingRight: 96,
-        }}
-        animate={{
-          paddingLeft: isScrolled ? 48 : 96,
-          paddingRight: isScrolled ? 48 : 96,
-        }}
+        initial={isDesktop ? { 
+          paddingLeft: isLargeDesktop ? 96 : 48, 
+          paddingRight: isLargeDesktop ? 96 : 48 
+        } : undefined}
+        animate={isDesktop ? {
+          paddingLeft: isScrolled ? (isLargeDesktop ? 48 : 32) : (isLargeDesktop ? 96 : 48),
+          paddingRight: isScrolled ? (isLargeDesktop ? 48 : 32) : (isLargeDesktop ? 96 : 48),
+        } : undefined}
         transition={{
           duration: 0.4,
           ease: [0.23, 1, 0.32, 1],
         }}
-        className="flex items-center justify-between h-full"
+        className={`flex items-center justify-between h-full ${
+          !isDesktop ? 'px-4 sm:px-6' : ''
+        }`}
         aria-label="Main navigation"
       >
         {/* Logo */}
@@ -247,8 +301,8 @@ export function Header() {
           />
         </Link>
 
-        {/* Desktop Navigation - EXACT from designer-src */}
-        <div className="hidden md:flex items-center gap-8 text-[14px] font-medium text-[#06003F]/60">
+        {/* Desktop Navigation - EXACT from designer-src (lg+ only) */}
+        <div className="hidden lg:flex items-center gap-8 text-[14px] font-medium text-[#06003F]/60">
           {navigation.map((item) =>
             item.label === 'Platform' ? (
               // Platform with dropdown
@@ -340,8 +394,8 @@ export function Header() {
           )}
         </div>
 
-        {/* Desktop CTAs */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Desktop CTAs (lg+ only) */}
+        <div className="hidden lg:flex items-center gap-4">
           <Link
             href="https://customer.voicecare.ai/"
             target="_blank"
@@ -360,10 +414,11 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
+        {/* Mobile menu button (visible below lg) */}
         <button
+          ref={hamburgerRef}
           type="button"
-          className="md:hidden p-2 -mr-2 text-[#06003F]"
+          className="lg:hidden p-2 -mr-2 text-[#06003F] min-h-[44px] min-w-[44px] flex items-center justify-center"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu"
@@ -377,128 +432,131 @@ export function Header() {
         </button>
       </motion.nav>
 
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          id="mobile-menu"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="md:hidden bg-white/95 backdrop-blur-md border-t border-black/[0.04]"
-        >
-          <div className="px-6 py-4">
-            <div className="flex flex-col gap-1">
-              {navigation.map((item) =>
-                item.label === 'Platform' ? (
-                  // Platform with accordion on mobile
-                  <div key={item.label}>
-                    <button
-                      type="button"
-                      onClick={() => setIsMobilePlatformExpanded(!isMobilePlatformExpanded)}
-                      className={`w-full px-4 py-3 text-[14px] font-medium hover:bg-[#06003F]/5 rounded-lg transition-colors flex items-center justify-between ${
-                        pathname === item.href || pathname?.startsWith('/platform')
+      {/* Mobile menu (visible below lg) */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden absolute top-14 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-black/[0.04] overflow-y-auto max-h-[calc(100vh-3.5rem)]"
+          >
+            <div className="px-4 sm:px-6 py-4">
+              <div className="flex flex-col gap-1">
+                {navigation.map((item) =>
+                  item.label === 'Platform' ? (
+                    // Platform with accordion on mobile
+                    <div key={item.label}>
+                      <button
+                        type="button"
+                        onClick={() => setIsMobilePlatformExpanded(!isMobilePlatformExpanded)}
+                        className={`w-full px-4 py-3 min-h-[44px] text-[14px] font-medium hover:bg-[#06003F]/5 rounded-lg transition-colors flex items-center justify-between ${
+                          pathname === item.href || pathname?.startsWith('/platform')
+                            ? 'text-[#FF4E3A]'
+                            : 'text-[#06003F]/70'
+                        }`}
+                      >
+                        {item.label}
+                        <ChevronDown 
+                          className={`w-4 h-4 transition-transform duration-200 ${
+                            isMobilePlatformExpanded ? 'rotate-180' : ''
+                          }`} 
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {isMobilePlatformExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 py-1">
+                              {platformDropdownItems.map((dropdownItem) => (
+                                dropdownItem.isDisabled ? (
+                                  <span
+                                    key={dropdownItem.label}
+                                    className="block px-4 py-3 min-h-[44px] text-[13px] text-[#06003F]/40 cursor-not-allowed flex items-center"
+                                  >
+                                    {dropdownItem.label}
+                                  </span>
+                                ) : (
+                                  <a
+                                    key={dropdownItem.href}
+                                    href={dropdownItem.href}
+                                    onClick={(e) => handleAnchorClick(e, dropdownItem.href)}
+                                    className="block px-4 py-3 min-h-[44px] text-[13px] text-[#06003F]/60 hover:text-[#FF4E3A] hover:bg-[#06003F]/5 rounded-lg transition-colors flex items-center"
+                                  >
+                                    {dropdownItem.label}
+                                  </a>
+                                )
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : item.isDisabled ? (
+                    <span
+                      key={item.label}
+                      className="px-4 py-3 min-h-[44px] text-[14px] font-medium text-[#06003F]/40 cursor-not-allowed flex items-center"
+                    >
+                      {item.label}
+                    </span>
+                  ) : item.isExternal ? (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-3 min-h-[44px] text-[14px] font-medium text-[#06003F]/70 hover:bg-[#06003F]/5 hover:text-[#06003F] rounded-lg transition-colors flex items-center"
+                      onClick={closeMobileMenu}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`px-4 py-3 min-h-[44px] text-[14px] font-medium hover:bg-[#06003F]/5 hover:text-[#06003F] rounded-lg transition-colors flex items-center ${
+                        pathname === item.href
                           ? 'text-[#FF4E3A]'
                           : 'text-[#06003F]/70'
                       }`}
+                      onClick={closeMobileMenu}
                     >
                       {item.label}
-                      <ChevronDown 
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          isMobilePlatformExpanded ? 'rotate-180' : ''
-                        }`} 
-                      />
-                    </button>
-                    <AnimatePresence>
-                      {isMobilePlatformExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pl-4 py-1">
-                            {platformDropdownItems.map((dropdownItem) => (
-                              dropdownItem.isDisabled ? (
-                                <span
-                                  key={dropdownItem.label}
-                                  className="block px-4 py-2.5 text-[13px] text-[#06003F]/40 cursor-not-allowed"
-                                >
-                                  {dropdownItem.label}
-                                </span>
-                              ) : (
-                                <a
-                                  key={dropdownItem.href}
-                                  href={dropdownItem.href}
-                                  onClick={(e) => handleAnchorClick(e, dropdownItem.href)}
-                                  className="block px-4 py-2.5 text-[13px] text-[#06003F]/60 hover:text-[#FF4E3A] hover:bg-[#06003F]/5 rounded-lg transition-colors"
-                                >
-                                  {dropdownItem.label}
-                                </a>
-                              )
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : item.isDisabled ? (
-                  <span
-                    key={item.label}
-                    className="px-4 py-3 text-[14px] font-medium text-[#06003F]/40 cursor-not-allowed"
-                  >
-                    {item.label}
-                  </span>
-                ) : item.isExternal ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
+                    </Link>
+                  )
+                )}
+                <div className="mt-4 pt-4 border-t border-black/[0.04] space-y-3">
+                  <Link
+                    href="https://customer.voicecare.ai/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-3 text-[14px] font-medium text-[#06003F]/70 hover:bg-[#06003F]/5 hover:text-[#06003F] rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block w-full px-4 py-3 min-h-[44px] text-sm font-medium text-[#06003F] text-center hover:bg-[#06003F]/5 rounded-lg transition-colors"
+                    onClick={closeMobileMenu}
                   >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`px-4 py-3 text-[14px] font-medium hover:bg-[#06003F]/5 hover:text-[#06003F] rounded-lg transition-colors ${
-                      pathname === item.href
-                        ? 'text-[#FF4E3A]'
-                        : 'text-[#06003F]/70'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
+                    Log in
                   </Link>
-                )
-              )}
-              <div className="mt-4 pt-4 border-t border-black/[0.04] space-y-3">
-                <Link
-                  href="https://customer.voicecare.ai/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full px-4 py-2.5 text-sm font-medium text-[#06003F] text-center hover:bg-[#06003F]/5 rounded-lg transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="https://customer.voicecare.ai/become-a-customer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full px-4 py-2.5 bg-[#FF4E3A] text-white text-center text-sm font-medium rounded-[4px] hover:brightness-110 transition-all"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Become a Customer
-                </Link>
+                  <Link
+                    href="https://customer.voicecare.ai/become-a-customer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full px-4 py-3 min-h-[44px] bg-[#FF4E3A] text-white text-center text-sm font-medium rounded-[4px] hover:brightness-110 transition-all"
+                    onClick={closeMobileMenu}
+                  >
+                    Become a Customer
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
