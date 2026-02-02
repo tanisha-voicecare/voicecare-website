@@ -275,6 +275,75 @@ export interface WPContactFormSubmission {
 }
 
 // ============================================
+// Contact Form 7 Types
+// ============================================
+
+export interface CF7FormData {
+  [key: string]: string | File;
+}
+
+export interface CF7Response {
+  status: 'mail_sent' | 'mail_failed' | 'validation_failed' | 'spam' | 'aborted';
+  message: string;
+  invalid_fields?: Array<{
+    field: string;
+    message: string;
+  }>;
+}
+
+export interface CF7FormConfig {
+  formId: string | number;
+  fields: CF7FormData;
+}
+
+// ============================================
+// Job Listings Types
+// ============================================
+
+export interface WPJob {
+  id: number;
+  date: string;
+  slug: string;
+  status: 'publish' | 'draft';
+  title: WPRenderedContent;
+  content: WPRenderedContent;
+  excerpt: WPRenderedContent;
+  featured_media: number;
+  acf?: {
+    department?: string;
+    location?: string;
+    employment_type?: string;
+    experience_level?: string;
+    salary_range?: string;
+    responsibilities?: string;
+    requirements?: string;
+    benefits?: string;
+    application_deadline?: string;
+  };
+  _embedded?: {
+    'wp:featuredmedia'?: WPFeaturedMedia[];
+  };
+}
+
+export interface ProcessedJob {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  excerpt: string;
+  department: string;
+  location: string;
+  employmentType: string;
+  experienceLevel: string;
+  salaryRange?: string;
+  responsibilities: string;
+  requirements: string;
+  benefits: string;
+  applicationDeadline?: string;
+  postedDate: string;
+}
+
+// ============================================
 // Helper Types for Frontend
 // ============================================
 

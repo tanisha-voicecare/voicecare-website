@@ -15,9 +15,14 @@ const nextConfig = {
         hostname: '**.wordpress.com',
       },
       {
-        // Allow images from your WordPress CMS domain
+        // VoiceCare WordPress domain
         protocol: 'https',
-        hostname: process.env.WORDPRESS_HOSTNAME || 'your-wordpress-domain.com',
+        hostname: 'voicecare.ai',
+      },
+      {
+        // Allow images from WordPress CMS domain (fallback)
+        protocol: 'https',
+        hostname: process.env.WORDPRESS_HOSTNAME || 'voicecare.ai',
       },
     ],
     formats: ['image/avif', 'image/webp'],
