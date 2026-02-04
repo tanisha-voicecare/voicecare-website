@@ -47,51 +47,51 @@ const EHR_LOGOS: EHRLogo[] = [
     name: 'athenahealth',
     src: '/images/logos/ehr/athena-health.png',
     alt: 'athenahealth EHR Integration',
-    width: 'w-[200px] sm:w-[240px] lg:w-[280px]',
+    width: 'w-[180px] sm:w-[220px] md:w-[280px]',
   },
   {
     name: 'ModMed',
     src: '/images/logos/ehr/modmed.png',
     alt: 'ModMed EHR Integration',
-    width: 'w-[180px] sm:w-[200px] lg:w-[240px]',
+    width: 'w-[160px] sm:w-[200px] md:w-[240px]',
   },
   {
     name: 'Greenway Health',
     src: '/images/logos/ehr/greenway.png',
     alt: 'Greenway Health EHR Integration',
-    width: 'w-[160px] sm:w-[180px] lg:w-[200px]',
+    width: 'w-[140px] sm:w-[170px] md:w-[200px]',
   },
   // Row 2
   {
     name: 'Open Dental',
     src: '/images/logos/ehr/opendental.png',
     alt: 'Open Dental EHR Integration',
-    width: 'w-[180px] sm:w-[200px] lg:w-[240px]',
+    width: 'w-[160px] sm:w-[200px] md:w-[240px]',
   },
   {
     name: 'denticon',
     src: '/images/logos/ehr/denticon.png',
     alt: 'denticon EHR Integration',
-    width: 'w-[180px] sm:w-[200px] lg:w-[240px]',
+    width: 'w-[160px] sm:w-[200px] md:w-[240px]',
   },
   {
     name: 'cloud 9',
     src: '/images/logos/ehr/cloud-9.png',
     alt: 'cloud 9 EHR Integration',
-    width: 'w-[140px] sm:w-[160px] lg:w-[180px]',
+    width: 'w-[120px] sm:w-[150px] md:w-[180px]',
   },
   // Row 3
   {
     name: 'Dentrix Ascend',
     src: '/images/logos/ehr/dentrix-ascend.png',
     alt: 'Dentrix Ascend EHR Integration',
-    width: 'w-[180px] sm:w-[200px] lg:w-[240px]',
+    width: 'w-[160px] sm:w-[200px] md:w-[240px]',
   },
   {
     name: 'CareStack',
     src: '/images/logos/ehr/carestack.png',
     alt: 'CareStack EHR Integration',
-    width: 'w-[180px] sm:w-[200px] lg:w-[240px]',
+    width: 'w-[160px] sm:w-[200px] md:w-[240px]',
   },
 ];
 
@@ -133,10 +133,10 @@ export function SupportedEHRIntegrationsSection({
           )}
         </motion.div>
 
-        {/* Logo Grid - 3 columns on desktop, 2 on tablet, 1 on mobile */}
+        {/* Logo Grid - 3 columns on tablet+, 1 on mobile */}
         <div className="max-w-6xl mx-auto">
           {/* Row 1 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-6 lg:mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
             {EHR_LOGOS.slice(0, 3).map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -144,7 +144,7 @@ export function SupportedEHRIntegrationsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-[12px] p-6 sm:p-8 lg:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]"
+                className="bg-white rounded-[12px] p-6 sm:p-8 md:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px]"
               >
                 <Image
                   src={logo.src}
@@ -159,7 +159,7 @@ export function SupportedEHRIntegrationsSection({
           </div>
 
           {/* Row 2 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-6 lg:mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
             {EHR_LOGOS.slice(3, 6).map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -167,7 +167,7 @@ export function SupportedEHRIntegrationsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                className="bg-white rounded-[12px] p-6 sm:p-8 lg:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]"
+                className="bg-white rounded-[12px] p-6 sm:p-8 md:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px]"
               >
                 <Image
                   src={logo.src}
@@ -182,7 +182,7 @@ export function SupportedEHRIntegrationsSection({
           </div>
 
           {/* Row 3 - 2 logos + "& many more..." */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {EHR_LOGOS.slice(6, 8).map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -190,7 +190,7 @@ export function SupportedEHRIntegrationsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                className="bg-white rounded-[12px] p-6 sm:p-8 lg:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]"
+                className="bg-white rounded-[12px] p-6 sm:p-8 md:p-10 flex items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px]"
               >
                 <Image
                   src={logo.src}
@@ -209,7 +209,7 @@ export function SupportedEHRIntegrationsSection({
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              className="flex items-center justify-center min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]"
+              className="flex items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px]"
             >
               <p className="text-base sm:text-lg text-[#06003F]/40">
                 & many more...
