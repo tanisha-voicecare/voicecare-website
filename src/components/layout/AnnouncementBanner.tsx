@@ -2,7 +2,8 @@
 
 /**
  * AnnouncementBanner Component
- * Dynamic content from WordPress + PIXEL-PERFECT design
+ * PIXEL-PERFECT design matching Figma: https://craft-juror-27577775.figma.site/
+ * Scrolling marquee with multiple announcements
  */
 
 import { motion } from 'motion/react';
@@ -13,29 +14,84 @@ interface AnnouncementBannerProps {
   content?: AnnouncementBannerContent;
 }
 
-const DEFAULT_CONTENT: AnnouncementBannerContent = {
-  highlightText: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
-  regularText: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
-};
+// Multiple announcements matching Figma design
+const announcements = [
+  {
+    id: 1,
+    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
+    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+  },
+  {
+    id: 2,
+    highlight: 'VoiceCare AI launches Joy, the first AI agent',
+    text: 'that handles complex healthcare conversations with 95%+ accuracy across payer calls and EHR integrations',
+  },
+  {
+    id: 3,
+    highlight: 'Healthcare organizations save 40+ hours per week',
+    text: 'by automating prior authorizations, benefits verification, and claims follow-up with VoiceCare AI',
+  },
+];
 
 export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
-  const bannerContent = content || DEFAULT_CONTENT;
+  // If custom content is provided, use it as the first announcement
+  const displayAnnouncements = content
+    ? [
+        { id: 0, highlight: content.highlightText, text: content.regularText },
+        ...announcements.slice(1),
+      ]
+    : announcements;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-      className="relative mt-14 bg-gradient-to-r from-[#06003F] via-[#06003F]/95 to-[#06003F] border-b border-[#FF4E3A]/20"
+      className="relative mt-14 bg-gradient-to-r from-[#06003F] via-[#06003F]/95 to-[#06003F] border-b border-[#FF4E3A]/20 overflow-hidden"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-16 max-w-7xl">
-        <div className="flex items-center justify-start xl:justify-center gap-3 py-3 overflow-x-auto scrollbar-hide">
-          <Sparkles className="w-4 h-4 text-[#FF4E3A] flex-shrink-0" />
-          <p className="text-sm text-white/90 xl:text-center xl:whitespace-nowrap">
-            <span className="font-semibold text-white">
-              {bannerContent.highlightText}
-            </span>{' '}
-            {bannerContent.regularText}
-          </p>
+      <div className="flex items-center gap-3 py-3">
+        <Sparkles className="w-4 h-4 text-[#FF4E3A] flex-shrink-0 ml-4 sm:ml-6" />
+        <div className="relative overflow-hidden flex-1">
+          <motion.div
+            animate={{ x: [0, -1920] }}
+            transition={{
+              duration: 40,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+            className="flex gap-8 whitespace-nowrap items-center"
+          >
+            {/* First set of announcements */}
+            {displayAnnouncements.map((announcement) => (
+              <div
+                key={`first-${announcement.id}`}
+                className="flex items-center gap-8"
+              >
+                <div className="text-[13px] sm:text-[15px] text-white/90">
+                  <span className="font-semibold text-white">
+                    {announcement.highlight}
+                  </span>{' '}
+                  {announcement.text}
+                </div>
+                <span className="text-white/30">|</span>
+              </div>
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {displayAnnouncements.map((announcement) => (
+              <div
+                key={`second-${announcement.id}`}
+                className="flex items-center gap-8"
+              >
+                <div className="text-[13px] sm:text-[15px] text-white/90">
+                  <span className="font-semibold text-white">
+                    {announcement.highlight}
+                  </span>{' '}
+                  {announcement.text}
+                </div>
+                <span className="text-white/30">|</span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </motion.div>
