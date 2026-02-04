@@ -16,8 +16,8 @@ const CONTENT_API_BASE = (WORDPRESS_CONTENT_ENABLED && WORDPRESS_API_URL)
   ? `${WORDPRESS_API_URL}/wp-json/voicecare/v1` 
   : '';
 
-// Revalidation time (10 minutes) - content updates will reflect within this time
-export const CONTENT_REVALIDATE_TIME = 600;
+// Revalidation time (1 minute) - content updates will reflect within this time
+export const CONTENT_REVALIDATE_TIME = 60;
 
 // Request timeout (2 seconds) - if WordPress doesn't respond, use fallback immediately
 const FETCH_TIMEOUT_MS = 2000;
