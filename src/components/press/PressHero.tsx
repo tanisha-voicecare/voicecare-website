@@ -14,15 +14,15 @@ interface PressHeroProps {
 
 const DEFAULT_CONTENT: PressHeroContent = {
   badge: 'Press Coverage',
-  headline: 'Press',
+  headline: 'Press Coverage',
   description: "Explore our remarkable journey through extensive press features, media highlights that showcase our brand's growth and impact.",
 };
 
 export function PressHero({ content }: PressHeroProps) {
   const heroContent = content || DEFAULT_CONTENT;
   return (
-    <section className="pt-4 sm:pt-5 md:pt-6 pb-8 sm:pb-10 md:pb-12 border-b border-[#06003F]/10">
-      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
+    <section className="pt-10 sm:pt-12 md:pt-[45px] pb-10 sm:pb-11 md:pb-12 border-b border-[#06003F]/10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-16 max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -30,18 +30,13 @@ export function PressHero({ content }: PressHeroProps) {
             duration: 0.8,
             ease: [0.23, 1, 0.32, 1],
           }}
-          className="max-w-4xl"
+          className="max-w-4xl mt-4 sm:mt-5 md:mt-[21px]"
         >
-          <div className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full bg-[#06003F]/5 text-[10px] sm:text-[12px] font-bold uppercase tracking-[0.1em] mb-5 sm:mb-6 md:mb-8 text-[#06003F] border border-[#06003F]/5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#FF4E3A] animate-pulse" />
-            {heroContent.badge}
-          </div>
-
-          <h1 className="text-[40px] sm:text-[56px] md:text-[72px] lg:text-[84px] font-bold tracking-tight text-[#06003F] mb-4 sm:mb-5 md:mb-6 leading-[1.0] sm:leading-[0.95]">
+          <h1 className="text-[48px] sm:text-[64px] md:text-[84px] font-bold tracking-tight text-[#06003F] mb-4 sm:mb-5 md:mb-6 leading-[0.95]">
             {heroContent.headline}
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-[#06003F]/60 leading-relaxed font-medium max-w-[60ch] sm:max-w-xl md:max-w-2xl">
+          <p className="text-[16px] sm:text-[17px] md:text-[18px] text-[#06003F]/60 leading-relaxed font-medium max-w-[60ch] sm:max-w-xl md:max-w-2xl">
             {heroContent.description}
           </p>
         </motion.div>
