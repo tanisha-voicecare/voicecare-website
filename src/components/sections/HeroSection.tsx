@@ -28,14 +28,12 @@ interface HeroSectionProps {
 // ============================================
 
 const DEFAULT_CONTENT: HomepageHeroContent = {
-  badge: 'Agentic Intelligence for RCM',
-  headline: 'Your back office just got a massive upgrade. Stop Managing Admin and Delegate it to VoiceCare. Backed by Mayo Clinic.',
+  badge: 'Backed by Mayo Clinic',
+  headline: '',
   rotatingHeadlines: [
-    'Your AI workforce that autonomously handles Prior Auths, Benefits Verification, and Claims.',
-    'Enterprise-Ready deep integration with your EHR and payor portals.',
-    'Clinical-Grade Reliability by securing every task with a Human-in-the-Loop safety net.',
-    'Supercharging teams by replacing painful, time-consuming manual work.',
-    'SOC 2 Type II attested and HIPAA-compliant platform.',
+    'Automating administrative burdens',
+    'Creating time for care teams',
+    'Improving patient outcomes',
   ],
   primaryButtonText: 'Experience it',
   primaryButtonLink: '#experience',

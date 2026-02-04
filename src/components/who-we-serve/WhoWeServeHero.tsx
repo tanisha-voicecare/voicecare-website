@@ -22,7 +22,7 @@ interface WhoWeServeHeroProps {
 
 const DEFAULT_CONTENT: WhoWeServeHeroContent = {
   headline: 'Who We Serve',
-  description: 'From large health systems and specialized clinics to RCM firms and dental practices, we replace administrative friction with AI-enabled autonomous efficiency.',
+  description: '',
 };
 
 export function WhoWeServeHero({ content }: WhoWeServeHeroProps) {

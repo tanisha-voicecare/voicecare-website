@@ -24,9 +24,9 @@ interface ProductIntroSectionProps {
 // ============================================
 
 const DEFAULT_CONTENT: ProductIntroContent = {
-  sectionTitle: 'Meet Your AI Workforce',
+  sectionTitle: 'AI_AGENT',
   heading: 'Introducing Joy',
-  description: 'Introducing Joy, your lead AI agent. Joy orchestrates a team of agents to autonomously talk to stakeholders, navigate complex workflows from payor portals to EHRs with clinical-grade precision and empathy to significantly reduce administrative burden.',
+  description: 'Your automated Voice AI Agent, designed to optimize and ease administrative burden by supercharging your workflow to be more efficient and empathetic.',
   buttonText: 'Experience It',
   buttonLink: '#experience',
 };

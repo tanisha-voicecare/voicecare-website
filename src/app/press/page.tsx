@@ -1,17 +1,12 @@
 /**
  * Press Page
- * Implementation from designer-src/src/app/components/Press.tsx
- *
- * Sections IMPLEMENTED:
- * 1. PressHero ✓
- * 2. PressCoverage ✓
- *
- * NOTE: Header and Footer are rendered by root layout.tsx
+ * Content is fetched from WordPress headless CMS
  */
 
 import type { Metadata } from 'next';
 import { PressHero, PressCoverage } from '@/components/press';
 import { generatePageMetadata } from '@/lib/seo';
+import { getPressContent } from '@/lib/content';
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Press',
@@ -20,11 +15,15 @@ export const metadata: Metadata = generatePageMetadata({
   pathname: '/press',
 });
 
-export default function PressPage() {
+export const revalidate = 600; // Revalidate every 10 minutes
+
+export default async function PressPage() {
+  const content = await getPressContent();
+
   return (
     <div className="w-full overflow-x-hidden">
-      <PressHero />
-      <PressCoverage />
+      <PressHero content={content.hero} />
+      <PressCoverage coverageTitle={content.coverageTitle} items={content.items} />
     </div>
   );
 }

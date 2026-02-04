@@ -2,40 +2,24 @@
 
 /**
  * Company Hero Component
- * EXACT implementation from designer-src/src/app/components/company/CompanyHero.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section Container:
- * - relative pt-16 pb-24 overflow-hidden
- *
- * Gradient Background:
- * - absolute inset-y-0 left-12 right-12
- * - bg-gradient-to-br from-[#FF4E3A] via-[#06003F] via-50% to-[#02007F]
- * - rounded-b-[29px]
- * - Animation: opacity 0→1, scale 0.95→1, duration 0.6s, ease "easeOut"
- *
- * Content Container:
- * - container mx-auto px-6 md:px-16 max-w-7xl relative z-10
- *
- * Inner Wrapper:
- * - max-w-4xl mx-auto text-center
- * - Animation: opacity 0→1, y 30→0, duration 0.5s, delay 0.1s
- *
- * Eyebrow:
- * - text-[18px] text-white/80 mb-6 tracking-wide
- * - Animation: opacity 0→1, y 20→0, duration 0.4s, delay 0.2s
- *
- * Headline (H1):
- * - text-[84px] font-bold tracking-[-0.04em] leading-[1.1] text-white
- * - inline-block px-2 pb-4
- * - Animation: opacity 0→1, y 30→0, duration 0.5s, delay 0.3s
- * - Hover: scale 1.02
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { motion } from 'motion/react';
+import type { CompanyHeroContent } from '@/lib/content';
 
-export function CompanyHero() {
+interface CompanyHeroProps {
+  content?: CompanyHeroContent;
+}
+
+const DEFAULT_CONTENT: CompanyHeroContent = {
+  eyebrow: 'Supercharging administration with',
+  headline: 'Artificial Intelligence',
+};
+
+export function CompanyHero({ content }: CompanyHeroProps) {
+  const heroContent = content || DEFAULT_CONTENT;
+
   return (
     <section className="relative pt-12 sm:pt-14 md:pt-16 pb-16 sm:pb-20 md:pb-24 overflow-hidden">
       {/* Gradient Background - responsive left/right insets */}
@@ -61,7 +45,7 @@ export function CompanyHero() {
             transition={{ duration: 0.4, delay: 0.2 }}
             className="text-[14px] sm:text-[16px] md:text-[18px] text-white/80 mb-4 sm:mb-5 md:mb-6 tracking-wide"
           >
-            Supercharging administration with
+            {heroContent.eyebrow}
           </motion.div>
 
           {/* Headline */}
@@ -72,7 +56,7 @@ export function CompanyHero() {
             whileHover={{ scale: 1.02 }}
             className="text-[36px] sm:text-[52px] md:text-[68px] lg:text-[84px] font-bold tracking-[-0.04em] leading-[1.05] sm:leading-[1.0] md:leading-[1.1] text-white inline-block px-2 pb-4 max-w-[18ch] sm:max-w-[22ch] md:max-w-none mx-auto"
           >
-            Artificial Intelligence
+            {heroContent.headline}
           </motion.h1>
         </motion.div>
       </div>

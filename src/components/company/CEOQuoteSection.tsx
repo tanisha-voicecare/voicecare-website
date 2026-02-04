@@ -2,58 +2,26 @@
 
 /**
  * CEO Quote Section Component
- * EXACT implementation from designer-src/src/app/components/company/CEOQuoteSection.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section Container:
- * - relative py-32 overflow-hidden
- *
- * Background Gradient:
- * - absolute inset-0 bg-gradient-to-br from-[#06003F] via-[#1a0f3d] to-[#2d1147]
- *
- * Decorative Glow:
- * - absolute top-0 right-0 w-[800px] h-[800px]
- * - Inner: bg-gradient-radial from-[#FF4E3A]/40 via-[#8B3A8B]/30 to-transparent blur-3xl
- * - Animation: opacity 0→0.3, scale 0.8→1, duration 0.8s, whileInView
- *
- * Content Container:
- * - container mx-auto px-6 md:px-16 max-w-7xl relative z-10
- *
- * Grid:
- * - grid lg:grid-cols-2 gap-16 items-center
- *
- * Left Column (Quote):
- * - Animation: opacity 0→1, x -30→0, duration 0.5s
- *
- * Quote Mark:
- * - text-[#FF4E3A] text-[80px] leading-none mb-6 font-serif
- * - Animation: opacity 0→1, scale 0.5→1, duration 0.4s, delay 0.1s
- *
- * Quote Text:
- * - text-[28px] text-white/95 leading-relaxed mb-8 font-light
- * - Animation: opacity 0→1, y 20→0, duration 0.5s, delay 0.15s
- *
- * Attribution:
- * - border-l-2 border-[#FF4E3A] pl-6
- * - Animation: opacity 0→1, x -20→0, duration 0.4s, delay 0.25s
- * - Hover: x 5, duration 0.2s
- * - Name: text-white font-bold text-[20px] mb-1
- * - Title: text-[#FF4E3A] text-[16px] font-medium
- *
- * Right Column (Image):
- * - Animation: opacity 0→1, x 30→0, duration 0.5s
- * - Hover: scale 1.02, duration 0.3s
- * - Image container: rounded-[12px] overflow-hidden border border-white/10
- * - Image: w-full h-auto object-cover aspect-[4/5]
- * - Image hover: scale-105 transition-transform duration-300
- * - Overlay: bg-gradient-to-t from-[#FF4E3A]/10 to-transparent, opacity 0→1 on hover
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
+import type { CEOQuoteContent } from '@/lib/content';
 
-export function CEOQuoteSection() {
+interface CEOQuoteSectionProps {
+  content?: CEOQuoteContent;
+}
+
+const DEFAULT_CONTENT: CEOQuoteContent = {
+  quote: "We're giving back time to healthcare professionals so that they can focus on high-order patient tasks, and driving radical efficiencies with every conversation.",
+  name: 'Parag Jhaveri',
+  title: 'CEO, Founder',
+  image: '/images/company/ceo/parag-jhaveri.png',
+};
+
+export function CEOQuoteSection({ content }: CEOQuoteSectionProps) {
+  const quoteContent = content || DEFAULT_CONTENT;
   return (
     <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden w-full">
       {/* Background Gradient */}
@@ -102,9 +70,7 @@ export function CEOQuoteSection() {
               transition={{ duration: 0.5, delay: 0.15 }}
               className="text-[18px] sm:text-[22px] md:text-[26px] lg:text-[28px] text-white/95 leading-relaxed mb-6 sm:mb-7 md:mb-8 font-light"
             >
-              We&apos;re giving back time to healthcare professionals so that they
-              can focus on high-order patient tasks, and driving radical
-              efficiencies with every conversation.
+              {quoteContent.quote}
             </motion.p>
 
             {/* Attribution */}
@@ -117,10 +83,10 @@ export function CEOQuoteSection() {
               className="border-l-2 border-[#FF4E3A] pl-4 sm:pl-5 md:pl-6 inline-block lg:block"
             >
               <div className="text-white font-bold text-[17px] sm:text-[18px] md:text-[20px] mb-1">
-                Parag Jhaveri
+                {quoteContent.name}
               </div>
               <div className="text-[#FF4E3A] text-[14px] sm:text-[15px] md:text-[16px] font-medium">
-                CEO, Founder
+                {quoteContent.title}
               </div>
             </motion.div>
           </motion.div>
@@ -136,8 +102,8 @@ export function CEOQuoteSection() {
           >
             <div className="relative rounded-[12px] overflow-hidden border border-white/10">
               <Image
-                src="/images/company/ceo/parag-jhaveri.png"
-                alt="Parag Jhaveri - CEO and Founder of VoiceCare AI"
+                src={quoteContent.image}
+                alt={`${quoteContent.name} - ${quoteContent.title} of VoiceCare AI`}
                 width={600}
                 height={750}
                 sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, (max-width: 1024px) 380px, 50vw"

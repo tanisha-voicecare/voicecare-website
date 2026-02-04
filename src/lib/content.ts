@@ -9,10 +9,41 @@
 // ============================================
 
 const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || '';
-const CONTENT_API_BASE = WORDPRESS_API_URL ? `${WORDPRESS_API_URL}/wp-json/voicecare/v1` : '';
+const WORDPRESS_CONTENT_ENABLED = process.env.WORDPRESS_CONTENT_ENABLED === 'true';
+
+// Only set API base if WordPress content is explicitly enabled
+const CONTENT_API_BASE = (WORDPRESS_CONTENT_ENABLED && WORDPRESS_API_URL) 
+  ? `${WORDPRESS_API_URL}/wp-json/voicecare/v1` 
+  : '';
 
 // Revalidation time (10 minutes) - content updates will reflect within this time
 export const CONTENT_REVALIDATE_TIME = 600;
+
+// Request timeout (2 seconds) - if WordPress doesn't respond, use fallback immediately
+const FETCH_TIMEOUT_MS = 2000;
+
+/**
+ * Fetch with timeout - returns null if request takes too long
+ */
+async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response | null> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.warn(`[Content] Request timed out after ${timeoutMs}ms`);
+    }
+    return null;
+  }
+}
 
 // ============================================
 // Types
@@ -101,32 +132,38 @@ export async function getContent<T = Record<string, unknown>>(
   slug: string,
   fallback?: T
 ): Promise<T | null> {
+  // If WordPress API not configured, immediately return fallback (no network request)
   if (!CONTENT_API_BASE) {
-    console.warn(`[Content] ${slug}: Using FALLBACK (WordPress API not configured)`);
     return fallback || null;
   }
 
   try {
-    const response = await fetch(`${CONTENT_API_BASE}/content/${slug}`, {
-      next: {
-        revalidate: CONTENT_REVALIDATE_TIME,
-        tags: ['content', `content-${slug}`],
+    const response = await fetchWithTimeout(
+      `${CONTENT_API_BASE}/content/${slug}`,
+      {
+        next: {
+          revalidate: CONTENT_REVALIDATE_TIME,
+          tags: ['content', `content-${slug}`],
+        },
       },
-    });
+      FETCH_TIMEOUT_MS
+    );
+
+    // Timeout or network error - use fallback immediately
+    if (!response) {
+      return fallback || null;
+    }
 
     if (!response.ok) {
       if (response.status === 404) {
-        console.warn(`[Content] ${slug}: Using FALLBACK (not found in WordPress)`);
         return fallback || null;
       }
-      throw new Error(`Content API Error: ${response.status}`);
+      return fallback || null;
     }
 
     const result: ContentResponse<T> = await response.json();
-    console.log(`[Content] ${slug}: Loaded from WORDPRESS ✓`);
     return result.data;
-  } catch (error) {
-    console.error(`[Content] ${slug}: Using FALLBACK (error: ${error})`);
+  } catch {
     return fallback || null;
   }
 }
@@ -212,14 +249,12 @@ export async function listAllContent(): Promise<Array<{
  */
 export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
   const fallback: HomepageHeroContent = {
-    badge: 'Agentic Intelligence for RCM',
-    headline: 'Your back office just got a massive upgrade. Stop Managing Admin and Delegate it to VoiceCare. Backed by Mayo Clinic.',
+    badge: 'Backed by Mayo Clinic',
+    headline: '',
     rotatingHeadlines: [
-      'Your AI workforce that autonomously handles Prior Auths, Benefits Verification, and Claims.',
-      'Enterprise-Ready deep integration with your EHR and payor portals.',
-      'Clinical-Grade Reliability by securing every task with a Human-in-the-Loop safety net.',
-      'Supercharging teams by replacing painful, time-consuming manual work.',
-      'SOC 2 Type II attested and HIPAA-compliant platform.',
+      'Automating administrative burdens',
+      'Creating time for care teams',
+      'Improving patient outcomes',
     ],
     primaryButtonText: 'Experience it',
     primaryButtonLink: '#experience',
@@ -236,23 +271,23 @@ export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
  */
 export async function getValueMetricsContent(): Promise<ValueMetricsContent> {
   const fallback: ValueMetricsContent = {
-    sectionTitle: 'The VoiceCare Advantage',
-    sectionDescription: 'Delegate complex, variable administrative tasks from payor portal navigation to faxes into structured, EHR-ready data in one click, in real-time.',
+    sectionTitle: 'Why VoiceCare.',
+    sectionDescription: 'Our agentic AI goes beyond traditional automation to take meaningful action, delivering measurable outcomes that transform healthcare operations.',
     metrics: [
       {
         value: '70%',
         title: 'Higher ROI',
-        description: 'See an impact on your account receivables within months, not years.',
-      },
-      {
-        value: '99.999%',
-        title: 'Data Integrity',
-        description: 'Ensure consistent, 20% better data output for every conversation through our Human-in-the-Loop safety net.',
+        description: 'Returns within a few months, not years.',
       },
       {
         value: '40%',
-        title: 'Faster Execution',
-        description: 'Accelerate collection, initiation, and transfer of mission-critical data.',
+        title: 'Faster',
+        description: 'Collect, initiate, and transfer data',
+      },
+      {
+        value: '20%',
+        title: 'Better Data Quality',
+        description: 'Consistent data output with every conversation',
       },
     ],
   };
@@ -268,9 +303,7 @@ export async function getRadicalEfficienciesContent(): Promise<RadicalEfficienci
   const fallback: RadicalEfficienciesContent = {
     sectionTitle: 'Radical Efficiencies',
     stats: [
-      { value: '530+', label: 'hours recovered per 1,000 conversations' },
-      { value: '1060+', label: 'hours saved per day' },
-      { value: '130+', label: 'workdays of staff time recovered every day' },
+      { value: '32000', label: 'Minutes saved per 1,000 phone calls' },
     ],
   };
 
@@ -284,7 +317,7 @@ export async function getRadicalEfficienciesContent(): Promise<RadicalEfficienci
 export async function getEHRIntegrationsContent(): Promise<EHRIntegrationsContent> {
   const fallback: EHRIntegrationsContent = {
     sectionTitle: 'Supported EHR Integrations',
-    sectionDescription: 'Transform complex administrative tasks into structured data within your existing systems',
+    sectionDescription: '',
   };
 
   const content = await getContent<EHRIntegrationsContent>('homepage-ehr-integrations', fallback);
@@ -296,11 +329,11 @@ export async function getEHRIntegrationsContent(): Promise<EHRIntegrationsConten
  */
 export async function getProductIntroContent(): Promise<ProductIntroContent> {
   const fallback: ProductIntroContent = {
-    sectionTitle: 'Meet Your AI Workforce',
+    sectionTitle: 'AI_AGENT',
     heading: 'Introducing Joy',
-    description: 'Introducing Joy, your lead AI agent. Joy orchestrates a team of agents to autonomously talk to stakeholders, navigate complex workflows from payor portals to EHRs with clinical-grade precision and empathy to significantly reduce administrative burden.',
-    buttonText: 'Learn More',
-    buttonLink: '/platform',
+    description: 'Your automated Voice AI Agent, designed to optimize and ease administrative burden by supercharging your workflow to be more efficient and empathetic.',
+    buttonText: 'Experience It',
+    buttonLink: '#experience',
   };
 
   const content = await getContent<ProductIntroContent>('homepage-product-intro', fallback);
@@ -322,7 +355,7 @@ export interface PlatformHeroContent {
 export interface PlatformEHRContent {
   heading: string;
   subheading: string;
-  bulletPoints: string[];
+  additionalParagraphs: string[];
   closingStatement: string;
 }
 
@@ -355,9 +388,9 @@ export interface PlatformSolutionsContent {
  */
 export async function getPlatformHeroContent(): Promise<PlatformHeroContent> {
   const fallback: PlatformHeroContent = {
-    eyebrow: 'Powered by',
-    headline: 'Healthcare Administration General Intelligence (HAgi)',
-    description: 'The cognitive core of the VoiceCare platform. HAgi goes beyond standard automation to understand the nuances of healthcare operations with the judgment of a human expert. It fuses Generative AI with deep clinical context to autonomously reason through complex workflows adapting to variable payor rules and unstructured conversations in real-time.',
+    eyebrow: "We're powered by",
+    headline: 'Healthcare Administration General Intelligence (HAGI)',
+    description: 'It is the heart of the VoiceCare platform. Using Generative and Conversational AI, it intelligently automates routine back-office workflows.',
   };
 
   const content = await getContent<PlatformHeroContent>('platform-hero', fallback);
@@ -369,15 +402,12 @@ export async function getPlatformHeroContent(): Promise<PlatformHeroContent> {
  */
 export async function getPlatformEHRContent(): Promise<PlatformEHRContent> {
   const fallback: PlatformEHRContent = {
-    heading: 'The Enterprise Administration Platform',
-    subheading: 'Your secure command center turns administrative chaos into structured intelligence.',
-    bulletPoints: [
-      'Complete thousands of calls and tasks in a single click using our advanced generative models.',
-      'Actionable Intelligence and AI-powered analytics measure the performance of every conversation to drive improvement.',
-      'All data is automatically formatted and ingested into any EHR or system of record.',
-      'Instantly search historical calls and access summarized, use-case-specific data.',
+    heading: 'We Are Enterprise\nAdministration platform',
+    subheading: 'One secure conversational platform, powered by advanced and constantly improving generative models for healthcare professionals to complete 1000s of calls and tasks in one click. You can search for historical calls, and get summarized use-case-specific information, which is ingested in any EHR or any system of record.',
+    additionalParagraphs: [
+      'Our AI-powered analytics gives you actionable insights to measure the performance of every conversation.',
     ],
-    closingStatement: 'Every conversation matters. Elevate your patient experience by automating your back office.',
+    closingStatement: 'Automate the back office to improve patient experience with every conversation.',
   };
 
   const content = await getContent<PlatformEHRContent>('platform-ehr', fallback);
@@ -392,20 +422,20 @@ export async function getPlatformBenefitsContent(): Promise<PlatformBenefitsCont
     sectionTitle: 'Benefits',
     benefits: [
       {
-        title: 'Automate Tasks & Conversations',
-        description: 'Schedule one-time or recurring phone conversations and tasks seamlessly in one click.',
+        title: 'Automate tasks and conversations',
+        description: 'Schedule one-time or recurring automated phone conversations and tasks in one click.',
       },
       {
-        title: 'Search for Conversations',
-        description: 'Find structured data across every conversational audio and transcript, and instantly access use-case specific call summaries.',
+        title: 'Search for conversations',
+        description: 'Find structured data across every conversational audio and transcript, and get use-case specific call summary.',
       },
       {
-        title: 'AI-Powered Call Analytics',
-        description: 'Generate insights and knowledge grounded in your back-office data with detailed analytics for every conversation to pinpoint what\'s working and where to improve.',
+        title: 'AI-powered call analytics',
+        description: "Generate knowledge grounded in your back-office information – with drill-down analytics for every conversation on what's working, and where to improve.",
       },
       {
-        title: 'Customize Conversations',
-        description: 'Configure use-case specific conversations to ask the questions that matter, delivering better healthcare outcomes for your patients.',
+        title: 'Customize conversations',
+        description: 'For use-case specific conversations, ask the questions that matter to deliver healthcare outcomes for your patients.',
       },
     ],
   };
@@ -495,82 +525,82 @@ export async function getWhoWeServeContent(): Promise<WhoWeServeContent> {
   const fallback: WhoWeServeContent = {
     hero: {
       headline: 'Who We Serve',
-      description: 'From large health systems and specialized clinics to RCM firms and dental practices, we replace administrative friction with AI-enabled autonomous efficiency.',
+      description: '',
     },
     tabs: {
       healthcareStakeholders: {
         title: 'Healthcare Stakeholders',
-        subtitle: 'We collaborate with stakeholders across different verticals within the healthcare domain.',
+        subtitle: 'Transforming healthcare operations across the industry.',
         cards: [
           {
             title: 'Health Systems',
-            description: 'Maximize Patient Throughput & Revenue. Delegate repetitive, high-volume insurance verification and authorization tasks to AI agents. Reduce administrative bottlenecks to improve patient flow and allow clinical teams to focus purely on quality of care.',
+            description: 'Streamline administrative processes by automating insurance verification and authorization calls, reducing wait times and improving patient flow. Empower healthcare teams to concentrate on delivering quality care rather than handling repetitive administrative tasks.',
           },
           {
             title: 'Labs & Diagnostics',
-            description: 'Accelerate Diagnostic Cycles and shorten the time between order and result. Automate the heavy lifting of repetitive pre-authorizations and patient follow-ups, ensuring technicians and pathologists focus on accurate, timely diagnostics, not phone tag.',
+            description: 'Optimize operational efficiency by automating insurance pre-authorization calls and patient follow-ups, allowing lab technicians and diagnostic professionals to focus on accurate and timely test results.',
           },
           {
             title: 'Specialty Pharmacies',
-            description: 'Reduce Time-to-Therapy and get critical medications to patients faster. Automate complex benefits investigations and prior authorizations to clear administrative hurdles instantly, boosting patient adherence and satisfaction.',
+            description: 'Improve patient satisfaction and adherence by automating insurance-related tasks, enabling quicker access to specialty medications.',
           },
           {
             title: 'Ambulatory Surgery Centers',
-            description: 'Optimize Surgical Schedules and ensure every operating room slot is utilized and reimbursed. Automate repetitive insurance interactions to secure payment authorizations prior to arrival, keeping surgical teams focused on procedural excellence.',
+            description: 'Optimize resource allocation by automating insurance interactions, enabling surgical teams to dedicate more time to clinical care and procedural excellence.',
           },
         ],
       },
       specialistPractice: {
         title: 'Specialist Practice Providers',
-        subtitle: 'We specialize in providing efficient, customized solutions for specialized segments within the healthcare industry.',
+        subtitle: 'Serving specialized healthcare segments with tailored solutions.',
         cards: [
           {
             title: 'Cardiology',
-            description: 'Accelerate Cardiac Care and eliminate administrative delays for critical heart procedures. Automate repetitive insurance interactions to secure faster approvals, ensuring patients receive timely treatment and improved outcomes.',
+            description: 'Improve patient satisfaction and outcomes by automating insurance interactions, facilitating quicker approvals for cardiac treatments and procedures.',
           },
           {
             title: 'Oncology',
-            description: 'Optimize Revenue & Care Pathways. Delegate repetitive insurance billing and claims management to AI. Reduce administrative overhead to accelerate revenue cycles, allowing clinical teams to focus entirely on life-saving patient care.',
+            description: 'Enhance operational efficiency in oncology practices by automating insurance billing and claims management, reducing administrative overhead and optimizing revenue cycles.',
           },
           {
-            title: 'Infectious Diseases',
-            description: 'Expedite Critical Treatments and automate repetitive insurance tasks to facilitate faster approvals. Ensure seamless coordination for time-sensitive interventions, improving outcomes when speed is critical.',
+            title: 'Infectious diseases',
+            description: 'Improve patient outcomes by automating insurance-related tasks, facilitating faster approvals and seamless coordination of treatments for infectious diseases.',
           },
           {
             title: 'Gastroenterology',
-            description: 'Optimize Revenue & Efficiency. Enhance operational efficiency by automating insurance billing and claims processing. Reduce administrative workload and optimize revenue cycles, ensuring your practice runs at peak performance.',
+            description: 'Enhance operational efficiency in gastroenterology practices by automating insurance billing and claims processing, reducing administrative workload and optimizing revenue cycles.',
           },
           {
             title: 'Nephrology',
-            description: 'Ensure Timely Access and optimize patient care by automating insurance verification and pre-authorization processes for nephrology treatments and procedures, ensuring timely access to critical care services.',
+            description: 'Optimize patient care by automating insurance verification and pre-authorization processes for nephrology treatments and procedures, ensuring timely access to critical renal care services.',
           },
           {
             title: 'Neurology',
-            description: 'Offload complex administrative workflows to AI. Enable specialists to focus on personalized care plans and innovative treatments without the distraction of paperwork.',
+            description: 'Enable neurology teams to focus on delivering personalized care and innovative treatments with improved administrative efficiency.',
           },
           {
             title: 'Urology',
-            description: 'Streamline Urology Workflows. Automate insurance interactions to optimize revenue cycles. Allow providers to dedicate more time to comprehensive care and innovative treatment planning.',
+            description: 'Improve revenue cycles while delivering comprehensive urological care and innovative treatment plans.',
           },
           {
             title: 'Rheumatology',
-            description: 'Enhance Chronic Care Management. Delegate insurance hurdles to AI to ensure continuity of care. Empower teams to deliver personalized treatments for complex autoimmune conditions with enhanced administrative efficiency.',
+            description: 'Empower rheumatology teams to deliver personalized care and effective treatments with enhanced administrative efficiency.',
           },
           {
             title: 'Hematology',
-            description: 'Accelerate Critical Access and streamline patient care with automated verification and pre-authorization tailored for hematology. Ensure timely access to life-saving interventions without administrative delays.',
+            description: 'Streamline patient care with automated insurance verification and pre-authorization processes tailored for hematological treatments and diagnostics, ensuring timely access to critical medical interventions.',
           },
           {
             title: 'Anesthesia',
-            description: 'Automate complex billing and pre-operative authorizations. Ensure seamless revenue capture and compliance while fully supporting surgical teams.',
+            description: 'Improve revenue cycles while delivering comprehensive urological care and innovative treatment plans.',
           },
           {
             title: 'Orthopedics',
-            description: 'Optimize Surgical Throughput and automate authorizations for surgeries and imaging. Reduce wait times to help patients regain mobility faster while ensuring payment security.',
+            description: 'Empower rheumatology teams to deliver personalized care and effective treatments with enhanced administrative efficiency.',
           },
           {
             title: 'Pediatrics',
-            description: 'Prioritize Family-Centric Care. Automate insurance verification and pre-authorization to remove administrative burdens. Allow providers to focus entirely on the health and comfort of young patients and their families.',
+            description: 'Streamline patient care with automated insurance verification and pre-authorization processes tailored for hematological treatments and diagnostics, ensuring timely access to critical medical interventions.',
           },
         ],
       },
@@ -580,17 +610,17 @@ export async function getWhoWeServeContent(): Promise<WhoWeServeContent> {
         cards: [
           {
             title: 'Revenue Cycle Management',
-            description: 'Maximize Revenue Integrity and improve margins with AI-driven automation for insurance eligibility verification and denial management. Ensure accurate billing and coding to maximize reimbursements, minimize revenue leakage, and reduce administrative costs through clean-claim precision.',
+            description: 'Improve revenue integrity with AI-driven automation of insurance eligibility verification and denial management processes. Ensure accurate billing and coding to maximize reimbursements and minimize revenue leakage.',
           },
         ],
       },
       dental: {
         title: 'Dental',
-        subtitle: 'Transforming dental practice operations with AI-powered automation.',
+        subtitle: 'Transforming dental practice operations.',
         cards: [
           {
             title: 'Dental',
-            description: 'Maximize Practice Revenue and improve revenue integrity by automating insurance eligibility verification and denial management. Ensure accurate billing and coding to maximize reimbursements and minimize revenue leakage, allowing your team to focus on patient care and chair-side excellence.',
+            description: 'Improve revenue integrity with AI-driven automation of insurance eligibility verification and denial management processes. Ensure accurate billing and coding to maximize reimbursements and minimize revenue leakage.',
           },
         ],
       },
@@ -598,6 +628,646 @@ export async function getWhoWeServeContent(): Promise<WhoWeServeContent> {
   };
 
   const content = await getContent<WhoWeServeContent>('who-we-serve', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Security Page Content Types
+// ============================================
+
+export interface SecurityHeroContent {
+  headline: string;
+  subheadline: string;
+}
+
+export interface SecurityCertificationsContent {
+  title: string;
+  description: string;
+}
+
+export interface SecurityFeature {
+  title: string;
+  description: string;
+}
+
+export interface SecurityComplianceContent {
+  sectionTitle: string;
+  sectionDescription: string;
+  tabs: {
+    infrastructure: SecurityFeature[];
+    organizational: SecurityFeature[];
+    product: SecurityFeature[];
+    internal: SecurityFeature[];
+    dataPrivacy: SecurityFeature[];
+  };
+}
+
+export interface SecurityContent {
+  hero: SecurityHeroContent;
+  certifications: SecurityCertificationsContent;
+  compliance: SecurityComplianceContent;
+}
+
+/**
+ * Get Security page content with fallback
+ */
+export async function getSecurityContent(): Promise<SecurityContent> {
+  const fallback: SecurityContent = {
+    hero: {
+      headline: 'Healthcare Data. Maximum Security.',
+      subheadline: 'We are SOC 2 Type II attested, HIPAA-compliant.',
+    },
+    certifications: {
+      title: '',
+      description: 'Independently verified and certified to meet the highest standards of healthcare data security and compliance.',
+    },
+    compliance: {
+      sectionTitle: 'Compliance and Monitoring',
+      sectionDescription: 'We provide an overview of our dedication to compliance and security, offering access to certifications, documentation, and details on our strict control adherence.',
+      tabs: {
+        infrastructure: [
+          { title: 'Service Infrastructure', description: 'We maintain our service infrastructure' },
+          { title: 'Production Data Backups', description: 'We conduct regular backups of production data' },
+          { title: 'Multi-factor Authentication', description: 'Multi-factor authentication (MFA) is enforced on all systems' },
+          { title: 'Network Protection', description: 'Firewalls and intrusion prevention and detection systems protect our network' },
+        ],
+        organizational: [
+          { title: 'Endpoint Encryption', description: 'All endpoints are encrypted' },
+          { title: 'Anti-malware', description: 'Anti-malware technology is utilized' },
+          { title: 'Password Policy', description: 'Password policy is enforced' },
+          { title: 'Security Training', description: 'Security training is implemented' },
+          { title: 'Contractor Agreements', description: 'Contractors sign Confidentiality Agreements and BAAs' },
+          { title: 'Production Inventory', description: 'Production inventory is maintained' },
+          { title: 'Employee Agreements', description: 'Employees acknowledge Confidentiality Agreements' },
+        ],
+        product: [
+          { title: 'Data Encryption', description: 'Data is encrypted both at rest and in transit' },
+          { title: 'Vulnerability Monitoring', description: 'Vulnerability and system monitoring procedures have been established' },
+        ],
+        internal: [
+          { title: 'Vulnerability Scanning', description: 'Scanned for and remediated vulnerabilities' },
+          { title: 'Incident Response', description: 'Tested the incident response plan' },
+          { title: 'Access Requests', description: 'Processed access requests as required' },
+          { title: 'Production Access', description: 'Restricted production deployment access' },
+          { title: 'Change Management', description: 'Enforced change management procedures' },
+          { title: 'Configuration Management', description: 'Established a configuration management system' },
+          { title: 'Support System', description: 'Provided an available support system' },
+          { title: 'Third-party Agreements', description: 'Established third-party agreements' },
+          { title: 'Cybersecurity Insurance', description: 'Maintained cybersecurity insurance' },
+          { title: 'System Capacity', description: 'Reviewed system capacity' },
+        ],
+        dataPrivacy: [
+          { title: 'Privacy Policy', description: 'Established privacy policy' },
+          { title: 'Privacy Training', description: 'Security awareness and privacy training' },
+        ],
+      },
+    },
+  };
+
+  const content = await getContent<SecurityContent>('security', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Company Page Content Types
+// ============================================
+
+export interface CompanyHeroContent {
+  eyebrow: string;
+  headline: string;
+}
+
+export interface AboutUsSectionContent {
+  sectionTitle: string;
+  sectionDescription: string;
+  visionTitle: string;
+  visionDescription: string;
+  missionTitle: string;
+  missionDescription: string;
+}
+
+export interface CEOQuoteContent {
+  quote: string;
+  name: string;
+  title: string;
+  image: string;
+}
+
+export interface PrincipleItem {
+  title: string;
+  description: string;
+}
+
+export interface PrinciplesSectionContent {
+  sectionTitle: string;
+  sectionDescription: string;
+  principles: PrincipleItem[];
+}
+
+export interface AdvisorItem {
+  name: string;
+  role: 'Investor' | 'Board Member' | 'Advisor';
+  designation: string;
+  description: string;
+  image: string;
+  logos: Array<{ src: string; alt: string }>;
+}
+
+export interface AdvisorsSectionContent {
+  sectionTitle: string;
+  sectionDescription: string;
+  advisors: AdvisorItem[];
+}
+
+export interface CompanyContent {
+  hero: CompanyHeroContent;
+  aboutUs: AboutUsSectionContent;
+  ceoQuote: CEOQuoteContent;
+  principles: PrinciplesSectionContent;
+  advisors: AdvisorsSectionContent;
+}
+
+/**
+ * Get Company page content with fallback
+ */
+export async function getCompanyContent(): Promise<CompanyContent> {
+  const fallback: CompanyContent = {
+    hero: {
+      eyebrow: 'Supercharging administration with',
+      headline: 'Artificial Intelligence',
+    },
+    aboutUs: {
+      sectionTitle: 'About Us',
+      sectionDescription: 'We are building a Healthcare Administration General Intelligence (HAGI) company for the entire back-office. Powered by advanced Generative AI, we are massively eliminating administrative burden and radically improving operational efficiency.',
+      visionTitle: 'Our Vision',
+      visionDescription: 'To transform healthcare administration through intelligent automation, giving healthcare professionals more time to focus on what matters most: patient care.',
+      missionTitle: 'Our Mission',
+      missionDescription: 'To dramatically improve access, adherence, and outcomes for the patients and the healthcare workforce through the application of generative AI.',
+    },
+    ceoQuote: {
+      quote: "We're giving back time to healthcare professionals so that they can focus on high-order patient tasks, and driving radical efficiencies with every conversation.",
+      name: 'Parag Jhaveri',
+      title: 'CEO, Founder',
+      image: '/images/company/ceo/parag-jhaveri.png',
+    },
+    principles: {
+      sectionTitle: 'Our Operating Principles',
+      sectionDescription: 'Core principles that guide how we build, ship, and deliver excellence.',
+      principles: [
+        { title: 'Solving Customer Problems', description: 'We relentlessly focus on solving real customer problems with measurable value.' },
+        { title: 'Innovate Constantly', description: "Innovation isn't a department—it's our operating system for staying ahead." },
+        { title: 'Go Above & Beyond', description: "Good enough isn't in our vocabulary. We deliver exceptional outcomes." },
+        { title: 'Take Ownership', description: 'We take full ownership of our commitments—no excuses, no finger-pointing.' },
+        { title: 'Default Trust', description: 'Transparency, honesty, and integrity guide every interaction with our team.' },
+        { title: 'Think in First Principles', description: 'We break down complex problems to fundamentals, building from the ground up.' },
+        { title: 'Attention to Detail', description: 'Excellence lives in the details—we sweat the small stuff because it matters.' },
+      ],
+    },
+    advisors: {
+      sectionTitle: 'Our Advisors & Investors',
+      sectionDescription: 'Backed by industry leaders who share our vision for transforming healthcare administration',
+      advisors: [
+        {
+          name: 'Dave Vreeland',
+          role: 'Investor',
+          designation: 'Senior Managing Director, Caduceus Capital',
+          description: '30 years of experience in the healthcare industry, Dave is a well-known authority on healthcare innovation and venture capital investment. MBA in Healthcare, Washington University School of Medicine.',
+          image: '/images/company/advisors/photos/dave-vreeland.png',
+          logos: [
+            { src: '/images/company/advisors/logos/caduceus.png', alt: 'Caduceus Capital Partners' },
+            { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
+          ],
+        },
+        {
+          name: 'Mary Grove',
+          role: 'Investor',
+          designation: 'Managing Partner, Bread & Butter Ventures',
+          description: "20 years of experience in tech and early stage venture investing. Previously was Founding Director of Google for Startups and Investment Partner at Revolution's Rise of the Rest Seed Fund. MBA in Healthcare, Washington University School of Medicine.",
+          image: '/images/company/advisors/photos/mary-grove.png',
+          logos: [
+            { src: '/images/company/advisors/logos/bread-butter.png', alt: 'Bread & Butter Ventures' },
+            { src: '/images/company/advisors/logos/google.png', alt: 'Google for Startups' },
+            { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
+          ],
+        },
+        {
+          name: 'Paul Conley',
+          role: 'Advisor',
+          designation: 'Chairman and CEO, General Inception',
+          description: 'Serial Life Sciences entrepreneur and Deep Tech investor. Took 10x Genomics (TXG) and Twist Bio (TWST) public. Ph.D. in Computational Physics, UCSD.',
+          image: '/images/company/advisors/photos/paul-conley.png',
+          logos: [
+            { src: '/images/company/advisors/logos/los-alamos.png', alt: 'Los Alamos National Laboratory' },
+            { src: '/images/company/advisors/logos/ucsd.png', alt: 'University of California, San Diego' },
+            { src: '/images/company/advisors/logos/uva.png', alt: 'University of Virginia' },
+          ],
+        },
+        {
+          name: 'Andrew Vaz',
+          role: 'Board Member',
+          designation: 'Ex-Global Chief Innovation Officer, Deloitte',
+          description: '30 years of experience in growing Global Fortune 500, technology companies, and start-ups. Expert in emerging technologies, business model innovation, and digital customer and cloud transformation. Masters in Health Sciences, University of Toronto.',
+          image: '/images/company/advisors/photos/andrew-vaz.png',
+          logos: [
+            { src: '/images/company/advisors/logos/deloitte.png', alt: 'Deloitte' },
+            { src: '/images/company/advisors/logos/toronto-uni.png', alt: 'University of Toronto' },
+          ],
+        },
+        {
+          name: 'Mark Nathan',
+          role: 'Advisor',
+          designation: 'CEO and Founder, Mangoose Health and Burrow Software',
+          description: 'Serial Healthcare entrepreneur. Co-founder and CEO of Zipari.com, acquired by Thoma Bravo for $500M. Masters in Electrical Engineering, University of Colorado.',
+          image: '/images/company/advisors/photos/mark-nathan.png',
+          logos: [
+            { src: '/images/company/advisors/logos/zipari.png', alt: 'Zipari' },
+            { src: '/images/company/advisors/logos/apple.png', alt: 'Apple' },
+            { src: '/images/company/advisors/logos/colorado-uni.png', alt: 'University of Colorado Boulder' },
+          ],
+        },
+        {
+          name: 'James Fan',
+          role: 'Advisor',
+          designation: 'Co-founder and CTO, Tomato.ai',
+          description: 'Serial entrepreneur with deep expertise in speech-to-text and text-to-speech. Led Google Cloud Speech and CCAI group. Ph.D. in Computer Science, UT Austin.',
+          image: '/images/company/advisors/photos/james-fan.png',
+          logos: [
+            { src: '/images/company/advisors/logos/google.png', alt: 'Google' },
+            { src: '/images/company/advisors/logos/ut-austin.png', alt: 'University of Texas at Austin' },
+          ],
+        },
+        {
+          name: 'Sheena Menezes',
+          role: 'Advisor',
+          designation: 'Co-founder and CEO, Simple HealthKit',
+          description: '15+ years of start-up experience focused on payors, pharmacies, providers, and government. Ph.D. in Biochemistry from UC Santa Barbara.',
+          image: '/images/company/advisors/photos/sheena-menezes.png',
+          logos: [
+            { src: '/images/company/advisors/logos/simple-healthkit.png', alt: 'Simple HealthKit' },
+            { src: '/images/company/advisors/logos/ucsb.png', alt: 'UC Santa Barbara' },
+          ],
+        },
+      ],
+    },
+  };
+
+  const content = await getContent<CompanyContent>('company', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Careers Page Content Types
+// ============================================
+
+export interface CareersHeroContent {
+  headline: string;
+  subheadline: string;
+}
+
+export interface CareersValueItem {
+  title: string;
+  description: string;
+}
+
+export interface CareersValuesContent {
+  values: CareersValueItem[];
+}
+
+export interface CareersContent {
+  hero: CareersHeroContent;
+  values: CareersValuesContent;
+  openPositionsTitle: string;
+}
+
+/**
+ * Get Careers page content with fallback
+ */
+export async function getCareersContent(): Promise<CareersContent> {
+  const fallback: CareersContent = {
+    hero: {
+      headline: 'People who care.\nAI that matters.',
+      subheadline: "A collective of talented individuals uniting to create something greater than themselves. Together, we're pushing the boundaries of AI and healthcare.",
+    },
+    values: {
+      values: [
+        { title: 'Passionate.', description: 'We value individuals who can adapt, learn, and persevere through challenges.' },
+        { title: 'Committed.', description: 'A shared promise to push the envelope for the future of healthcare.' },
+        { title: 'Resilient.', description: 'Support and uplift each other to achieve our shared vision and goals.' },
+      ],
+    },
+    openPositionsTitle: 'Open Positions',
+  };
+
+  const content = await getContent<CareersContent>('careers', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Press Page Content Types
+// ============================================
+
+export interface PressHeroContent {
+  badge: string;
+  headline: string;
+  description: string;
+}
+
+export interface PressItemContent {
+  id: number;
+  logo: string;
+  outlet: string;
+  quote: string;
+  link: string;
+  featured?: boolean;
+}
+
+export interface PressContent {
+  hero: PressHeroContent;
+  coverageTitle: string;
+  items: PressItemContent[];
+}
+
+/**
+ * Get Press page content with fallback
+ */
+export async function getPressContent(): Promise<PressContent> {
+  const fallback: PressContent = {
+    hero: {
+      badge: 'Press Coverage',
+      headline: 'Press',
+      description: "Explore our remarkable journey through extensive press features, media highlights that showcase our brand's growth and impact.",
+    },
+    coverageTitle: 'Recent Coverage',
+    items: [
+      {
+        id: 1,
+        logo: '/images/press/logos/pr-newswire.png',
+        outlet: 'PR Newswire',
+        quote: "Company closes $4.54M in Seed round led by Caduceus Capital Partners, with participation from Bread and Butter Ventures, Mayo Clinic, and a strategic RCM company\n\nVoiceCare AI's goal is to tackle one of the largest and most overlooked pain points in healthcare, said Parag Jhaveri, founder and CEO of VoiceCare AI. With this funding, we are doubling down on our mission to reduce the burden of administrative conversations and tasks so care teams can prioritize high-value patient care.",
+        link: 'https://prnewswire.com',
+        featured: true,
+      },
+      {
+        id: 2,
+        logo: '/images/press/logos/forbes.png',
+        outlet: 'Forbes',
+        quote: 'AI Agents Are Coming to HealthCare\n\nVoiceCare AI automates communication between provider organizations, insurers, and patients. Its CEO, Parag Jhaveri, reported that their agent, Joy, can wait on hold for more than 30 minutes, navigate phone trees, sustain multi-hour conversations, and take actions like updating claims and filing requests.',
+        link: 'https://forbes.com',
+        featured: true,
+      },
+      {
+        id: 3,
+        logo: '/images/press/logos/beckers.png',
+        outlet: "Becker's Hospital Review",
+        quote: 'Streamlining Revenue Cycle Management with AI: VoiceCare AI at Becker\'s 15th Annual Meeting\n\nVoiceCare AI showcased "Joy," its advanced voice agent, at Becker\'s 15th Annual Meeting, which automates payer calls for benefits verification, prior authorizations, claims follow‑up, and A/R collections. Leveraging generative AI and conversational models, it reduces denials, accelerates reimbursements, and slashes administrative workload in revenue‑cycle management.',
+        link: 'https://beckershospitalreview.com',
+        featured: true,
+      },
+      {
+        id: 4,
+        logo: '/images/press/logos/hit-consultant.png',
+        outlet: 'Healthcare IT Consultant',
+        quote: "Inside Healthcare's Hottest New AI Category: Agentic AI\n\nAutomating these phone calls end-to-end eliminates a \"tremendous\" amount of tedious work, Jhaveri pointed out.\nHe said he was recently on a call with leaders from another large health system who told him their imaging department makes 70,000 calls to insurers per month.",
+        link: 'https://healthcareitconsultant.com',
+        featured: true,
+      },
+      {
+        id: 5,
+        logo: '/images/press/logos/medcity-news.png',
+        outlet: 'MedCity News',
+        quote: 'VoiceCare AI, new agentic AI startup, kicks off pilot with Mayo Clinic to automate back office work\n\nVoiceCare AI dubbed its voice AI agent "Joy," and the agent is capable of supporting long, complex, and highly nuanced conversations and extended hold times, Jhaveri said.',
+        link: 'https://medcitynews.com',
+        featured: true,
+      },
+      {
+        id: 6,
+        logo: '/images/press/logos/fierce-healthcare.png',
+        outlet: 'Fierce Healthcare',
+        quote: 'Agentic AI Startup, VoiceCare AI, Launches to Automate Healthcare Back Office and Super-Staff Workforce\n\nCompany Raises $3.85M in Seed Funding led by Caduceus Capital Partners, with Participation\nfrom Bread and Butter Ventures; Announces Collaboration with Mayo Clinic',
+        link: 'https://fiercehealthcare.com',
+        featured: true,
+      },
+      {
+        id: 7,
+        logo: '/images/press/logos/pr-newswire.png',
+        outlet: 'PR Newswire',
+        quote: 'VoiceCare AI plans to automate back-office operations with generative AI\n\nVoiceCare AI founder and CEO Parag Jhavari said: "By automating conversations in a way that feels genuinely human, we seek to give back time to healthcare professionals so they can focus on high-order patient care, driving radical efficiencies with every conversation. That\'s why we created "Joy," our voice AI agent."',
+        link: 'https://prnewswire.com',
+        featured: true,
+      },
+      {
+        id: 8,
+        logo: '/images/press/logos/yahoo-finance.png',
+        outlet: 'Yahoo Finance',
+        quote: 'VoiceCare AI Launches with $3.85M to Automate Healthcare Back Office with AI-Powered Voice Agent "Joy"\n\nImagine a world where the time spent on manual phone calls and faxes is replaced by meaningful patient interactions. With generative AI, we want to make this a reality," said Parag Jhaveri, founder and CEO of VoiceCare AI.',
+        link: 'https://finance.yahoo.com',
+        featured: true,
+      },
+    ],
+  };
+
+  const content = await getContent<PressContent>('press', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Partner With Us Page Content Types
+// ============================================
+
+export interface PartnerHeroContent {
+  headline: string;
+  description: string;
+}
+
+export interface PartnerContent {
+  hero: PartnerHeroContent;
+}
+
+/**
+ * Get Partner page content with fallback
+ */
+export async function getPartnerContent(): Promise<PartnerContent> {
+  const fallback: PartnerContent = {
+    hero: {
+      headline: 'Partner with Us',
+      description: 'Collaborating with VoiceCare will drive mutual growth and success. Fill out the form below to explore partnership opportunities and embark on a journey toward shaping the future of healthcare together.',
+    },
+  };
+
+  const content = await getContent<PartnerContent>('partner-with-us', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Schedule Demo Page Content Types
+// ============================================
+
+export interface ScheduleDemoHeroContent {
+  headline: string;
+  description: string;
+}
+
+export interface ScheduleDemoContent {
+  hero: ScheduleDemoHeroContent;
+}
+
+/**
+ * Get Schedule Demo page content with fallback
+ */
+export async function getScheduleDemoContent(): Promise<ScheduleDemoContent> {
+  const fallback: ScheduleDemoContent = {
+    hero: {
+      headline: 'Schedule a Demo',
+      description: 'Gain a comprehensive understanding of how our AI-driven solutions can revolutionize your operations. Our team will reach out promptly to arrange a tailored demonstration that aligns with your needs and objectives.',
+    },
+  };
+
+  const content = await getContent<ScheduleDemoContent>('schedule-demo', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Terms of Service Page Content Types
+// ============================================
+
+export interface TermsSectionContent {
+  title: string;
+  content: string; // HTML content
+  subsections?: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+export interface TermsFullContent {
+  title: string;
+  sections: TermsSectionContent[];
+}
+
+/**
+ * Get Terms of Service page content with fallback
+ */
+export async function getTermsContent(): Promise<TermsFullContent> {
+  const fallback: TermsFullContent = {
+    title: 'Terms Of Use Policy',
+    sections: [], // Empty means use default hardcoded content
+  };
+
+  const content = await getContent<TermsFullContent>('terms-of-service', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Privacy Policy Page Content Types
+// ============================================
+
+export interface PrivacySectionContent {
+  title: string;
+  content: string; // HTML content
+  subsections?: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+export interface PrivacyFullContent {
+  title: string;
+  sections: PrivacySectionContent[];
+}
+
+/**
+ * Get Privacy Policy page content with fallback
+ */
+export async function getPrivacyContent(): Promise<PrivacyFullContent> {
+  const fallback: PrivacyFullContent = {
+    title: 'Privacy Policy',
+    sections: [], // Empty means use default hardcoded content
+  };
+
+  const content = await getContent<PrivacyFullContent>('privacy-policy', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// TrustedBy Section Content Types
+// ============================================
+
+export interface TrustedByLogoContent {
+  name: string;
+  src: string;
+  size: 'normal' | 'large';
+}
+
+export interface TrustedByContent {
+  logos: TrustedByLogoContent[];
+}
+
+/**
+ * Get TrustedBy section content with fallback
+ */
+export async function getTrustedByContent(): Promise<TrustedByContent> {
+  const fallback: TrustedByContent = {
+    logos: [
+      { name: 'American Specialty Health', src: '/images/logos/american-specialty-health.png', size: 'normal' },
+      { name: 'Anthem', src: '/images/logos/anthem.png', size: 'normal' },
+      { name: 'Aetna', src: '/images/logos/aetna.png', size: 'normal' },
+      { name: 'Blue Shield of California', src: '/images/logos/blue-shield-california.png', size: 'large' },
+      { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'large' },
+      { name: 'Quantum Health', src: '/images/logos/quantum-health.png', size: 'normal' },
+      { name: 'UMR', src: '/images/logos/umr.png', size: 'normal' },
+      { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'normal' },
+    ],
+  };
+
+  const content = await getContent<TrustedByContent>('trusted-by', fallback);
+  return content || fallback;
+}
+
+// ============================================
+// Layout Content Types (Header, Footer, Banner)
+// ============================================
+
+export interface AnnouncementBannerContent {
+  highlightText: string;
+  regularText: string;
+}
+
+export interface FooterContent {
+  newsletterTitle: string;
+  newsletterDescription: string;
+  socialLabel: string;
+  linkedinUrl: string;
+  companyColumnTitle: string;
+  resourcesColumnTitle: string;
+  copyrightText: string;
+}
+
+export interface LayoutContent {
+  announcementBanner: AnnouncementBannerContent;
+  footer: FooterContent;
+}
+
+/**
+ * Get Layout content with fallback
+ */
+export async function getLayoutContent(): Promise<LayoutContent> {
+  const fallback: LayoutContent = {
+    announcementBanner: {
+      highlightText: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
+      regularText: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+    },
+    footer: {
+      newsletterTitle: 'Stay Updated',
+      newsletterDescription: 'Get the latest news and updates delivered to your inbox.',
+      socialLabel: 'Connect with us',
+      linkedinUrl: 'https://linkedin.com',
+      companyColumnTitle: 'Company',
+      resourcesColumnTitle: 'Resources',
+      copyrightText: '© 2025 VoiceCare AI. All rights reserved.',
+    },
+  };
+
+  const content = await getContent<LayoutContent>('layout', fallback);
   return content || fallback;
 }
 

@@ -2,26 +2,24 @@
 
 /**
  * TermsHeader Component
- * PIXEL-PERFECT implementation from designer-src/src/app/components/TermsOfService.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section:
- * - container mx-auto px-6 md:px-16 max-w-7xl py-20
- *
- * Animation Wrapper:
- * - initial={{ opacity: 0, y: 20 }}
- * - animate={{ opacity: 1, y: 0 }}
- * - transition={{ duration: 0.6 }}
- *
- * H1:
- * - text-[48px] leading-[1.1] mb-[48px] font-bold text-center
- * - mt-[-40px] mr-[0px] ml-[0px]
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { motion } from 'motion/react';
+import type { TermsFullContent } from '@/lib/content';
 
-export function TermsHeader() {
+interface TermsHeaderProps {
+  content?: TermsFullContent;
+}
+
+const DEFAULT_CONTENT: TermsFullContent = {
+  title: 'Terms Of Use Policy',
+  sections: [],
+};
+
+export function TermsHeader({ content }: TermsHeaderProps) {
+  const headerContent = content || DEFAULT_CONTENT;
+
   return (
     <section className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl py-12 sm:py-16 md:py-20">
       <motion.div
@@ -30,7 +28,7 @@ export function TermsHeader() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-[32px] sm:text-[40px] md:text-[48px] leading-[1.1] mb-[24px] sm:mb-[36px] md:mb-[48px] font-bold text-[#06003F] text-center mt-[-20px] sm:mt-[-30px] md:mt-[-40px]">
-          Terms Of Use Policy
+          {headerContent.title}
         </h1>
       </motion.div>
     </section>

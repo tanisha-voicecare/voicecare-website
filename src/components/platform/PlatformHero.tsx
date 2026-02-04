@@ -21,9 +21,9 @@ interface PlatformHeroProps {
 // ============================================
 
 const DEFAULT_CONTENT: PlatformHeroContent = {
-  eyebrow: 'Powered by',
-  headline: 'Healthcare Administration General Intelligence (HAgi)',
-  description: 'The cognitive core of the VoiceCare platform. HAgi goes beyond standard automation to understand the nuances of healthcare operations with the judgment of a human expert. It fuses Generative AI with deep clinical context to autonomously reason through complex workflows adapting to variable payor rules and unstructured conversations in real-time.',
+  eyebrow: "We're powered by",
+  headline: 'Healthcare Administration General Intelligence (HAGI)',
+  description: 'It is the heart of the VoiceCare platform. Using Generative and Conversational AI, it intelligently automates routine back-office workflows.',
 };
 
 export function PlatformHero({ content }: PlatformHeroProps) {

@@ -1,18 +1,12 @@
 /**
  * Privacy Policy Page
- * Implementation from designer-src/src/app/components/PrivacyPolicy.tsx
- *
- * Sections IMPLEMENTED:
- * 1. PrivacyPolicyHeader (H1 title) ✓
- * 2. PrivacyPolicyContent (18 legal text sections) ✓
- *
- * NOTE: Header is rendered by root layout.tsx
- * NOTE: Footer is NOT rendered on this page (per designer-src)
+ * Content is fetched from WordPress headless CMS
  */
 
 import type { Metadata } from 'next';
 import { PrivacyPolicyHeader, PrivacyPolicyContent } from '@/components/privacy-policy';
 import { generatePageMetadata } from '@/lib/seo';
+import { getPrivacyContent } from '@/lib/content';
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Privacy Policy',
@@ -21,11 +15,15 @@ export const metadata: Metadata = generatePageMetadata({
   pathname: '/privacy-policy',
 });
 
-export default function PrivacyPolicyPage() {
+export const revalidate = 600; // Revalidate every 10 minutes
+
+export default async function PrivacyPolicyPage() {
+  const content = await getPrivacyContent();
+
   return (
     <div className="min-h-screen bg-background w-full overflow-x-hidden">
-      <PrivacyPolicyHeader />
-      <PrivacyPolicyContent />
+      <PrivacyPolicyHeader content={content} />
+      <PrivacyPolicyContent sections={content.sections} />
     </div>
   );
 }

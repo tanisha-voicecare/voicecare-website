@@ -1,26 +1,50 @@
 /**
  * PrivacyPolicyContent Component
- * PIXEL-PERFECT implementation from designer-src/src/app/components/PrivacyPolicy.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Content Wrapper:
- * - max-w-4xl mx-auto space-y-8 text-[16px] leading-relaxed
- *
- * Section Titles (H2):
- * - text-[24px] font-bold mb-4
- *
- * Subsection Titles (H3):
- * - text-[18px] font-semibold mb-3
- *
- * Paragraphs:
- * - text-muted-foreground
- * - mb-4 between paragraphs (except last)
- *
- * LEGAL TEXT IS COPIED VERBATIM - DO NOT MODIFY
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
-export function PrivacyPolicyContent() {
+import type { PrivacySectionContent } from '@/lib/content';
+
+interface PrivacyPolicyContentProps {
+  sections?: PrivacySectionContent[];
+}
+
+// If WordPress provides sections, render them dynamically
+// Otherwise, render the default hardcoded content
+export function PrivacyPolicyContent({ sections }: PrivacyPolicyContentProps) {
+  // If sections are provided from WordPress, render dynamically
+  if (sections && sections.length > 0) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl pb-12 sm:pb-16 md:pb-20">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-7 md:space-y-8 text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed">
+          {sections.map((section, index) => (
+            <section key={index}>
+              <h2 className="text-[20px] sm:text-[22px] md:text-[24px] font-bold text-[#06003F] mb-3 sm:mb-4">
+                {section.title}
+              </h2>
+              <div 
+                className="privacy-content text-muted-foreground [&>p]:mb-4 [&>p:last-child]:mb-0 [&>a]:hover:underline"
+                dangerouslySetInnerHTML={{ __html: section.content }}
+              />
+              {section.subsections?.map((sub, subIndex) => (
+                <div key={subIndex} className="mt-4">
+                  <h3 className="text-[16px] sm:text-[17px] md:text-[18px] font-semibold text-[#06003F] mb-2 sm:mb-3">
+                    {sub.title}
+                  </h3>
+                  <div 
+                    className="privacy-content text-muted-foreground [&>p]:mb-4 [&>p:last-child]:mb-0 [&>a]:hover:underline"
+                    dangerouslySetInnerHTML={{ __html: sub.content }}
+                  />
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Default fallback - original hardcoded content
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl pb-12 sm:pb-16 md:pb-20">
       <div className="max-w-4xl mx-auto space-y-6 sm:space-y-7 md:space-y-8 text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed">

@@ -2,53 +2,7 @@
 
 /**
  * Security Compliance Component
- * EXACT implementation from designer-src/src/app/components/Solutions.tsx (Compliance and Monitoring Section)
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section Container:
- * - relative bg-white p-[0px]
- *
- * Content Container:
- * - container mx-auto px-6 md:px-16 max-w-7xl
- *
- * Header:
- * - text-center mb-20 max-w-4xl mx-auto
- * - Title: text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-6
- * - Description: text-[17px] text-[#06003F]/60 leading-relaxed
- * - Animation: opacity 0→1, y 20→0, duration 0.6s, ease smooth
- *
- * Tabs Container:
- * - flex flex-wrap justify-center gap-3 mb-16
- *
- * Tab Button:
- * - px-6 py-3 rounded-[6px] text-[15px] font-medium transition-all duration-300
- * - Active: bg-[#06003F] text-white
- * - Inactive: bg-white border border-[#06003F]/10 text-[#06003F] hover:border-[#06003F]/30
- * - Animation: whileHover scale 1.05, whileTap scale 0.95, duration 0.2s
- *
- * Cards Grid:
- * - grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-[0px] mr-[0px] mb-[70px] ml-[0px]
- * - Animation: key={activeTab}, opacity 0→1, y 20→0, duration 0.4s, ease smooth
- *
- * Feature Card:
- * - bg-[#F8F9FA] rounded-[12px] p-8
- * - hover:bg-[#FF4E3A]/5 hover:border hover:border-[#FF4E3A]/20
- * - transition-all duration-300 cursor-pointer group
- * - Animation: opacity 0→1, y 20→0, duration 0.4s, delay index*0.05, ease smooth
- * - whileHover: y -4, duration 0.2s
- *
- * Icon Container:
- * - w-12 h-12 rounded-[8px] bg-[#06003F]/5 group-hover:bg-[#FF4E3A]/10
- * - flex items-center justify-center mb-6 transition-all duration-300
- * - whileHover: rotate [0, -5, 5, 0], duration 0.5s
- *
- * Icon:
- * - w-6 h-6 text-[#06003F] group-hover:text-[#FF4E3A]
- * - transition-colors duration-300, strokeWidth 1.5
- *
- * Feature Text:
- * - text-[15px] text-[#06003F] font-medium leading-relaxed
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import React from 'react';
@@ -64,7 +18,17 @@ import {
   Key,
   Bell,
   Activity,
+  type LucideIcon,
 } from 'lucide-react';
+import type { SecurityComplianceContent, SecurityFeature } from '@/lib/content';
+
+// ============================================
+// Types
+// ============================================
+
+interface SecurityComplianceProps {
+  content?: SecurityComplianceContent;
+}
 
 // EASING from designer-src/src/utils/animations.ts
 const EASING = {
@@ -78,86 +42,8 @@ const ANIMATION_DURATION = {
 
 type TabKey = 'infrastructure' | 'organizational' | 'product' | 'internal' | 'data';
 
-// Security categories data from designer-src/Solutions.tsx
-const securityCategories: Record<
-  TabKey,
-  {
-    icon: typeof Server;
-    title: string;
-    features: { text: string; icon: typeof Server }[];
-  }
-> = {
-  infrastructure: {
-    icon: Server,
-    title: 'Infrastructure Security',
-    features: [
-      { text: 'We maintain our service infrastructure', icon: Server },
-      { text: 'We conduct regular backups of production data', icon: Database },
-      {
-        text: 'Multi-factor authentication (MFA) is enforced on all systems',
-        icon: Key,
-      },
-      {
-        text: 'Firewalls and intrusion prevention and detection systems protect our network',
-        icon: ShieldCheck,
-      },
-    ],
-  },
-  organizational: {
-    icon: ShieldCheck,
-    title: 'Organizational Security',
-    features: [
-      { text: 'All endpoints are encrypted', icon: Lock },
-      { text: 'Anti-malware technology is utilized', icon: ShieldCheck },
-      { text: 'Password policy is enforced', icon: Key },
-      { text: 'Security training is implemented', icon: Activity },
-      {
-        text: 'Contractors sign Confidentiality Agreements and BAAs',
-        icon: FileCheck,
-      },
-      { text: 'Production inventory is maintained', icon: Database },
-      {
-        text: 'Employees acknowledge Confidentiality Agreements',
-        icon: FileCheck,
-      },
-    ],
-  },
-  product: {
-    icon: Lock,
-    title: 'Product Security',
-    features: [
-      { text: 'Data is encrypted both at rest and in transit', icon: Lock },
-      {
-        text: 'Vulnerability and system monitoring procedures have been established',
-        icon: Eye,
-      },
-    ],
-  },
-  internal: {
-    icon: Key,
-    title: 'Internal Security',
-    features: [
-      { text: 'Scanned for and remediated vulnerabilities', icon: Eye },
-      { text: 'Tested the incident response plan', icon: Bell },
-      { text: 'Processed access requests as required', icon: Key },
-      { text: 'Restricted production deployment access', icon: Lock },
-      { text: 'Enforced change management procedures', icon: FileCheck },
-      { text: 'Established a configuration management system', icon: Server },
-      { text: 'Provided an available support system', icon: Bell },
-      { text: 'Established third-party agreements', icon: FileCheck },
-      { text: 'Maintained cybersecurity insurance', icon: Shield },
-      { text: 'Reviewed system capacity', icon: Activity },
-    ],
-  },
-  data: {
-    icon: Database,
-    title: 'Data and Privacy',
-    features: [
-      { text: 'Established privacy policy', icon: FileCheck },
-      { text: 'Security awareness and privacy training', icon: Activity },
-    ],
-  },
-};
+// Icon rotation for variety
+const ICON_SEQUENCE: LucideIcon[] = [Server, Database, Key, ShieldCheck, Lock, Eye, FileCheck, Bell, Activity, Shield];
 
 // Tab configuration
 const tabs: { key: TabKey; label: string }[] = [
@@ -168,8 +54,75 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: 'data', label: 'Data & Privacy' },
 ];
 
-export function SecurityCompliance() {
+// ============================================
+// Default Content (Fallback) - Original content
+// ============================================
+
+const DEFAULT_CONTENT: SecurityComplianceContent = {
+  sectionTitle: 'Compliance and Monitoring',
+  sectionDescription: 'We provide an overview of our dedication to compliance and security, offering access to certifications, documentation, and details on our strict control adherence.',
+  tabs: {
+    infrastructure: [
+      { title: '', description: 'We maintain our service infrastructure' },
+      { title: '', description: 'We conduct regular backups of production data' },
+      { title: '', description: 'Multi-factor authentication (MFA) is enforced on all systems' },
+      { title: '', description: 'Firewalls and intrusion prevention and detection systems protect our network' },
+    ],
+    organizational: [
+      { title: '', description: 'All endpoints are encrypted' },
+      { title: '', description: 'Anti-malware technology is utilized' },
+      { title: '', description: 'Password policy is enforced' },
+      { title: '', description: 'Security training is implemented' },
+      { title: '', description: 'Contractors sign Confidentiality Agreements and BAAs' },
+      { title: '', description: 'Production inventory is maintained' },
+      { title: '', description: 'Employees acknowledge Confidentiality Agreements' },
+    ],
+    product: [
+      { title: '', description: 'Data is encrypted both at rest and in transit' },
+      { title: '', description: 'Vulnerability and system monitoring procedures have been established' },
+    ],
+    internal: [
+      { title: '', description: 'Scanned for and remediated vulnerabilities' },
+      { title: '', description: 'Tested the incident response plan' },
+      { title: '', description: 'Processed access requests as required' },
+      { title: '', description: 'Restricted production deployment access' },
+      { title: '', description: 'Enforced change management procedures' },
+      { title: '', description: 'Established a configuration management system' },
+      { title: '', description: 'Provided an available support system' },
+      { title: '', description: 'Established third-party agreements' },
+      { title: '', description: 'Maintained cybersecurity insurance' },
+      { title: '', description: 'Reviewed system capacity' },
+    ],
+    dataPrivacy: [
+      { title: '', description: 'Established privacy policy' },
+      { title: '', description: 'Security awareness and privacy training' },
+    ],
+  },
+};
+
+export function SecurityCompliance({ content }: SecurityComplianceProps) {
+  const complianceContent = content || DEFAULT_CONTENT;
   const [activeTab, setActiveTab] = React.useState<TabKey>('infrastructure');
+
+  // Get features for current tab
+  const getCurrentFeatures = (): SecurityFeature[] => {
+    switch (activeTab) {
+      case 'infrastructure':
+        return complianceContent.tabs.infrastructure;
+      case 'organizational':
+        return complianceContent.tabs.organizational;
+      case 'product':
+        return complianceContent.tabs.product;
+      case 'internal':
+        return complianceContent.tabs.internal;
+      case 'data':
+        return complianceContent.tabs.dataPrivacy;
+      default:
+        return complianceContent.tabs.infrastructure;
+    }
+  };
+
+  const currentFeatures = getCurrentFeatures();
 
   return (
     <section className="relative bg-white">
@@ -183,12 +136,10 @@ export function SecurityCompliance() {
           className="text-center mb-10 sm:mb-14 md:mb-20 max-w-4xl mx-auto"
         >
           <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-4 sm:mb-5 md:mb-6">
-            Compliance and Monitoring
+            {complianceContent.sectionTitle}
           </h2>
           <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/60 leading-relaxed px-2">
-            We provide an overview of our dedication to compliance and security,
-            offering access to certifications, documentation, and details on our
-            strict control adherence.
+            {complianceContent.sectionDescription}
           </p>
         </motion.div>
 
@@ -230,8 +181,8 @@ export function SecurityCompliance() {
           transition={{ duration: 0.4, ease: EASING.smooth }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-12 sm:mb-16 md:mb-[70px]"
         >
-          {securityCategories[activeTab].features.map((feature, index) => {
-            const Icon = feature.icon;
+          {currentFeatures.map((feature, index) => {
+            const Icon = ICON_SEQUENCE[index % ICON_SEQUENCE.length];
             return (
               <motion.div
                 key={index}
@@ -259,9 +210,16 @@ export function SecurityCompliance() {
                   />
                 </motion.div>
 
+                {/* Feature Title - only shown if provided */}
+                {feature.title && (
+                  <h3 className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F] font-bold mb-2">
+                    {feature.title}
+                  </h3>
+                )}
+
                 {/* Feature Text */}
-                <p className="text-[14px] sm:text-[14px] md:text-[15px] text-[#06003F] font-medium leading-relaxed">
-                  {feature.text}
+                <p className={`text-[14px] sm:text-[14px] md:text-[15px] text-[#06003F] ${feature.title ? 'text-[#06003F]/60' : 'font-medium'} leading-relaxed`}>
+                  {feature.description}
                 </p>
               </motion.div>
             );

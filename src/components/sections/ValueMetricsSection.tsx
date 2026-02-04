@@ -23,23 +23,23 @@ interface ValueMetricsSectionProps {
 // ============================================
 
 const DEFAULT_CONTENT: ValueMetricsContent = {
-  sectionTitle: 'The VoiceCare Advantage',
-  sectionDescription: 'Delegate complex, variable administrative tasks from payor portal navigation to faxes into structured, EHR-ready data in one click, in real-time.',
+  sectionTitle: 'Why VoiceCare.',
+  sectionDescription: 'Our agentic AI goes beyond traditional automation to take meaningful action, delivering measurable outcomes that transform healthcare operations.',
   metrics: [
     {
       value: '70%',
       title: 'Higher ROI',
-      description: 'See an impact on your account receivables within months, not years.',
-    },
-    {
-      value: '99.999%',
-      title: 'Data Integrity',
-      description: 'Ensure consistent, 20% better data output for every conversation through our Human-in-the-Loop safety net.',
+      description: 'Returns within a few months, not years.',
     },
     {
       value: '40%',
-      title: 'Faster Execution',
-      description: 'Accelerate collection, initiation, and transfer of mission-critical data.',
+      title: 'Faster',
+      description: 'Collect, initiate, and transfer data',
+    },
+    {
+      value: '20%',
+      title: 'Better Data Quality',
+      description: 'Consistent data output with every conversation',
     },
   ],
 };
@@ -47,11 +47,11 @@ const DEFAULT_CONTENT: ValueMetricsContent = {
 // Icon mapping for metrics
 const METRIC_ICONS: Record<string, LucideIcon> = {
   'Higher ROI': TrendingUp,
-  'Data Integrity': CheckCircle,
-  'Faster Execution': Zap,
+  'Faster': Zap,
+  'Better Data Quality': CheckCircle,
 };
 
-const METRIC_COLORS = ['#06003F', '#06003F', '#FF4E3A'];
+const METRIC_COLORS = ['#06003F', '#FF4E3A', '#06003F'];
 
 // ============================================
 // Component

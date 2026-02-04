@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Header, Footer, ScrollToTop, AnnouncementBanner } from '@/components/layout';
 import { generateSiteMetadata } from '@/lib/seo';
+import { getLayoutContent } from '@/lib/content';
 import './globals.css';
 
 // ============================================
@@ -32,20 +33,24 @@ export const viewport: Viewport = {
 // Root Layout
 // ============================================
 
-export default function RootLayout({
+export const revalidate = 600; // Revalidate layout content every 10 minutes
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const layoutContent = await getLayoutContent();
+
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-white font-sans antialiased">
         <ScrollToTop />
         <div className="flex min-h-screen flex-col">
           <Header />
-          <AnnouncementBanner />
+          <AnnouncementBanner content={layoutContent.announcementBanner} />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <Footer content={layoutContent.footer} />
         </div>
       </body>
     </html>

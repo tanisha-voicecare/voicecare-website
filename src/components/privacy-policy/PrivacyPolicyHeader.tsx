@@ -2,26 +2,24 @@
 
 /**
  * PrivacyPolicyHeader Component
- * PIXEL-PERFECT implementation from designer-src/src/app/components/PrivacyPolicy.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section:
- * - container mx-auto px-6 md:px-16 max-w-7xl py-20
- *
- * Animation Wrapper:
- * - initial={{ opacity: 0, y: 20 }}
- * - animate={{ opacity: 1, y: 0 }}
- * - transition={{ duration: 0.6 }}
- *
- * H1:
- * - text-[48px] leading-[1.1] mb-[48px] font-bold text-center
- * - mt-[-45px] mr-[0px] ml-[0px]
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { motion } from 'motion/react';
+import type { PrivacyFullContent } from '@/lib/content';
 
-export function PrivacyPolicyHeader() {
+interface PrivacyPolicyHeaderProps {
+  content?: PrivacyFullContent;
+}
+
+const DEFAULT_CONTENT: PrivacyFullContent = {
+  title: 'Privacy Policy',
+  sections: [],
+};
+
+export function PrivacyPolicyHeader({ content }: PrivacyPolicyHeaderProps) {
+  const headerContent = content || DEFAULT_CONTENT;
+
   return (
     <section className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl py-12 sm:py-16 md:py-20">
       <motion.div
@@ -30,7 +28,7 @@ export function PrivacyPolicyHeader() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-[32px] sm:text-[40px] md:text-[48px] leading-[1.1] mb-[24px] sm:mb-[36px] md:mb-[48px] font-bold text-[#06003F] text-center mt-[-20px] sm:mt-[-30px] md:mt-[-45px]">
-          Privacy Policy
+          {headerContent.title}
         </h1>
       </motion.div>
     </section>

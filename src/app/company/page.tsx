@@ -1,15 +1,6 @@
 /**
  * Company Page
- * Implementation from designer-src/src/app/components/Company.tsx
- *
- * All sections IMPLEMENTED:
- * 1. CompanyHero
- * 2. AboutUsSection
- * 3. CEOQuoteSection
- * 4. PrinciplesSection
- * 5. AdvisorsSection
- *
- * NOTE: Header and Footer are rendered by root layout.tsx
+ * Content is fetched from WordPress headless CMS
  */
 
 import type { Metadata } from 'next';
@@ -21,6 +12,7 @@ import {
   AdvisorsSection,
 } from '@/components/company';
 import { generatePageMetadata } from '@/lib/seo';
+import { getCompanyContent } from '@/lib/content';
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Company',
@@ -29,14 +21,18 @@ export const metadata: Metadata = generatePageMetadata({
   pathname: '/company',
 });
 
-export default function CompanyPage() {
+export const revalidate = 600; // Revalidate every 10 minutes
+
+export default async function CompanyPage() {
+  const content = await getCompanyContent();
+
   return (
     <>
-      <CompanyHero />
-      <AboutUsSection />
-      <CEOQuoteSection />
-      <PrinciplesSection />
-      <AdvisorsSection />
+      <CompanyHero content={content.hero} />
+      <AboutUsSection content={content.aboutUs} />
+      <CEOQuoteSection content={content.ceoQuote} />
+      <PrinciplesSection content={content.principles} />
+      <AdvisorsSection content={content.advisors} />
     </>
   );
 }

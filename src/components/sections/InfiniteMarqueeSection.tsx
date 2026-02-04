@@ -25,9 +25,7 @@ interface InfiniteMarqueeSectionProps {
 const DEFAULT_CONTENT: RadicalEfficienciesContent = {
   sectionTitle: 'Radical Efficiencies',
   stats: [
-    { value: '530+', label: 'hours recovered per 1,000 conversations' },
-    { value: '1060+', label: 'hours saved per day' },
-    { value: '130+', label: 'workdays of staff time recovered every day' },
+    { value: '32000', label: 'Minutes saved per 1,000 phone calls' },
   ],
 };
 
@@ -41,7 +39,7 @@ export function InfiniteMarqueeSection({ className = '', content }: InfiniteMarq
   
   // Extract primary stat for animated counter (first stat's numeric value)
   const primaryStat = sectionContent.stats[0];
-  const targetValue = parseInt(primaryStat?.value.replace(/[^0-9]/g, '') || '530') * 60; // Convert hours to minutes
+  const targetValue = parseInt(primaryStat?.value.replace(/[^0-9]/g, '') || '32000'); // Direct minutes value
   
   const [count, setCount] = useState(0);
   const ref = useRef(null);

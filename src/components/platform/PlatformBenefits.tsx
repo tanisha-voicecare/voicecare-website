@@ -32,20 +32,20 @@ const DEFAULT_CONTENT: PlatformBenefitsContent = {
   sectionTitle: 'Benefits',
   benefits: [
     {
-      title: 'Automate Tasks & Conversations',
-      description: 'Schedule one-time or recurring phone conversations and tasks seamlessly in one click.',
+      title: 'Automate tasks and conversations',
+      description: 'Schedule one-time or recurring automated phone conversations and tasks in one click.',
     },
     {
-      title: 'Search for Conversations',
-      description: 'Find structured data across every conversational audio and transcript, and instantly access use-case specific call summaries.',
+      title: 'Search for conversations',
+      description: 'Find structured data across every conversational audio and transcript, and get use-case specific call summary.',
     },
     {
-      title: 'AI-Powered Call Analytics',
-      description: "Generate insights and knowledge grounded in your back-office data with detailed analytics for every conversation to pinpoint what's working and where to improve.",
+      title: 'AI-powered call analytics',
+      description: "Generate knowledge grounded in your back-office information – with drill-down analytics for every conversation on what's working, and where to improve.",
     },
     {
-      title: 'Customize Conversations',
-      description: 'Configure use-case specific conversations to ask the questions that matter, delivering better healthcare outcomes for your patients.',
+      title: 'Customize conversations',
+      description: 'For use-case specific conversations, ask the questions that matter to deliver healthcare outcomes for your patients.',
     },
   ],
 };

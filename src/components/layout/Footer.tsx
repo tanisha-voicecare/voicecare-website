@@ -2,46 +2,7 @@
 
 /**
  * Footer Component
- * PIXEL-PERFECT implementation from designer-src/src/app/components/Footer.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Footer Container:
- * - bg-white border-t border-[#06003F]/10
- *
- * Inner Wrapper:
- * - container mx-auto px-6 md:px-16 max-w-7xl
- *
- * Main Content:
- * - pt-16 md:pt-20 pb-8 md:pb-10
- *
- * Grid:
- * - grid-cols-1 md:grid-cols-12 gap-12 md:gap-8
- *
- * Logo Column (md:col-span-4):
- * - Logo: h-20 mb-8
- * - Social label: text-[13px] font-medium text-[#06003F]/40 uppercase tracking-wider mb-4
- * - LinkedIn button: w-11 h-11 rounded-[8px] border border-[#06003F]/10
- *   hover:border-[#FF4E3A] bg-white hover:bg-[#FF4E3A]
- *   text-[#06003F] hover:text-white
- *
- * Navigation Columns (md:col-span-2 each):
- * - Headings: text-[13px] font-semibold text-[#06003F] uppercase tracking-wider mb-6
- * - Links: text-[15px] text-[#06003F]/60 hover:text-[#FF4E3A] transition-colors
- * - space-y-4
- *
- * Newsletter Column (md:col-span-4):
- * - Heading: text-[13px] font-semibold text-[#06003F] uppercase tracking-wider mb-6
- * - Description: text-[15px] text-[#06003F]/60 mb-6 leading-relaxed
- * - Input: px-5 py-3.5 text-[15px] bg-[#06003F]/[0.02] border border-[#06003F]/10
- *   rounded-[8px] focus:border-[#FF4E3A] placeholder:text-[#06003F]/30
- * - Submit button: bg-[#FF4E3A] text-white px-5 rounded-[6px] font-semibold
- *
- * Bottom Bar:
- * - py-8 border-t border-[#06003F]/10
- * - Copyright: text-[14px] text-[#06003F]/40
- * - Compliance badges: h-20
- * - Legal links: text-[14px] text-[#06003F]/40 hover:text-[#FF4E3A]
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { useState } from 'react';
@@ -49,6 +10,21 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Linkedin, ArrowRight } from 'lucide-react';
+import type { FooterContent } from '@/lib/content';
+
+interface FooterProps {
+  content?: FooterContent;
+}
+
+const DEFAULT_CONTENT: FooterContent = {
+  newsletterTitle: 'Stay Updated',
+  newsletterDescription: 'Get the latest news and updates delivered to your inbox.',
+  socialLabel: 'Connect with us',
+  linkedinUrl: 'https://linkedin.com',
+  companyColumnTitle: 'Company',
+  resourcesColumnTitle: 'Resources',
+  copyrightText: '© 2025 VoiceCare AI. All rights reserved.',
+};
 
 // ============================================
 // Pages that should NOT render Footer (per designer-src)
@@ -95,7 +71,8 @@ const legalLinks: FooterLink[] = [
 
 type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export function Footer() {
+export function Footer({ content }: FooterProps) {
+  const footerContent = content || DEFAULT_CONTENT;
   const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
@@ -170,10 +147,10 @@ export function Footer() {
               {/* Social Section */}
               <div>
                 <p className="text-[13px] font-medium text-[#06003F]/40 uppercase tracking-wider mb-3 sm:mb-4">
-                  Connect with us
+                  {footerContent.socialLabel}
                 </p>
                 <a
-                  href="https://linkedin.com"
+                  href={footerContent.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] border border-[#06003F]/10 hover:border-[#FF4E3A] bg-white hover:bg-[#FF4E3A] text-[#06003F] hover:text-white transition-all duration-300"
@@ -185,10 +162,10 @@ export function Footer() {
 
             {/* Navigation columns wrapper for tablet centering */}
             <div className="md:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10">
-              {/* Company Column - EXACT from designer-src */}
+              {/* Company Column */}
               <div className="text-center lg:text-left">
                 <h5 className="text-[13px] font-semibold text-[#06003F] uppercase tracking-wider mb-4 sm:mb-6">
-                  Company
+                  {footerContent.companyColumnTitle}
                 </h5>
                 <ul className="space-y-3 sm:space-y-4">
                   {companyLinks.map((link) => (
@@ -219,10 +196,10 @@ export function Footer() {
                 </ul>
               </div>
 
-              {/* Resources Column - EXACT from designer-src */}
+              {/* Resources Column */}
               <div className="text-center lg:text-left">
                 <h5 className="text-[13px] font-semibold text-[#06003F] uppercase tracking-wider mb-4 sm:mb-6">
-                  Resources
+                  {footerContent.resourcesColumnTitle}
                 </h5>
                 <ul className="space-y-3 sm:space-y-4">
                   {resourcesLinks.map((link) => (
@@ -248,10 +225,10 @@ export function Footer() {
             {/* Newsletter Column */}
             <div className="md:col-span-2 lg:col-span-4 text-center lg:text-left">
               <h5 className="text-[13px] font-semibold text-[#06003F] uppercase tracking-wider mb-4 sm:mb-6">
-                Stay Updated
+                {footerContent.newsletterTitle}
               </h5>
               <p className="text-[15px] text-[#06003F]/60 mb-4 sm:mb-6 leading-relaxed max-w-md mx-auto lg:mx-0 lg:max-w-none">
-                Get the latest news and updates delivered to your inbox.
+                {footerContent.newsletterDescription}
               </p>
 
               {submitStatus === 'success' ? (
@@ -308,7 +285,7 @@ export function Footer() {
         <div className="py-6 sm:py-8 border-t border-[#06003F]/10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6">
             <p className="text-[13px] sm:text-[14px] text-[#06003F]/40 text-center lg:text-left order-3 lg:order-1">
-              © 2025 VoiceCare AI. All rights reserved.
+              {footerContent.copyrightText}
             </p>
 
             {/* Compliance Badges - placeholder for local asset */}

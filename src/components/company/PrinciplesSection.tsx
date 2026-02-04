@@ -2,55 +2,7 @@
 
 /**
  * Principles Section Component
- * EXACT implementation from designer-src/src/app/components/company/PrinciplesSection.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section Container:
- * - relative py-[110px] bg-[#FAFBFC] px-[0px]
- *
- * Content Container:
- * - container mx-auto px-6 md:px-16 max-w-6xl relative z-10
- *
- * Header:
- * - text-center mb-12
- * - Animation: opacity 0→1, y 20→0, duration 0.5s
- *
- * Title:
- * - text-[48px] font-bold text-[#06003F] mb-4
- * - Animation: opacity 0→1, scale 0.95→1, duration 0.4s, delay 0.1s
- *
- * Description:
- * - text-[18px] text-[#06003F]/60 max-w-2xl mx-auto
- * - Animation: opacity 0→1, y 10→0, duration 0.4s, delay 0.15s
- *
- * Grid:
- * - grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-16
- *
- * Card Wrapper:
- * - Animation: opacity 0→1, y 20→0, delay index*0.05
- * - Hover: y -8, scale 1.02, duration 0.2s
- * - group cursor-default
- *
- * Card Container:
- * - bg-white rounded-[12px] p-8 h-full border border-[#06003F]/5
- * - hover:border-[#06003F]/10 transition-colors duration-200
- *
- * Icon Container:
- * - w-12 h-12 rounded-[6px] bg-[#06003F]/5 flex items-center justify-center mb-5
- * - group-hover:bg-[#FF4E3A]/10
- * - Hover animation: scale 1.1, rotate 5, spring
- *
- * Icon:
- * - w-6 h-6 text-[#06003F]/70 group-hover:text-[#FF4E3A] strokeWidth 2
- *
- * Title:
- * - text-[18px] font-bold text-[#06003F] mb-3 leading-tight
- * - group-hover:text-[#FF4E3A]
- *
- * Description:
- * - text-[15px] text-[#06003F]/60 leading-relaxed
- * - group-hover:text-[#06003F]/80
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { motion } from 'motion/react';
@@ -64,67 +16,45 @@ import {
   Zap,
   LucideIcon,
 } from 'lucide-react';
+import type { PrinciplesSectionContent } from '@/lib/content';
 
-// ============================================
-// Principles Data (EXACT from designer-src/company-data.ts)
-// ============================================
-
-interface Principle {
-  icon: LucideIcon;
-  title: string;
-  description: string;
+interface PrinciplesSectionProps {
+  content?: PrinciplesSectionContent;
 }
 
-const principles: Principle[] = [
-  {
-    icon: Target,
-    title: 'Solving Customer Problems',
-    description:
-      'We relentlessly focus on solving real customer problems with measurable value.',
-  },
-  {
-    icon: Lightbulb,
-    title: 'Innovate Constantly',
-    description:
-      "Innovation isn't a department—it's our operating system for staying ahead.",
-  },
-  {
-    icon: TrendingUp,
-    title: 'Go Above & Beyond',
-    description:
-      "Good enough isn't in our vocabulary. We deliver exceptional outcomes.",
-  },
-  {
-    icon: Shield,
-    title: 'Take Ownership',
-    description:
-      'We take full ownership of our commitments—no excuses, no finger-pointing.',
-  },
-  {
-    icon: Users,
-    title: 'Default Trust',
-    description:
-      'Transparency, honesty, and integrity guide every interaction with our team.',
-  },
-  {
-    icon: Clock,
-    title: 'Think in First Principles',
-    description:
-      'We break down complex problems to fundamentals, building from the ground up.',
-  },
-  {
-    icon: Zap,
-    title: 'Attention to Detail',
-    description:
-      'Excellence lives in the details—we sweat the small stuff because it matters.',
-  },
-];
+const DEFAULT_CONTENT: PrinciplesSectionContent = {
+  sectionTitle: 'Our Operating Principles',
+  sectionDescription: 'Core principles that guide how we build, ship, and deliver excellence.',
+  principles: [
+    { title: 'Solving Customer Problems', description: 'We relentlessly focus on solving real customer problems with measurable value.' },
+    { title: 'Innovate Constantly', description: "Innovation isn't a department—it's our operating system for staying ahead." },
+    { title: 'Go Above & Beyond', description: "Good enough isn't in our vocabulary. We deliver exceptional outcomes." },
+    { title: 'Take Ownership', description: 'We take full ownership of our commitments—no excuses, no finger-pointing.' },
+    { title: 'Default Trust', description: 'Transparency, honesty, and integrity guide every interaction with our team.' },
+    { title: 'Think in First Principles', description: 'We break down complex problems to fundamentals, building from the ground up.' },
+    { title: 'Attention to Detail', description: 'Excellence lives in the details—we sweat the small stuff because it matters.' },
+  ],
+};
+
+// Icon mapping for principles
+const ICON_MAP: Record<string, LucideIcon> = {
+  'Solving Customer Problems': Target,
+  'Innovate Constantly': Lightbulb,
+  'Go Above & Beyond': TrendingUp,
+  'Take Ownership': Shield,
+  'Default Trust': Users,
+  'Think in First Principles': Clock,
+  'Attention to Detail': Zap,
+};
+
+const ICON_SEQUENCE: LucideIcon[] = [Target, Lightbulb, TrendingUp, Shield, Users, Clock, Zap];
 
 // ============================================
 // Component
 // ============================================
 
-export function PrinciplesSection() {
+export function PrinciplesSection({ content }: PrinciplesSectionProps) {
+  const sectionContent = content || DEFAULT_CONTENT;
   return (
     <section className="relative py-14 sm:py-20 md:py-[110px] bg-[#FAFBFC] px-4 sm:px-6 md:px-12">
       <div className="container mx-auto max-w-6xl relative z-10">
@@ -143,7 +73,7 @@ export function PrinciplesSection() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-3 sm:mb-4"
           >
-            Our Operating Principles
+            {sectionContent.sectionTitle}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -152,15 +82,14 @@ export function PrinciplesSection() {
             transition={{ duration: 0.4, delay: 0.15 }}
             className="text-[15px] sm:text-[16px] md:text-[18px] text-[#06003F]/60 max-w-xl sm:max-w-2xl mx-auto px-2"
           >
-            Core principles that guide how we build, ship, and deliver
-            excellence.
+            {sectionContent.sectionDescription}
           </motion.p>
         </motion.div>
 
         {/* Principles Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-5 mt-8 sm:mt-12 md:mt-16">
-          {principles.map((principle, index) => {
-            const Icon = principle.icon;
+          {sectionContent.principles.map((principle, index) => {
+            const Icon = ICON_MAP[principle.title] || ICON_SEQUENCE[index % ICON_SEQUENCE.length];
 
             return (
               <motion.div

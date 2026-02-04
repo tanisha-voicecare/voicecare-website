@@ -18,6 +18,7 @@ import {
   getRadicalEfficienciesContent,
   getEHRIntegrationsContent,
   getProductIntroContent,
+  getTrustedByContent,
 } from '@/lib/content';
 
 // ============================================
@@ -49,12 +50,14 @@ export default async function HomePage() {
     radicalEfficienciesContent,
     ehrIntegrationsContent,
     productIntroContent,
+    trustedByContent,
   ] = await Promise.all([
     getHomepageHeroContent(),
     getValueMetricsContent(),
     getRadicalEfficienciesContent(),
     getEHRIntegrationsContent(),
     getProductIntroContent(),
+    getTrustedByContent(),
   ]);
 
   return (
@@ -63,7 +66,7 @@ export default async function HomePage() {
       <HeroSection content={heroContent} />
 
       {/* Trusted By Section */}
-      <TrustedBySection />
+      <TrustedBySection content={trustedByContent} />
 
       {/* Value Metrics Section - The VoiceCare Advantage */}
       <ValueMetricsSection content={valueMetricsContent} />

@@ -1,13 +1,6 @@
 /**
  * Security Page
- * Implementation from designer-src/src/app/components/Solutions.tsx
- *
- * Current sections IMPLEMENTED:
- * 1. SecurityHero
- * 2. SecurityCertifications
- * 3. SecurityCompliance (5 tabs + cards)
- *
- * NOTE: Header and Footer are rendered by root layout.tsx
+ * Content is fetched from WordPress headless CMS
  */
 
 import type { Metadata } from 'next';
@@ -17,6 +10,7 @@ import {
   SecurityCompliance,
 } from '@/components/security';
 import { generatePageMetadata } from '@/lib/seo';
+import { getSecurityContent } from '@/lib/content';
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Security',
@@ -25,12 +19,16 @@ export const metadata: Metadata = generatePageMetadata({
   pathname: '/security',
 });
 
-export default function SecurityPage() {
+export const revalidate = 600; // Revalidate every 10 minutes
+
+export default async function SecurityPage() {
+  const content = await getSecurityContent();
+
   return (
     <>
-      <SecurityHero />
-      <SecurityCertifications />
-      <SecurityCompliance />
+      <SecurityHero content={content.hero} />
+      <SecurityCertifications content={content.certifications} />
+      <SecurityCompliance content={content.compliance} />
     </>
   );
 }

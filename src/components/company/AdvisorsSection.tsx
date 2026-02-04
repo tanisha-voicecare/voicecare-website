@@ -2,164 +2,114 @@
 
 /**
  * Advisors Section Component
- * EXACT implementation from designer-src/src/app/components/company/AdvisorsSection.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Section Container:
- * - relative py-[60px] bg-white
- *
- * Content Container:
- * - container mx-auto px-6 md:px-16 max-w-7xl
- *
- * Header:
- * - text-center mb-20
- * - Title: text-[48px] font-bold text-[#06003F] mb-4
- * - Description: text-[18px] text-[#06003F]/60 max-w-3xl mx-auto
- *
- * Horizontal Scroll:
- * - overflow-x-auto scrollbar-hide
- * - Cards container: flex gap-6 pb-6, width: max-content
- *
- * Card:
- * - width: 280px, flex-shrink-0
- * - Animation: opacity 0→1, x 30→0, delay index*0.06
- * - Hover: y -8, scale 1.02, duration 0.2s
- *
- * Photo Container:
- * - aspect-[3/4], rounded-[12px], overflow-hidden
- * - Image hover: scale-105
- * - Gradient overlay on hover
- *
- * Role Chip:
- * - Investor: bg-[#FF4E3A] text-white
- * - Board Member: bg-[#06003F] text-white
- * - Advisor: bg-white text-[#06003F]
- *
- * Modal:
- * - Backdrop: fixed, bg-[#06003F]/80 backdrop-blur-sm, z-[100]
- * - Content: fixed center, max-w-[900px], max-h-[85vh], z-[101]
- * - Animation: opacity/scale/y with AnimatePresence
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { AdvisorsSectionContent, AdvisorItem } from '@/lib/content';
 
-// ============================================
-// Advisors Data (EXACT from designer-src/company-data.ts)
-// ============================================
-
-interface AdvisorLogo {
-  src: string;
-  alt: string;
+interface AdvisorsSectionProps {
+  content?: AdvisorsSectionContent;
 }
 
-interface Advisor {
-  name: string;
-  role: 'Investor' | 'Board Member' | 'Advisor';
-  designation: string;
-  description: string;
-  image: string;
-  logos: AdvisorLogo[];
-}
-
-const advisors: Advisor[] = [
-  {
-    name: 'Dave Vreeland',
-    role: 'Investor',
-    designation: 'Senior Managing Director, Caduceus Capital',
-    description:
-      '30 years of experience in the healthcare industry, Dave is a well-known authority on healthcare innovation and venture capital investment. MBA in Healthcare, Washington University School of Medicine.',
-    image: '/images/company/advisors/photos/dave-vreeland.png',
-    logos: [
-      { src: '/images/company/advisors/logos/caduceus.png', alt: 'Caduceus Capital Partners' },
-      { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
-    ],
-  },
-  {
-    name: 'Mary Grove',
-    role: 'Investor',
-    designation: 'Managing Partner, Bread & Butter Ventures',
-    description:
-      "20 years of experience in tech and early stage venture investing. Previously was Founding Director of Google for Startups and Investment Partner at Revolution's Rise of the Rest Seed Fund. MBA in Healthcare, Washington University School of Medicine.",
-    image: '/images/company/advisors/photos/mary-grove.png',
-    logos: [
-      { src: '/images/company/advisors/logos/bread-butter.png', alt: 'Bread & Butter Ventures' },
-      { src: '/images/company/advisors/logos/google.png', alt: 'Google for Startups' },
-      { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
-    ],
-  },
-  {
-    name: 'Paul Conley',
-    role: 'Advisor',
-    designation: 'Chairman and CEO, General Inception',
-    description:
-      'Serial Life Sciences entrepreneur and Deep Tech investor. Took 10x Genomics (TXG) and Twist Bio (TWST) public. Ph.D. in Computational Physics, UCSD.',
-    image: '/images/company/advisors/photos/paul-conley.png',
-    logos: [
-      { src: '/images/company/advisors/logos/los-alamos.png', alt: 'Los Alamos National Laboratory' },
-      { src: '/images/company/advisors/logos/ucsd.png', alt: 'University of California, San Diego' },
-      { src: '/images/company/advisors/logos/uva.png', alt: 'University of Virginia' },
-    ],
-  },
-  {
-    name: 'Andrew Vaz',
-    role: 'Board Member',
-    designation: 'Ex-Global Chief Innovation Officer, Deloitte',
-    description:
-      '30 years of experience in growing Global Fortune 500, technology companies, and start-ups. Expert in emerging technologies, business model innovation, and digital customer and cloud transformation. Masters in Health Sciences, University of Toronto.',
-    image: '/images/company/advisors/photos/andrew-vaz.png',
-    logos: [
-      { src: '/images/company/advisors/logos/deloitte.png', alt: 'Deloitte' },
-      { src: '/images/company/advisors/logos/toronto-uni.png', alt: 'University of Toronto' },
-    ],
-  },
-  {
-    name: 'Mark Nathan',
-    role: 'Advisor',
-    designation: 'CEO and Founder, Mangoose Health and Burrow Software',
-    description:
-      'Serial Healthcare entrepreneur. Co-founder and CEO of Zipari.com, acquired by Thoma Bravo for $500M. Masters in Electrical Engineering, University of Colorado.',
-    image: '/images/company/advisors/photos/mark-nathan.png',
-    logos: [
-      { src: '/images/company/advisors/logos/zipari.png', alt: 'Zipari' },
-      { src: '/images/company/advisors/logos/apple.png', alt: 'Apple' },
-      { src: '/images/company/advisors/logos/colorado-uni.png', alt: 'University of Colorado Boulder' },
-    ],
-  },
-  {
-    name: 'James Fan',
-    role: 'Advisor',
-    designation: 'Co-founder and CTO, Tomato.ai',
-    description:
-      'Serial entrepreneur with deep expertise in speech-to-text and text-to-speech. Led Google Cloud Speech and CCAI group. Ph.D. in Computer Science, UT Austin.',
-    image: '/images/company/advisors/photos/james-fan.png',
-    logos: [
-      { src: '/images/company/advisors/logos/google.png', alt: 'Google' },
-      { src: '/images/company/advisors/logos/ut-austin.png', alt: 'University of Texas at Austin' },
-    ],
-  },
-  {
-    name: 'Sheena Menezes',
-    role: 'Advisor',
-    designation: 'Co-founder and CEO, Simple HealthKit',
-    description:
-      '15+ years of start-up experience focused on payors, pharmacies, providers, and government. Ph.D. in Biochemistry from UC Santa Barbara.',
-    image: '/images/company/advisors/photos/sheena-menezes.png',
-    logos: [
-      { src: '/images/company/advisors/logos/simple-healthkit.png', alt: 'Simple HealthKit' },
-      { src: '/images/company/advisors/logos/ucsb.png', alt: 'UC Santa Barbara' },
-    ],
-  },
-];
+const DEFAULT_CONTENT: AdvisorsSectionContent = {
+  sectionTitle: 'Our Advisors & Investors',
+  sectionDescription: 'Backed by industry leaders who share our vision for transforming healthcare administration',
+  advisors: [
+    {
+      name: 'Dave Vreeland',
+      role: 'Investor',
+      designation: 'Senior Managing Director, Caduceus Capital',
+      description: '30 years of experience in the healthcare industry, Dave is a well-known authority on healthcare innovation and venture capital investment. MBA in Healthcare, Washington University School of Medicine.',
+      image: '/images/company/advisors/photos/dave-vreeland.png',
+      logos: [
+        { src: '/images/company/advisors/logos/caduceus.png', alt: 'Caduceus Capital Partners' },
+        { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
+      ],
+    },
+    {
+      name: 'Mary Grove',
+      role: 'Investor',
+      designation: 'Managing Partner, Bread & Butter Ventures',
+      description: "20 years of experience in tech and early stage venture investing. Previously was Founding Director of Google for Startups and Investment Partner at Revolution's Rise of the Rest Seed Fund. MBA in Healthcare, Washington University School of Medicine.",
+      image: '/images/company/advisors/photos/mary-grove.png',
+      logos: [
+        { src: '/images/company/advisors/logos/bread-butter.png', alt: 'Bread & Butter Ventures' },
+        { src: '/images/company/advisors/logos/google.png', alt: 'Google for Startups' },
+        { src: '/images/company/advisors/logos/washington-uni.png', alt: 'Washington University School of Medicine' },
+      ],
+    },
+    {
+      name: 'Paul Conley',
+      role: 'Advisor',
+      designation: 'Chairman and CEO, General Inception',
+      description: 'Serial Life Sciences entrepreneur and Deep Tech investor. Took 10x Genomics (TXG) and Twist Bio (TWST) public. Ph.D. in Computational Physics, UCSD.',
+      image: '/images/company/advisors/photos/paul-conley.png',
+      logos: [
+        { src: '/images/company/advisors/logos/los-alamos.png', alt: 'Los Alamos National Laboratory' },
+        { src: '/images/company/advisors/logos/ucsd.png', alt: 'University of California, San Diego' },
+        { src: '/images/company/advisors/logos/uva.png', alt: 'University of Virginia' },
+      ],
+    },
+    {
+      name: 'Andrew Vaz',
+      role: 'Board Member',
+      designation: 'Ex-Global Chief Innovation Officer, Deloitte',
+      description: '30 years of experience in growing Global Fortune 500, technology companies, and start-ups. Expert in emerging technologies, business model innovation, and digital customer and cloud transformation. Masters in Health Sciences, University of Toronto.',
+      image: '/images/company/advisors/photos/andrew-vaz.png',
+      logos: [
+        { src: '/images/company/advisors/logos/deloitte.png', alt: 'Deloitte' },
+        { src: '/images/company/advisors/logos/toronto-uni.png', alt: 'University of Toronto' },
+      ],
+    },
+    {
+      name: 'Mark Nathan',
+      role: 'Advisor',
+      designation: 'CEO and Founder, Mangoose Health and Burrow Software',
+      description: 'Serial Healthcare entrepreneur. Co-founder and CEO of Zipari.com, acquired by Thoma Bravo for $500M. Masters in Electrical Engineering, University of Colorado.',
+      image: '/images/company/advisors/photos/mark-nathan.png',
+      logos: [
+        { src: '/images/company/advisors/logos/zipari.png', alt: 'Zipari' },
+        { src: '/images/company/advisors/logos/apple.png', alt: 'Apple' },
+        { src: '/images/company/advisors/logos/colorado-uni.png', alt: 'University of Colorado Boulder' },
+      ],
+    },
+    {
+      name: 'James Fan',
+      role: 'Advisor',
+      designation: 'Co-founder and CTO, Tomato.ai',
+      description: 'Serial entrepreneur with deep expertise in speech-to-text and text-to-speech. Led Google Cloud Speech and CCAI group. Ph.D. in Computer Science, UT Austin.',
+      image: '/images/company/advisors/photos/james-fan.png',
+      logos: [
+        { src: '/images/company/advisors/logos/google.png', alt: 'Google' },
+        { src: '/images/company/advisors/logos/ut-austin.png', alt: 'University of Texas at Austin' },
+      ],
+    },
+    {
+      name: 'Sheena Menezes',
+      role: 'Advisor',
+      designation: 'Co-founder and CEO, Simple HealthKit',
+      description: '15+ years of start-up experience focused on payors, pharmacies, providers, and government. Ph.D. in Biochemistry from UC Santa Barbara.',
+      image: '/images/company/advisors/photos/sheena-menezes.png',
+      logos: [
+        { src: '/images/company/advisors/logos/simple-healthkit.png', alt: 'Simple HealthKit' },
+        { src: '/images/company/advisors/logos/ucsb.png', alt: 'UC Santa Barbara' },
+      ],
+    },
+  ],
+};
 
 // ============================================
 // Component
 // ============================================
 
-export function AdvisorsSection() {
+export function AdvisorsSection({ content }: AdvisorsSectionProps) {
+  const sectionContent = content || DEFAULT_CONTENT;
+  const advisors = sectionContent.advisors;
+  
   const [selectedAdvisor, setSelectedAdvisor] = useState<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -219,7 +169,7 @@ export function AdvisorsSection() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-3 sm:mb-4"
           >
-            Our Advisors & Investors
+            {sectionContent.sectionTitle}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -228,8 +178,7 @@ export function AdvisorsSection() {
             transition={{ duration: 0.4, delay: 0.15 }}
             className="text-[15px] sm:text-[16px] md:text-[18px] text-[#06003F]/60 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto px-2"
           >
-            Backed by industry leaders who share our vision for transforming
-            healthcare administration
+            {sectionContent.sectionDescription}
           </motion.p>
         </motion.div>
 

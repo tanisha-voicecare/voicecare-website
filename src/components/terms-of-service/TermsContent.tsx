@@ -1,32 +1,50 @@
 /**
  * TermsContent Component
- * PIXEL-PERFECT implementation from designer-src/src/app/components/TermsOfService.tsx
- *
- * DESIGNER EXACT VALUES (DO NOT CHANGE):
- *
- * Content Wrapper:
- * - max-w-4xl mx-auto space-y-8 text-[16px] leading-relaxed
- *
- * Section Titles (H2):
- * - text-[24px] font-bold mb-4
- *
- * Subsection Titles (H3):
- * - text-[18px] font-semibold mb-3
- *
- * Paragraphs:
- * - text-muted-foreground
- * - mb-4 between paragraphs (except last)
- *
- * Bulleted Lists:
- * - list-disc pl-4 sm:pl-5 md:pl-6 space-y-1.5 sm:space-y-2 text-muted-foreground
- *
- * Bold/CAPS Warnings:
- * - text-muted-foreground font-semibold
- *
- * LEGAL TEXT IS COPIED VERBATIM - DO NOT MODIFY
+ * Dynamic content from WordPress + PIXEL-PERFECT design
  */
 
-export function TermsContent() {
+import type { TermsSectionContent } from '@/lib/content';
+
+interface TermsContentProps {
+  sections?: TermsSectionContent[];
+}
+
+// If WordPress provides sections, render them dynamically
+// Otherwise, render the default hardcoded content
+export function TermsContent({ sections }: TermsContentProps) {
+  // If sections are provided from WordPress, render dynamically
+  if (sections && sections.length > 0) {
+    return (
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl pb-12 sm:pb-16 md:pb-20">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-7 md:space-y-8 text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed">
+          {sections.map((section, index) => (
+            <section key={index}>
+              <h2 className="text-[20px] sm:text-[22px] md:text-[24px] font-bold text-[#06003F] mb-3 sm:mb-4">
+                {section.title}
+              </h2>
+              <div 
+                className="terms-content text-muted-foreground [&>p]:mb-4 [&>p:last-child]:mb-0 [&>ul]:list-disc [&>ul]:pl-4 [&>ul]:sm:pl-5 [&>ul]:md:pl-6 [&>ul]:space-y-1.5 [&>ul]:sm:space-y-2 [&>ul]:text-muted-foreground [&>ul]:mb-4 [&_.font-semibold]:font-semibold [&>a]:hover:underline"
+                dangerouslySetInnerHTML={{ __html: section.content }}
+              />
+              {section.subsections?.map((sub, subIndex) => (
+                <div key={subIndex} className="mt-4">
+                  <h3 className="text-[16px] sm:text-[17px] md:text-[18px] font-semibold text-[#06003F] mb-2 sm:mb-3">
+                    {sub.title}
+                  </h3>
+                  <div 
+                    className="terms-content text-muted-foreground [&>p]:mb-4 [&>p:last-child]:mb-0 [&>ul]:list-disc [&>ul]:pl-4 [&>ul]:sm:pl-5 [&>ul]:md:pl-6 [&>ul]:space-y-1.5 [&>ul]:sm:space-y-2 [&>ul]:text-muted-foreground [&>ul]:mb-4 [&>a]:hover:underline"
+                    dangerouslySetInnerHTML={{ __html: sub.content }}
+                  />
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Default fallback - original hardcoded content
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl pb-12 sm:pb-16 md:pb-20">
       <div className="max-w-4xl mx-auto space-y-6 sm:space-y-7 md:space-y-8 text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed">
