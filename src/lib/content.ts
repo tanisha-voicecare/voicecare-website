@@ -252,9 +252,15 @@ export async function listAllContent(): Promise<Array<{
  * Validates content structure to prevent crashes from malformed WordPress data
  */
 export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  // Designer content:
+  // - Badge: "Agentic Intelligence for RCM"
+  // - Headline: "Supercharging Healthcare Workers with Care and AI by"
+  // - Rotating: ["Automating administrative burdens", "Creating time for care teams", "Improving patient outcomes"]
   const fallback: HomepageHeroContent = {
-    badge: 'Backed by Mayo Clinic',
-    headline: '',
+    badge: 'Agentic Intelligence for RCM',
+    headline: 'Supercharging Healthcare Workers with Care and AI by',
     rotatingHeadlines: [
       'Automating administrative burdens',
       'Creating time for care teams',
@@ -266,25 +272,7 @@ export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
     secondaryButtonLink: '/schedule-demo',
   };
 
-  const content = await getContent<Partial<HomepageHeroContent>>('homepage-hero');
-  
-  // If no content or content structure is invalid (e.g., has wrong fields), use fallback
-  if (!content || (!content.badge && !content.rotatingHeadlines && !content.primaryButtonText)) {
-    return fallback;
-  }
-  
-  // Merge with fallback to ensure all fields exist
-  return {
-    badge: content.badge || fallback.badge,
-    headline: content.headline ?? fallback.headline,
-    rotatingHeadlines: (Array.isArray(content.rotatingHeadlines) && content.rotatingHeadlines.length > 0)
-      ? content.rotatingHeadlines
-      : fallback.rotatingHeadlines,
-    primaryButtonText: content.primaryButtonText || fallback.primaryButtonText,
-    primaryButtonLink: content.primaryButtonLink || fallback.primaryButtonLink,
-    secondaryButtonText: content.secondaryButtonText || fallback.secondaryButtonText,
-    secondaryButtonLink: content.secondaryButtonLink || fallback.secondaryButtonLink,
-  };
+  return fallback;
 }
 
 /**
@@ -408,20 +396,23 @@ export interface PlatformSolutionsContent {
  * Get Platform Hero content with fallback
  */
 export async function getPlatformHeroContent(): Promise<PlatformHeroContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: PlatformHeroContent = {
     eyebrow: "We're powered by",
     headline: 'Healthcare Administration General Intelligence (HAGI)',
     description: 'It is the heart of the VoiceCare platform. Using Generative and Conversational AI, it intelligently automates routine back-office workflows.',
   };
 
-  const content = await getContent<PlatformHeroContent>('platform-hero', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 /**
  * Get Platform EHR/Enterprise content with fallback
  */
 export async function getPlatformEHRContent(): Promise<PlatformEHRContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: PlatformEHRContent = {
     heading: 'We Are Enterprise\nAdministration platform',
     subheading: 'One secure conversational platform, powered by advanced and constantly improving generative models for healthcare professionals to complete 1000s of calls and tasks in one click. You can search for historical calls, and get summarized use-case-specific information, which is ingested in any EHR or any system of record.',
@@ -431,8 +422,7 @@ export async function getPlatformEHRContent(): Promise<PlatformEHRContent> {
     closingStatement: 'Automate the back office to improve patient experience with every conversation.',
   };
 
-  const content = await getContent<PlatformEHRContent>('platform-ehr', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 /**
@@ -461,8 +451,9 @@ export async function getPlatformBenefitsContent(): Promise<PlatformBenefitsCont
     ],
   };
 
-  const content = await getContent<PlatformBenefitsContent>('platform-benefits', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 /**
@@ -505,8 +496,9 @@ export async function getPlatformSolutionsContent(): Promise<PlatformSolutionsCo
     ],
   };
 
-  const content = await getContent<PlatformSolutionsContent>('platform-solutions', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -648,8 +640,9 @@ export async function getWhoWeServeContent(): Promise<WhoWeServeContent> {
     },
   };
 
-  const content = await getContent<WhoWeServeContent>('who-we-serve', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -942,8 +935,9 @@ export async function getCompanyContent(): Promise<CompanyContent> {
     },
   };
 
-  const content = await getContent<CompanyContent>('company', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -989,8 +983,9 @@ export async function getCareersContent(): Promise<CareersContent> {
     openPositionsTitle: 'Open Positions',
   };
 
-  const content = await getContent<CareersContent>('careers', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -1097,8 +1092,9 @@ export async function getPressContent(): Promise<PressContent> {
     ],
   };
 
-  const content = await getContent<PressContent>('press', fallback);
-  return content || fallback;
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -1151,27 +1147,9 @@ export async function getPricingContent(): Promise<PricingContent> {
     },
   };
 
-  const content = await getContent<Partial<PricingContent>>('pricing');
-  
-  if (!content) {
-    return fallback;
-  }
-  
-  // Deep merge with fallback
-  return {
-    hero: {
-      badge: content.hero?.badge || fallback.hero.badge,
-      headline: content.hero?.headline || fallback.hero.headline,
-      description: content.hero?.description || fallback.hero.description,
-    },
-    faq: {
-      tabs: {
-        pricing: content.faq?.tabs?.pricing || fallback.faq.tabs.pricing,
-        implementation: content.faq?.tabs?.implementation || fallback.faq.tabs.implementation,
-        support: content.faq?.tabs?.support || fallback.faq.tabs.support,
-      },
-    },
-  };
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
+  return fallback;
 }
 
 // ============================================
@@ -1191,6 +1169,8 @@ export interface PartnerContent {
  * Get Partner page content with fallback
  */
 export async function getPartnerContent(): Promise<PartnerContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: PartnerContent = {
     hero: {
       headline: 'Partner with Us',
@@ -1198,8 +1178,7 @@ export async function getPartnerContent(): Promise<PartnerContent> {
     },
   };
 
-  const content = await getContent<PartnerContent>('partner-with-us', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
@@ -1219,6 +1198,8 @@ export interface ScheduleDemoContent {
  * Get Schedule Demo page content with fallback
  */
 export async function getScheduleDemoContent(): Promise<ScheduleDemoContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: ScheduleDemoContent = {
     hero: {
       headline: 'Schedule a Demo',
@@ -1226,8 +1207,7 @@ export async function getScheduleDemoContent(): Promise<ScheduleDemoContent> {
     },
   };
 
-  const content = await getContent<ScheduleDemoContent>('schedule-demo', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
@@ -1252,13 +1232,14 @@ export interface TermsFullContent {
  * Get Terms of Service page content with fallback
  */
 export async function getTermsContent(): Promise<TermsFullContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: TermsFullContent = {
     title: 'Terms Of Use Policy',
     sections: [], // Empty means use default hardcoded content
   };
 
-  const content = await getContent<TermsFullContent>('terms-of-service', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
@@ -1283,13 +1264,14 @@ export interface PrivacyFullContent {
  * Get Privacy Policy page content with fallback
  */
 export async function getPrivacyContent(): Promise<PrivacyFullContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: PrivacyFullContent = {
     title: 'Privacy Policy',
     sections: [], // Empty means use default hardcoded content
   };
 
-  const content = await getContent<PrivacyFullContent>('privacy-policy', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
@@ -1310,6 +1292,8 @@ export interface TrustedByContent {
  * Get TrustedBy section content with fallback
  */
 export async function getTrustedByContent(): Promise<TrustedByContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: TrustedByContent = {
     logos: [
       { name: 'American Specialty Health', src: '/images/logos/american-specialty-health.png', size: 'normal' },
@@ -1323,8 +1307,7 @@ export async function getTrustedByContent(): Promise<TrustedByContent> {
     ],
   };
 
-  const content = await getContent<TrustedByContent>('trusted-by', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
@@ -1355,6 +1338,8 @@ export interface LayoutContent {
  * Get Layout content with fallback
  */
 export async function getLayoutContent(): Promise<LayoutContent> {
+  // TEMPORARY: Using designer's fallback content directly
+  // TODO: Update WordPress admin panel with correct content, then remove this bypass
   const fallback: LayoutContent = {
     announcementBanner: {
       highlightText: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
@@ -1371,8 +1356,7 @@ export async function getLayoutContent(): Promise<LayoutContent> {
     },
   };
 
-  const content = await getContent<LayoutContent>('layout', fallback);
-  return content || fallback;
+  return fallback;
 }
 
 // ============================================
