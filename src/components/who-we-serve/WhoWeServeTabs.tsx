@@ -206,7 +206,7 @@ export function WhoWeServeTabs({ content }: WhoWeServeTabsProps) {
   const currentContent = getTabContent(activeTab, tabsContent);
 
   return (
-    <section className="py-14 sm:py-18 md:py-24 bg-white">
+    <section className="pt-6 sm:pt-8 md:pt-10 pb-14 sm:pb-18 md:pb-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl">
         {/* Tab Navigation - horizontal scroll on mobile */}
         <div className="flex overflow-x-auto md:overflow-visible md:flex-wrap md:justify-center gap-2 sm:gap-3 md:gap-4 mb-10 sm:mb-12 md:mb-16 pb-2 md:pb-0 -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0 overscroll-x-contain [-webkit-overflow-scrolling:touch] scrollbar-hide">
@@ -242,7 +242,7 @@ export function WhoWeServeTabs({ content }: WhoWeServeTabsProps) {
         >
           {/* Title and Subtitle */}
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="text-[28px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-3 sm:mb-4">
+            <h2 className="text-[28px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-2 sm:mb-3">
               {currentContent.title}
             </h2>
             <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed px-2">

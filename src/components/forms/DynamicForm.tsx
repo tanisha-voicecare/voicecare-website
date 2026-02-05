@@ -41,6 +41,8 @@ interface DynamicFormProps {
   labelOverrides?: Record<string, string>;
   /** Optional: Override placeholders for fields */
   placeholderOverrides?: Record<string, string>;
+  /** Optional: Override required status for fields (key: field name, value: true/false) */
+  requiredOverrides?: Record<string, boolean>;
 }
 
 // ============================================
@@ -81,23 +83,40 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
     return (
       <div className="space-y-1.5 sm:space-y-2">
         {renderLabel()}
-        <select
-          id={field.name}
-          name={field.name}
-          required={field.required}
-          value={value}
-          onChange={handleChange}
-          className={`${inputBaseStyles} appearance-none`}
-        >
-          <option value="" disabled className="text-gray-400">
-            {field.placeholder || `Select ${field.label.toLowerCase()}`}
-          </option>
-          {field.options?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+        <div className="relative">
+          <select
+            id={field.name}
+            name={field.name}
+            required={field.required}
+            value={value}
+            onChange={handleChange}
+            className={`${inputBaseStyles} appearance-none pr-10 cursor-pointer`}
+          >
+            <option value="" disabled className="text-gray-400">
+              {field.placeholder || `Select ${field.label.toLowerCase()}`}
             </option>
-          ))}
-        </select>
+            {field.options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {/* Dropdown chevron icon */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <svg
+              className="h-5 w-5 text-[#06003F]/40"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
       </div>
     );
   }
@@ -343,6 +362,7 @@ export function DynamicForm({
   initialValues = {},
   labelOverrides = {},
   placeholderOverrides = {},
+  requiredOverrides = {},
 }: DynamicFormProps) {
   const [formStructure, setFormStructure] = useState<FormStructure | null>(null);
   const [formData, setFormData] = useState<Record<string, string>>(initialValues);
@@ -362,12 +382,13 @@ export function DynamicForm({
     return placeholder.replace(/\s*\*\s*$/, '').trim();
   };
 
-  // Apply label and placeholder overrides to a field
+  // Apply label, placeholder, and required overrides to a field
   // Checks: exact name match, label match, partial name match (for MetForm dynamic names)
   const applyOverrides = (field: FormField): FormField => {
     // Try exact name match first
     let overriddenLabel = labelOverrides[field.name];
     let overriddenPlaceholder = placeholderOverrides[field.name];
+    let overriddenRequired: boolean | undefined = requiredOverrides[field.name];
     
     // If no exact match, try matching by current label
     if (!overriddenLabel && field.label && labelOverrides[field.label]) {
@@ -375,6 +396,9 @@ export function DynamicForm({
     }
     if (!overriddenPlaceholder && field.label && placeholderOverrides[field.label]) {
       overriddenPlaceholder = placeholderOverrides[field.label];
+    }
+    if (overriddenRequired === undefined && field.label && requiredOverrides[field.label] !== undefined) {
+      overriddenRequired = requiredOverrides[field.label];
     }
     
     // If still no match, try partial name match (for MetForm names like "mf-text-abc123")
@@ -390,6 +414,14 @@ export function DynamicForm({
       for (const [key, value] of Object.entries(placeholderOverrides)) {
         if (field.name.startsWith(key) || field.name.includes(key)) {
           overriddenPlaceholder = value;
+          break;
+        }
+      }
+    }
+    if (overriddenRequired === undefined) {
+      for (const [key, value] of Object.entries(requiredOverrides)) {
+        if (field.name.startsWith(key) || field.name.includes(key)) {
+          overriddenRequired = value;
           break;
         }
       }
@@ -412,6 +444,7 @@ export function DynamicForm({
       label: overriddenLabel || field.label,
       placeholder: finalPlaceholder,
       options: cleanedOptions,
+      required: overriddenRequired !== undefined ? overriddenRequired : field.required,
     };
   };
 

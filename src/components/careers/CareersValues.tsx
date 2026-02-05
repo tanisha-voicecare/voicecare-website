@@ -49,7 +49,7 @@ export function CareersValues({ content }: CareersValuesProps) {
   const sectionContent = content || DEFAULT_CONTENT;
   const values = sectionContent.values;
   return (
-    <section className="py-14 sm:py-18 md:py-24 bg-white">
+    <section className="pt-6 sm:pt-8 md:pt-10 pb-14 sm:pb-18 md:pb-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 max-w-7xl">
         {/* Grid Features - 3 columns on lg, 2 on sm, 1 on mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">

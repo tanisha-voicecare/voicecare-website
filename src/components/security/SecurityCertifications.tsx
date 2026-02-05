@@ -35,7 +35,7 @@ export function SecurityCertifications({ content }: SecurityCertificationsProps)
   const certContent = content || DEFAULT_CONTENT;
 
   return (
-    <section className="relative py-16 sm:py-24 md:py-32 bg-white overflow-hidden">
+    <section className="relative pt-6 sm:pt-8 md:pt-10 pb-16 sm:pb-24 md:pb-32 bg-white overflow-hidden">
       {/* Subtle radial glow effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,78,58,0.03)_0%,_transparent_50%)]" />
 

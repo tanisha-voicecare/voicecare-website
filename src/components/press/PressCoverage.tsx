@@ -47,9 +47,9 @@ const DEFAULT_ITEMS: PressItemContent[] = [
   {
     id: 4,
     logo: '/images/press/logos/hit-consultant.png',
-    outlet: 'Healthcare IT Consultant',
+    outlet: 'HIT Consultant',
     quote: "Inside Healthcare's Hottest New AI Category: Agentic AI\n\nAutomating these phone calls end-to-end eliminates a \"tremendous\" amount of tedious work, Jhaveri pointed out.\nHe said he was recently on a call with leaders from another large health system who told him their imaging department makes 70,000 calls to insurers per month.",
-    link: 'https://healthcareitconsultant.com',
+    link: 'https://hitconsultant.net',
     featured: true,
   },
   {
@@ -119,11 +119,14 @@ export function PressCoverage({ coverageTitle = 'Recent Coverage', items }: Pres
             
             // Logo height based on outlet
             const getLogoHeight = () => {
-              if (item.outlet === 'PR Newswire') return 'h-16 md:h-20'; // Increased
-              if (item.outlet === 'Forbes') return 'h-12 md:h-14'; // Perfect - keep
-              if (item.outlet === "Becker's Hospital Review") return 'h-20 md:h-24'; // Increased
-              if (item.outlet === 'MedCity News') return 'h-18 md:h-18'; // Increased
-              return 'h-16 md:h-20'; // Default for HIT, Fierce, Yahoo - perfect
+              if (item.outlet === 'PR Newswire') return 'h-16 md:h-20';
+              if (item.outlet === 'Forbes') return 'h-12 md:h-14';
+              if (item.outlet === "Becker's Hospital Review") return 'h-20 md:h-24';
+              if (item.outlet === 'MedCity News') return 'h-16 md:h-18';
+              if (item.outlet === 'HIT Consultant') return 'h-16 md:h-20';
+              if (item.outlet === 'Fierce Healthcare') return 'h-16 md:h-20';
+              if (item.outlet === 'Yahoo Finance') return 'h-16 md:h-20';
+              return 'h-16 md:h-20';
             };
 
             return (

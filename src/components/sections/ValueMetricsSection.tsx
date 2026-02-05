@@ -72,7 +72,7 @@ export function ValueMetricsSection({ className = '', content }: ValueMetricsSec
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
           className="mb-10 sm:mb-12 md:mb-16 text-center"
         >
-          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-bold tracking-tight text-[#06003F] mb-4 sm:mb-6 md:mb-8">
+          <h2 className="text-[32px] sm:text-[40px] lg:text-[48px] font-bold tracking-tight text-[#06003F] mb-3 sm:mb-4">
             {sectionContent.sectionTitle}
           </h2>
 

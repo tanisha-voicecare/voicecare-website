@@ -28,10 +28,10 @@ const DEFAULT_LOGOS: TrustedByLogoContent[] = [
   { name: 'Anthem', src: '/images/logos/anthem.png', size: 'normal' },
   { name: 'Aetna', src: '/images/logos/aetna.png', size: 'normal' },
   { name: 'Blue Shield of California', src: '/images/logos/blue-shield-california.png', size: 'large' },
-  { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'large' },
+  { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'xlarge' },
   { name: 'Quantum Health', src: '/images/logos/quantum-health.png', size: 'normal' },
-  { name: 'UMR', src: '/images/logos/umr.png', size: 'normal' },
-  { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'normal' },
+  { name: 'UMR', src: '/images/logos/umr.png', size: 'large' },
+  { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'large' },
 ];
 
 // ============================================
@@ -81,13 +81,15 @@ export function TrustedBySection({ className = '', content }: TrustedBySectionPr
                 <Image
                 src={logo.src}
                 alt={`${logo.name} logo`}
-                width={logo.size === 'large' ? 160 : 120}
-                height={logo.size === 'large' ? 48 : 32}
-                sizes="(max-width: 768px) 80px, 160px"
+                width={logo.size === 'xlarge' ? 200 : logo.size === 'large' ? 160 : 120}
+                height={logo.size === 'xlarge' ? 56 : logo.size === 'large' ? 48 : 32}
+                sizes="(max-width: 768px) 80px, 200px"
                 className={`w-auto object-contain grayscale brightness-75 hover:grayscale-0 hover:brightness-100 transition-all duration-300 cursor-pointer ${
-                  logo.size === 'large'
-                    ? 'h-8 sm:h-9 md:h-10 lg:h-12'
-                    : 'h-6 sm:h-6 md:h-7 lg:h-8'
+                  logo.size === 'xlarge'
+                    ? 'h-10 sm:h-11 md:h-12 lg:h-14'
+                    : logo.size === 'large'
+                      ? 'h-8 sm:h-9 md:h-10 lg:h-12'
+                      : 'h-6 sm:h-6 md:h-7 lg:h-8'
                 }`}
               />
             </div>

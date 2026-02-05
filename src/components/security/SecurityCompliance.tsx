@@ -142,7 +142,7 @@ export function SecurityCompliance({ content }: SecurityComplianceProps) {
           transition={{ duration: ANIMATION_DURATION.normal, ease: EASING.smooth }}
           className="text-center mb-10 sm:mb-14 md:mb-20 max-w-4xl mx-auto"
         >
-          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-4 sm:mb-5 md:mb-6">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05] mb-3 sm:mb-4">
             {complianceContent.sectionTitle}
           </h2>
           <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/60 leading-relaxed px-2">

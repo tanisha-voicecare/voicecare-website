@@ -161,7 +161,7 @@ export function PricingFAQ({ content }: PricingFAQProps) {
           transition={{ duration: 0.6 }}
           className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-3 sm:mb-4">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-2 sm:mb-3">
             Frequently Asked Questions
           </h2>
           <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#06003F]/60 max-w-xl sm:max-w-2xl mx-auto leading-relaxed">

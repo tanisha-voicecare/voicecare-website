@@ -117,7 +117,7 @@ export function PrinciplesSection({ content }: PrinciplesSectionProps) {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-3 sm:mb-4"
+            className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-1 sm:mb-2"
           >
             {sectionContent.sectionTitle}
           </motion.h2>

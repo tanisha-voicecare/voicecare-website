@@ -35,7 +35,7 @@ export function AboutUsSection({ content }: AboutUsSectionProps) {
           transition={{ duration: 0.5 }}
           className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-4 sm:mb-5 md:mb-6">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-3 sm:mb-4">
             {sectionContent.sectionTitle}
           </h2>
           <p className="text-[15px] sm:text-[16px] md:text-[18px] text-[#06003F]/60 max-w-[48ch] sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed px-2">

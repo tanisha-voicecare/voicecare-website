@@ -54,6 +54,17 @@ const PLACEHOLDER_OVERRIDES: Record<string, string> = {
   'Textarea': 'Type here...',
 };
 
+// Required overrides - all fields required except Message
+const REQUIRED_OVERRIDES: Record<string, boolean> = {
+  'name': true,
+  'company___': true,
+  'callspermonth': true,
+  'industry': true,
+  'mf-email': true,
+  'mf-telephone': true,
+  'message': false,  // Message is optional
+};
+
 export function ScheduleDemoForm() {
   return (
     <section className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl pb-12 sm:pb-16 md:pb-20">
@@ -62,6 +73,7 @@ export function ScheduleDemoForm() {
         successMessage="Our team will reach out to you within the next 24 hours."
         labelOverrides={LABEL_OVERRIDES}
         placeholderOverrides={PLACEHOLDER_OVERRIDES}
+        requiredOverrides={REQUIRED_OVERRIDES}
       />
     </section>
   );

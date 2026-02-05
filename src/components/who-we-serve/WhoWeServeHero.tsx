@@ -29,7 +29,7 @@ export function WhoWeServeHero({ content }: WhoWeServeHeroProps) {
   const heroContent = content || DEFAULT_CONTENT;
 
   return (
-    <section className="relative pt-3 sm:pt-5 pb-12 sm:pb-20 overflow-hidden bg-white">
+    <section className="relative pt-3 sm:pt-5 pb-6 sm:pb-8 overflow-hidden bg-white">
       <div className="w-full px-3 sm:px-5">
         {/* Rounded Rectangle Background Container */}
         <div className="relative rounded-[24px] overflow-hidden w-full">

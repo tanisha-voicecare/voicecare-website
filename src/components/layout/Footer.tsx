@@ -242,8 +242,8 @@ export function Footer({ content }: FooterProps) {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit}>
-                  {/* Stacked input + button layout on all screen sizes */}
-                  <div className="flex flex-col gap-3 max-w-sm mx-auto lg:mx-0 lg:max-w-md">
+                  {/* Email input with arrow button inside */}
+                  <div className="relative max-w-sm mx-auto lg:mx-0 lg:max-w-md">
                     <input
                       type="email"
                       value={email}
@@ -251,20 +251,18 @@ export function Footer({ content }: FooterProps) {
                       placeholder="Enter your email"
                       required
                       disabled={submitStatus === 'loading'}
-                      className="w-full px-4 lg:px-5 py-3.5 text-[15px] bg-[#06003F]/[0.02] border border-[#06003F]/10 rounded-[8px] focus:outline-none focus:border-[#FF4E3A] focus:bg-white transition-all placeholder:text-[#06003F]/30 text-center lg:text-left disabled:opacity-50"
+                      className="w-full px-4 lg:px-5 py-3.5 pr-14 text-[15px] bg-[#06003F]/[0.02] border border-[#06003F]/10 rounded-[8px] focus:outline-none focus:border-[#FF4E3A] focus:bg-white transition-all placeholder:text-[#06003F]/30 text-center lg:text-left disabled:opacity-50"
                     />
                     <button
                       type="submit"
                       disabled={submitStatus === 'loading'}
-                      className="w-full bg-[#FF4E3A] text-white px-5 py-3 rounded-[6px] font-semibold hover:bg-[#FF4E3A]/90 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 min-h-[44px]"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#FF4E3A] text-white rounded-[6px] hover:bg-[#FF4E3A]/90 transition-all flex items-center justify-center group disabled:opacity-50"
+                      aria-label="Subscribe"
                     >
                       {submitStatus === 'loading' ? (
-                        'Subscribing...'
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       ) : (
-                        <>
-                          Submit
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                        </>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                       )}
                     </button>
                   </div>

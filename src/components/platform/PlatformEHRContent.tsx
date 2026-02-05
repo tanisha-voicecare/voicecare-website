@@ -33,7 +33,7 @@ export function PlatformEHRContent({ content }: PlatformEHRContentProps) {
   const ehrContent = content || DEFAULT_CONTENT;
 
   return (
-    <section className="relative py-16 sm:py-20 md:py-[90px] bg-white">
+    <section className="relative pt-6 sm:pt-8 md:pt-10 pb-16 sm:pb-20 md:pb-[90px] bg-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -42,7 +42,7 @@ export function PlatformEHRContent({ content }: PlatformEHRContentProps) {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-4 sm:mb-6 tracking-tight leading-[1.1]">
+          <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] mb-3 sm:mb-4 tracking-tight leading-[1.1]">
             {ehrContent.heading.split('\n').map((line, index, arr) => (
               <span key={index}>
                 {line}

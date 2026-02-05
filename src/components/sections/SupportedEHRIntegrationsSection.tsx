@@ -59,7 +59,8 @@ const ROW_1_LOGOS: EHRLogo[] = [
     name: 'ModMed',
     src: '/images/logos/ehr/modmed.png',
     alt: 'ModMed',
-    padding: 'p-6',
+    padding: 'p-4',
+    scale: 'scale-110',
   },
   {
     name: 'Greenway Health',
@@ -106,7 +107,8 @@ const ROW_2_LOGOS: EHRLogo[] = [
     name: 'CareStack',
     src: '/images/logos/ehr/carestack.png',
     alt: 'CareStack',
-    padding: 'p-6',
+    padding: 'p-4',
+    scale: 'scale-110',
   },
 ];
 
@@ -136,7 +138,7 @@ export function SupportedEHRIntegrationsSection({
         >
           <h2
             id="ehr-integrations-heading"
-            className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-3 sm:mb-4"
+            className="text-[32px] sm:text-[40px] md:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-2 sm:mb-3"
           >
             {sectionContent.sectionTitle}
           </h2>

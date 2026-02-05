@@ -1051,42 +1051,42 @@ export async function getPressContent(): Promise<PressContent> {
       },
       {
         id: 4,
-        logo: '/images/press/logos/medcity-news.png',
-        outlet: 'MedCity News',
+        logo: '/images/press/logos/hit-consultant.png',
+        outlet: 'HIT Consultant',
         quote: "Inside Healthcare's Hottest New AI Category: Agentic AI\n\nAutomating these phone calls end-to-end eliminates a \"tremendous\" amount of tedious work, Jhaveri pointed out.\nHe said he was recently on a call with leaders from another large health system who told him their imaging department makes 70,000 calls to insurers per month.",
-        link: 'https://medcitynews.com/2025/03/healthcare-agentic-ai-hospital/',
+        link: 'https://hitconsultant.net/2025/03/healthcare-agentic-ai/',
         featured: true,
       },
       {
         id: 5,
-        logo: '/images/press/logos/fierce-healthcare.png',
-        outlet: 'Fierce Healthcare',
+        logo: '/images/press/logos/medcity-news.png',
+        outlet: 'MedCity News',
         quote: 'VoiceCare AI, new agentic AI startup, kicks off pilot with Mayo Clinic to automate back office work\n\nVoiceCare AI dubbed its voice AI agent "Joy," and the agent is capable of supporting long, complex, and highly nuanced conversations and extended hold times, Jhaveri said.',
-        link: 'https://www.fiercehealthcare.com/ai-and-machine-learning/voicecare-ai-new-agentic-ai-startup-kicks-pilot-mayo-clinic-automate-back',
+        link: 'https://medcitynews.com/2025/02/voicecare-ai-mayo-clinic-pilot/',
         featured: true,
       },
       {
         id: 6,
-        logo: '/images/press/logos/pr-newswire.png',
-        outlet: 'PR Newswire',
+        logo: '/images/press/logos/fierce-healthcare.png',
+        outlet: 'Fierce Healthcare',
         quote: 'Agentic AI Startup, VoiceCare AI, Launches to Automate Healthcare Back Office and Super-Staff Workforce\n\nCompany Raises $3.85M in Seed Funding led by Caduceus Capital Partners, with Participation\nfrom Bread and Butter Ventures; Announces Collaboration with Mayo Clinic',
-        link: 'https://www.prnewswire.com/news-releases/agentic-ai-startup-voicecare-ai-launches-to-automate-healthcare-back-office-and-super-staff-workforce-302376944.html',
+        link: 'https://www.fiercehealthcare.com/ai-and-machine-learning/voicecare-ai-new-agentic-ai-startup-kicks-pilot-mayo-clinic-automate-back',
         featured: true,
       },
       {
         id: 7,
-        logo: '/images/press/logos/yahoo-finance.png',
-        outlet: 'Yahoo Finance',
+        logo: '/images/press/logos/pr-newswire.png',
+        outlet: 'PR Newswire',
         quote: 'VoiceCare AI plans to automate back-office operations with generative AI\n\nVoiceCare AI founder and CEO Parag Jhavari said: "By automating conversations in a way that feels genuinely human, we seek to give back time to healthcare professionals so they can focus on high-order patient care, driving radical efficiencies with every conversation. That\'s why we created "Joy," our voice AI agent."',
-        link: 'https://finance.yahoo.com/news/voicecare-ai-plans-automate-back-125115896.html',
+        link: 'https://www.prnewswire.com/news-releases/voicecare-ai-plans-automate-back-office-302376944.html',
         featured: true,
       },
       {
         id: 8,
-        logo: '/images/press/logos/hit-consultant.png',
-        outlet: 'HIT Consultant',
+        logo: '/images/press/logos/yahoo-finance.png',
+        outlet: 'Yahoo Finance',
         quote: 'VoiceCare AI Launches with $3.85M to Automate Healthcare Back Office with AI-Powered Voice Agent "Joy"\n\nImagine a world where the time spent on manual phone calls and faxes is replaced by meaningful patient interactions. With generative AI, we want to make this a reality," said Parag Jhaveri, founder and CEO of VoiceCare AI.',
-        link: 'https://hitconsultant.net/2025/02/14/voicecare-ai-launches-with-3-85m-to-automate-healthcare-back-office/',
+        link: 'https://finance.yahoo.com/news/voicecare-ai-launches-3-85m/',
         featured: true,
       },
     ],
@@ -1281,7 +1281,7 @@ export async function getPrivacyContent(): Promise<PrivacyFullContent> {
 export interface TrustedByLogoContent {
   name: string;
   src: string;
-  size: 'normal' | 'large';
+  size: 'normal' | 'large' | 'xlarge';
 }
 
 export interface TrustedByContent {
@@ -1300,10 +1300,10 @@ export async function getTrustedByContent(): Promise<TrustedByContent> {
       { name: 'Anthem', src: '/images/logos/anthem.png', size: 'normal' },
       { name: 'Aetna', src: '/images/logos/aetna.png', size: 'normal' },
       { name: 'Blue Shield of California', src: '/images/logos/blue-shield-california.png', size: 'large' },
-      { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'large' },
+      { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'xlarge' },
       { name: 'Quantum Health', src: '/images/logos/quantum-health.png', size: 'normal' },
-      { name: 'UMR', src: '/images/logos/umr.png', size: 'normal' },
-      { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'normal' },
+      { name: 'UMR', src: '/images/logos/umr.png', size: 'large' },
+      { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'large' },
     ],
   };
 
