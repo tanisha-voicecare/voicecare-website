@@ -15,9 +15,13 @@ const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || '';
 const WORDPRESS_CONTENT_ENABLED = process.env.WORDPRESS_CONTENT_ENABLED === 'true';
 
 // Only set API base if WordPress content is explicitly enabled
+// Server-side calls go directly to WordPress IP via the configured URL
 const CONTENT_API_BASE = (WORDPRESS_CONTENT_ENABLED && WORDPRESS_API_URL) 
   ? `${WORDPRESS_API_URL}/wp-json/voicecare/v1` 
   : '';
+
+// WordPress hostname for Host header (needed when calling via IP on shared hosting)
+const WORDPRESS_HOST = 'voicecare.ai';
 
 // Revalidation time
 // - Development: 0 (no cache) for instant updates

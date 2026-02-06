@@ -50,7 +50,7 @@ export interface FormListItem {
  */
 export async function fetchAllForms(): Promise<FormListItem[]> {
   try {
-    const response = await fetch(`/api/forms`);
+    const response = await fetch(`/wp-json/voicecare/v1/forms`);
     
     if (!response.ok) {
       console.error('Failed to fetch forms:', response.status);
@@ -70,7 +70,7 @@ export async function fetchAllForms(): Promise<FormListItem[]> {
  */
 export async function fetchFormFields(formId: number | string): Promise<FormStructure | null> {
   try {
-    const response = await fetch(`/api/form-fields/${formId}`);
+    const response = await fetch(`/wp-json/voicecare/v1/form-fields/${formId}`);
     
     if (!response.ok) {
       console.error('Failed to fetch form fields:', response.status);

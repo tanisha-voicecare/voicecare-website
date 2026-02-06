@@ -28,6 +28,17 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
 
+  // Proxy WordPress API calls to the original WordPress server
+  // Since voicecare.ai now points to Vercel, we need to forward /wp-json/ requests to WordPress
+  async rewrites() {
+    return [
+      {
+        source: '/wp-json/:path*',
+        destination: 'http://74.208.236.249/wp-json/:path*',
+      },
+    ];
+  },
+
   // Security headers for healthcare compliance
   async headers() {
     return [
