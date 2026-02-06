@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'http://74.208.236.249';
+const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://voicecare.ai';
 const API_KEY = process.env.VOICECARE_FORM_API_KEY || '';
 
 // Legacy form type to ID mapping (for backward compatibility)
@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'X-VoiceCare-API-Key': API_KEY,
-        'Host': 'voicecare.ai',
       },
       body: JSON.stringify(fields),
     });

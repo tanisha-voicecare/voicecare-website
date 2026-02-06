@@ -1,8 +1,9 @@
 /**
  * Form utilities for dynamic WordPress/MetForm integration
  * Fetches form structure and handles submissions without hardcoding
- * All WP API calls are proxied through Next.js API routes to avoid CORS
  */
+
+const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://voicecare.ai';
 
 // ============================================
 // Types
@@ -50,7 +51,9 @@ export interface FormListItem {
  */
 export async function fetchAllForms(): Promise<FormListItem[]> {
   try {
-    const response = await fetch(`/wp-json/voicecare/v1/forms`);
+    const response = await fetch(`${WORDPRESS_API_URL}/wp-json/voicecare/v1/forms`, {
+      next: { revalidate: 300 }, // Cache for 5 minutes
+    });
     
     if (!response.ok) {
       console.error('Failed to fetch forms:', response.status);
@@ -70,7 +73,9 @@ export async function fetchAllForms(): Promise<FormListItem[]> {
  */
 export async function fetchFormFields(formId: number | string): Promise<FormStructure | null> {
   try {
-    const response = await fetch(`/wp-json/voicecare/v1/form-fields/${formId}`);
+    const response = await fetch(`${WORDPRESS_API_URL}/wp-json/voicecare/v1/form-fields/${formId}`, {
+      next: { revalidate: 300 }, // Cache for 5 minutes
+    });
     
     if (!response.ok) {
       console.error('Failed to fetch form fields:', response.status);
