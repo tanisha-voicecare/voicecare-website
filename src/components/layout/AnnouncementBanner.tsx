@@ -4,6 +4,7 @@
  * AnnouncementBanner Component
  * PIXEL-PERFECT design matching Figma: https://craft-juror-27577775.figma.site/
  * Scrolling marquee with multiple announcements
+ * Announcements are managed from WP Admin → React Site Content → Layout
  */
 
 import { motion } from 'motion/react';
@@ -14,33 +15,13 @@ interface AnnouncementBannerProps {
   content?: AnnouncementBannerContent;
 }
 
-// Multiple announcements matching Figma design
-const announcements = [
-  {
-    id: 1,
-    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
-    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
-  },
-  {
-    id: 2,
-    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
-    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
-  },
-  {
-    id: 3,
-    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
-    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
-  },
-];
-
 export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
-  // If custom content is provided, use it as the first announcement
-  const displayAnnouncements = content
-    ? [
-        { id: 0, highlight: content.highlightText, text: content.regularText },
-        ...announcements.slice(1),
-      ]
-    : announcements;
+  // Use announcements from WP content, or default fallback
+  const displayAnnouncements = (content?.announcements || []).map((item, index) => ({
+    id: index + 1,
+    highlight: item.highlightText,
+    text: item.regularText,
+  }));
 
   return (
     <motion.div

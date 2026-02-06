@@ -1340,9 +1340,13 @@ export async function getTrustedByContent(): Promise<TrustedByContent> {
 // Layout Content Types (Header, Footer, Banner)
 // ============================================
 
-export interface AnnouncementBannerContent {
+export interface AnnouncementItem {
   highlightText: string;
   regularText: string;
+}
+
+export interface AnnouncementBannerContent {
+  announcements: AnnouncementItem[];
 }
 
 export interface FooterContent {
@@ -1366,8 +1370,20 @@ export interface LayoutContent {
 export async function getLayoutContent(): Promise<LayoutContent> {
   const fallback: LayoutContent = {
     announcementBanner: {
-      highlightText: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
-      regularText: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+      announcements: [
+        {
+          highlightText: 'VoiceCare AI launches Joy, the first AI agent',
+          regularText: 'that handles complex healthcare conversations with 95%+ accuracy across payer calls and EHR integrations',
+        },
+        {
+          highlightText: 'Healthcare organizations save 40+ hours per week',
+          regularText: 'by automating benefits verification, prior auth, and claims follow-up with VoiceCare AI',
+        },
+        {
+          highlightText: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
+          regularText: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+        },
+      ],
     },
     footer: {
       newsletterTitle: 'Stay Updated',
