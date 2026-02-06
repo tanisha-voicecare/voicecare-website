@@ -21,16 +21,16 @@ const announcements = [
     highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
     text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
   },
-  // {
-  //   id: 2,
-  //   highlight: 'VoiceCare AI launches Joy, the first AI agent',
-  //   text: 'that handles complex healthcare conversations with 95%+ accuracy across payer calls and EHR integrations',
-  // },
-  // {
-  //   id: 3,
-  //   highlight: 'Healthcare organizations save 40+ hours per week',
-  //   text: 'by automating prior authorizations, benefits verification, and claims follow-up with VoiceCare AI',
-  // },
+  {
+    id: 2,
+    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
+    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+  },
+  {
+    id: 3,
+    highlight: 'Agentic AI company VoiceCare AI raises $4.54M series Seed financing,',
+    text: 'strategic investment from Mayo Clinic, and SOC 2 Type II attested and HIPAA-compliant platform',
+  },
 ];
 
 export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
