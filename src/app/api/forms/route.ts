@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://voicecare.ai';
+const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'http://74.208.236.249';
 
 export async function GET() {
   try {
