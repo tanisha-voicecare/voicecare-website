@@ -152,7 +152,7 @@ export function SupportedEHRIntegrationsSection({
         {/* Logo Grid - matching designer: max-w-6xl */}
         <div className="max-w-6xl mx-auto">
           {/* Row 1 - grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6 mb-4 sm:mb-5 md:mb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 mb-3 sm:mb-4 md:mb-6">
             {ROW_1_LOGOS.map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -160,7 +160,7 @@ export function SupportedEHRIntegrationsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[100px] sm:min-h-[110px] md:min-h-[120px]`}
+                className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[80px] sm:min-h-[90px] md:min-h-[120px]`}
               >
                 <Image
                   src={logo.src}
@@ -175,7 +175,7 @@ export function SupportedEHRIntegrationsSection({
           </div>
 
           {/* Row 2 - grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6 mb-4 sm:mb-5 md:mb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 mb-3 sm:mb-4 md:mb-6">
             {ROW_2_LOGOS.map((logo, index) => (
               <motion.div
                 key={logo.name}
@@ -183,7 +183,7 @@ export function SupportedEHRIntegrationsSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[100px] sm:min-h-[110px] md:min-h-[120px]`}
+                className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[80px] sm:min-h-[90px] md:min-h-[120px]`}
               >
                 <Image
                   src={logo.src}
