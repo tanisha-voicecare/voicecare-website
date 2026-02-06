@@ -198,6 +198,9 @@ export async function getContent<T = Record<string, unknown>>(
     const response = await fetchWithTimeout(
       `${CONTENT_API_BASE}/content/${slug}`,
       {
+        headers: {
+          'Host': 'voicecare.ai',
+        },
         next: {
           revalidate: CONTENT_REVALIDATE_TIME,
           tags: ['content', `content-${slug}`],

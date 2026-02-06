@@ -18,7 +18,10 @@ export async function GET(
     console.log('[Form Fields Proxy] Fetching:', url);
     
     const response = await fetch(url, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Host': 'voicecare.ai',
+      },
       next: { revalidate: 300 },
     });
 

@@ -12,7 +12,10 @@ export async function GET() {
     const response = await fetch(
       `${WORDPRESS_API_URL}/wp-json/voicecare/v1/forms`,
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Host': 'voicecare.ai',
+        },
         next: { revalidate: 300 },
       }
     );

@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'X-VoiceCare-API-Key': API_KEY,
+        'Host': 'voicecare.ai',
       },
       body: JSON.stringify(fields),
     });
