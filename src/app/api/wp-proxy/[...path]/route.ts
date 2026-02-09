@@ -90,7 +90,17 @@ function proxyToWordPress(
 
 async function handleRequest(request: NextRequest, params: { path: string[] }) {
   const wpPath = '/' + params.path.join('/');
-  const queryString = request.nextUrl.search || '';
+  let queryString = request.nextUrl.search || '';
+
+  // For wp-login.php: strip IONOS-specific params and always set redirect to wp-admin
+  if (wpPath === '/wp-login.php' && request.method === 'GET') {
+    const action = request.nextUrl.searchParams.get('action');
+    // Strip ionos_oauth_register action - just show normal login page
+    if (action === 'ionos_oauth_register') {
+      queryString = '?redirect_to=%2Fwp-admin%2Findex.php';
+    }
+  }
+
   const fullPath = wpPath + queryString;
 
   try {

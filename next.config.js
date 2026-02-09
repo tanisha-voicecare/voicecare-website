@@ -39,10 +39,6 @@ const nextConfig = {
         { source: '/wp-admin/:path*', destination: '/api/wp-proxy/wp-admin/:path*' },
         { source: '/wp-content/:path*', destination: '/api/wp-proxy/wp-content/:path*' },
         { source: '/wp-includes/:path*', destination: '/api/wp-proxy/wp-includes/:path*' },
-        { source: '/backend', destination: '/api/wp-proxy/backend' },
-        { source: '/wp-json/:path*', destination: '/api/wp-proxy/wp-json/:path*' },
-        { source: '/wp-cron.php', destination: '/api/wp-proxy/wp-cron.php' },
-        { source: '/xmlrpc.php', destination: '/api/wp-proxy/xmlrpc.php' },
       ],
     };
   },
