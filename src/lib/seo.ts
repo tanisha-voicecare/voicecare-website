@@ -173,8 +173,8 @@ export function generateSiteMetadata(): Metadata {
       },
     },
     icons: {
-      icon: '/icons/png/logo.png',
-      shortcut: '/icons/png/logo.png',
+      icon: '/icon.svg',
+      shortcut: '/icon.svg',
       apple: '/apple-touch-icon.png',
     },
     manifest: '/site.webmanifest',
