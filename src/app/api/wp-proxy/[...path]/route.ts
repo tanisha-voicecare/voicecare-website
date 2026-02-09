@@ -92,9 +92,13 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
   const wpPath = '/' + params.path.join('/');
   let queryString = request.nextUrl.search || '';
 
-  // For wp-login.php GET: always show login page, never auto-redirect to wp-admin
+  // For wp-login.php: strip IONOS-specific params and always set redirect to wp-admin
   if (wpPath === '/wp-login.php' && request.method === 'GET') {
-    queryString = '?redirect_to=%2Fwp-admin%2Findex.php';
+    const action = request.nextUrl.searchParams.get('action');
+    // Strip ionos_oauth_register action - just show normal login page
+    if (action === 'ionos_oauth_register') {
+      queryString = '?redirect_to=%2Fwp-admin%2Findex.php';
+    }
   }
 
   const fullPath = wpPath + queryString;
@@ -105,14 +109,6 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
     request.headers.forEach((value, key) => {
       headers[key] = value;
     });
-
-    // For wp-login.php GET: strip auth cookies so WordPress always shows login form
-    if (wpPath === '/wp-login.php' && request.method === 'GET' && headers['cookie']) {
-      headers['cookie'] = headers['cookie']
-        .split(';')
-        .filter(c => !c.trim().startsWith('wordpress_logged_in'))
-        .join(';');
-    }
 
     // Read request body for POST/PUT
     let body: Buffer | null = null;
@@ -139,10 +135,6 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
       // Fix Location headers
       if (lowerKey === 'location') {
         let locationValue = Array.isArray(value) ? value[0] : value || '';
-        // After login (POST to wp-login.php): always go to wp-admin/index.php
-        if (wpPath === '/wp-login.php' && request.method === 'POST') {
-          locationValue = 'https://voicecare.ai/wp-admin/index.php';
-        }
         // Skip IONOS /backend and admin email confirmation - go straight to wp-admin
         if (locationValue.includes('/backend') || locationValue.includes('confirm_admin_email')) {
           locationValue = 'https://voicecare.ai/wp-admin/index.php';
