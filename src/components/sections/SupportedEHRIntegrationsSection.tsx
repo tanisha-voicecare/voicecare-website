@@ -151,38 +151,15 @@ export function SupportedEHRIntegrationsSection({
 
         {/* Logo Grid - matching designer: max-w-6xl */}
         <div className="max-w-6xl mx-auto">
-          {/* Row 1 - grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6 */}
-          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 mb-3 sm:mb-4 md:mb-6">
-            {ROW_1_LOGOS.map((logo, index) => (
+          {/* Combined grid: 2 cols mobile, 3 cols tablet, 5 cols desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+            {[...ROW_1_LOGOS, ...ROW_2_LOGOS].map((logo, index) => (
               <motion.div
                 key={logo.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[80px] sm:min-h-[90px] md:min-h-[120px]`}
-              >
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={200}
-                  height={60}
-                  loading="lazy"
-                  className={`w-full h-auto object-contain ${logo.scale || ''}`}
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Row 2 - grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6 */}
-          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 mb-3 sm:mb-4 md:mb-6">
-            {ROW_2_LOGOS.map((logo, index) => (
-              <motion.div
-                key={logo.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
                 className={`bg-white rounded-[12px] ${logo.padding} flex items-center justify-center min-h-[80px] sm:min-h-[90px] md:min-h-[120px]`}
               >
                 <Image
