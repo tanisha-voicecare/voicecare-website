@@ -23,6 +23,9 @@ const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://voicecare.ai
 // Default timeout for WordPress requests (ms)
 const DEFAULT_TIMEOUT_MS = 10000;
 
+// User-Agent header - IONOS WAF blocks requests without one (returns 429)
+const USER_AGENT = 'VoiceCareApp/1.0 (Next.js; Server-Side)';
+
 // ============================================
 // Response type (matches fetch Response shape)
 // ============================================
@@ -48,6 +51,8 @@ function makeDirectRequest(
   return new Promise((resolve) => {
     const headers: Record<string, string> = {
       'Host': WORDPRESS_HOST,
+      'User-Agent': USER_AGENT,
+      'Accept': 'application/json',
       ...extraHeaders,
     };
 
@@ -114,6 +119,8 @@ async function makeFetchRequest(
   try {
     const headers: Record<string, string> = {
       'Host': WORDPRESS_HOST,
+      'User-Agent': USER_AGENT,
+      'Accept': 'application/json',
       ...extraHeaders,
     };
 
