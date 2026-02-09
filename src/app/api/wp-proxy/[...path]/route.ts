@@ -121,9 +121,18 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
       const lowerKey = key.toLowerCase();
       // Skip hop-by-hop headers
       if (['connection', 'keep-alive', 'transfer-encoding'].includes(lowerKey)) continue;
+
+      // Fix Location headers
+      if (lowerKey === 'location') {
+        let locationValue = Array.isArray(value) ? value[0] : value || '';
+        // Skip IONOS /backend and admin email confirmation - go straight to wp-admin
+        if (locationValue.includes('/backend') || locationValue.includes('confirm_admin_email')) {
+          locationValue = 'https://voicecare.ai/wp-admin/index.php';
+        }
+        responseHeaders.set(key, locationValue);
+        continue;
+      }
       
-      // Fix Location headers: WordPress might redirect to voicecare.ai paths
-      // which is fine since our middleware will catch them again
       if (Array.isArray(value)) {
         value.forEach(v => responseHeaders.append(key, v));
       } else if (value) {

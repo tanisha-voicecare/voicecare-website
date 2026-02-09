@@ -25,7 +25,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/pr-newswire.png',
     outlet: 'PR Newswire',
     quote: "Company closes $4.54M in Seed round led by Caduceus Capital Partners, with participation from Bread and Butter Ventures, Mayo Clinic, and a strategic RCM company\n\nVoiceCare AI's goal is to tackle one of the largest and most overlooked pain points in healthcare, said Parag Jhaveri, founder and CEO of VoiceCare AI. With this funding, we are doubling down on our mission to reduce the burden of administrative conversations and tasks so care teams can prioritize high-value patient care.",
-    link: 'https://prnewswire.com',
+    link: 'https://www.fiercehealthcare.com/ai-and-machine-learning/voicecare-ai-new-agentic-ai-startup-kicks-pilot-mayo-clinic-automate-back',
     featured: true,
   },
   {
@@ -33,7 +33,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/forbes.png',
     outlet: 'Forbes',
     quote: 'AI Agents Are Coming to HealthCare\n\nVoiceCare AI automates communication between provider organizations, insurers, and patients. Its CEO, Parag Jhaveri, reported that their agent, Joy, can wait on hold for more than 30 minutes, navigate phone trees, sustain multi-hour conversations, and take actions like updating claims and filing requests.',
-    link: 'https://forbes.com',
+    link: 'https://www.forbes.com/sites/spencerdorn/2025/06/10/ai-agents-are-coming-to-healthcare/',
     featured: true,
   },
   {
@@ -41,7 +41,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/beckers.png',
     outlet: "Becker's Hospital Review",
     quote: 'Streamlining Revenue Cycle Management with AI: VoiceCare AI at Becker\'s 15th Annual Meeting\n\nVoiceCare AI showcased "Joy," its advanced voice agent, at Becker\'s 15th Annual Meeting, which automates payer calls for benefits verification, prior authorizations, claims follow‑up, and A/R collections. Leveraging generative AI and conversational models, it reduces denials, accelerates reimbursements, and slashes administrative workload in revenue‑cycle management.',
-    link: 'https://beckershospitalreview.com',
+    link: 'https://www.beckershospitalreview.com/healthcare-information-technology/ai/streamlining-revenue-cycle-management-with-ai-voicecare-ai-at-beckers-15th-annual-meeting/',
     featured: true,
   },
   {
@@ -49,7 +49,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/hit-consultant.png',
     outlet: 'HIT Consultant',
     quote: "Inside Healthcare's Hottest New AI Category: Agentic AI\n\nAutomating these phone calls end-to-end eliminates a \"tremendous\" amount of tedious work, Jhaveri pointed out.\nHe said he was recently on a call with leaders from another large health system who told him their imaging department makes 70,000 calls to insurers per month.",
-    link: 'https://hitconsultant.net',
+    link: 'https://hitconsultant.net/2025/03/healthcare-agentic-ai/',
     featured: true,
   },
   {
@@ -57,7 +57,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/medcity-news.png',
     outlet: 'MedCity News',
     quote: 'VoiceCare AI, new agentic AI startup, kicks off pilot with Mayo Clinic to automate back office work\n\nVoiceCare AI dubbed its voice AI agent "Joy," and the agent is capable of supporting long, complex, and highly nuanced conversations and extended hold times, Jhaveri said.',
-    link: 'https://medcitynews.com',
+    link: 'https://medcitynews.com/2025/02/voicecare-ai-mayo-clinic-pilot/',
     featured: true,
   },
   {
@@ -65,7 +65,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/fierce-healthcare.png',
     outlet: 'Fierce Healthcare',
     quote: 'Agentic AI Startup, VoiceCare AI, Launches to Automate Healthcare Back Office and Super-Staff Workforce\n\nCompany Raises $3.85M in Seed Funding led by Caduceus Capital Partners, with Participation\nfrom Bread and Butter Ventures; Announces Collaboration with Mayo Clinic',
-    link: 'https://fiercehealthcare.com',
+    link: 'https://www.fiercehealthcare.com/ai-and-machine-learning/voicecare-ai-new-agentic-ai-startup-kicks-pilot-mayo-clinic-automate-back',
     featured: true,
   },
   {
@@ -73,7 +73,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/pr-newswire.png',
     outlet: 'PR Newswire',
     quote: 'VoiceCare AI plans to automate back-office operations with generative AI\n\nVoiceCare AI founder and CEO Parag Jhavari said: "By automating conversations in a way that feels genuinely human, we seek to give back time to healthcare professionals so they can focus on high-order patient care, driving radical efficiencies with every conversation. That\'s why we created "Joy," our voice AI agent."',
-    link: 'https://prnewswire.com',
+    link: 'https://www.prnewswire.com/news-releases/voicecare-ai-plans-automate-back-office-302376944.html',
     featured: true,
   },
   {
@@ -81,7 +81,7 @@ const DEFAULT_ITEMS: PressItemContent[] = [
     logo: '/images/press/logos/yahoo-finance.png',
     outlet: 'Yahoo Finance',
     quote: 'VoiceCare AI Launches with $3.85M to Automate Healthcare Back Office with AI-Powered Voice Agent "Joy"\n\nImagine a world where the time spent on manual phone calls and faxes is replaced by meaningful patient interactions. With generative AI, we want to make this a reality," said Parag Jhaveri, founder and CEO of VoiceCare AI.',
-    link: 'https://finance.yahoo.com',
+    link: 'https://finance.yahoo.com/news/voicecare-ai-launches-3-85m/',
     featured: true,
   },
 ];

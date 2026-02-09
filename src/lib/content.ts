@@ -65,10 +65,17 @@ function deepMerge<T>(fallback: T, wpData: unknown): T {
     // Empty string → keep fallback (WP field not filled in)
     if (typeof wpValue === 'string' && wpValue.trim() === '' && typeof fallbackValue === 'string' && (fallbackValue as string).trim() !== '') continue;
 
-    // Arrays: use WP array only if it has items, otherwise keep fallback
+    // Arrays: use WP array only if it has items AND same item type as fallback
     if (Array.isArray(fallbackValue)) {
       if (Array.isArray(wpValue) && wpValue.length > 0) {
-        result[key] = wpValue;
+        // Validate: if fallback contains objects, WP array must also contain objects
+        // This prevents broken WP data (e.g. array of JSON string lines) from
+        // overriding a valid fallback array of objects
+        const fallbackHasObjects = fallbackValue.length > 0 && typeof fallbackValue[0] === 'object';
+        const wpHasObjects = typeof wpValue[0] === 'object';
+        if (!fallbackHasObjects || wpHasObjects) {
+          result[key] = wpValue;
+        }
       }
       // else keep fallback array
       continue;
