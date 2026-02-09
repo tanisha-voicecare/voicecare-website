@@ -28,6 +28,21 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
 
+  // Rewrite WordPress admin paths to our internal proxy API route
+  // The proxy connects directly to WordPress server IP (bypassing DNS)
+  // This allows wp-admin to work on voicecare.ai even though domain points to Vercel
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/wp-login.php', destination: '/api/wp-proxy/wp-login.php' },
+        { source: '/wp-admin', destination: '/api/wp-proxy/wp-admin' },
+        { source: '/wp-admin/:path*', destination: '/api/wp-proxy/wp-admin/:path*' },
+        { source: '/wp-content/:path*', destination: '/api/wp-proxy/wp-content/:path*' },
+        { source: '/wp-includes/:path*', destination: '/api/wp-proxy/wp-includes/:path*' },
+      ],
+    };
+  },
+
   // Security headers for healthcare compliance
   async headers() {
     return [
