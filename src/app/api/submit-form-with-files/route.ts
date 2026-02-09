@@ -1,11 +1,14 @@
 /**
  * API Route: Form Submission with File Uploads
  * Receives JSON with base64 encoded files and forwards to WordPress
+ * 
+ * Uses wp-fetch utility to connect directly to WordPress server IP
+ * with proper TLS SNI, bypassing DNS resolution issues.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { wpPost } from '@/lib/wp-fetch';
 
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://voicecare.ai';
 const API_KEY = process.env.VOICECARE_FORM_API_KEY || '';
 
 interface FileData {
@@ -38,33 +41,26 @@ export async function POST(request: NextRequest) {
     console.log(`Files to upload:`, fileNames);
 
     // Send to WordPress with base64 files
-    const endpoint = `${WORDPRESS_API_URL}/wp-json/voicecare/v1/submit-form-with-file/${formId}`;
-    
-    const wpResponse = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-VoiceCare-API-Key': API_KEY,
-      },
-      body: JSON.stringify({
-        fields,
-        files,
-      }),
-    });
+    const wpResponse = await wpPost(
+      `/wp-json/voicecare/v1/submit-form-with-file/${formId}`,
+      { fields, files },
+      { 'X-VoiceCare-API-Key': API_KEY }
+    );
 
-    const wpResult = await wpResponse.json();
-    console.log('WordPress response:', JSON.stringify(wpResult, null, 2));
+    if (wpResponse) {
+      const wpResult = await wpResponse.json() as { success?: boolean; message?: string };
+      console.log('WordPress response:', JSON.stringify(wpResult, null, 2));
 
-    if (wpResponse.ok && wpResult.success) {
-      return NextResponse.json({
-        success: true,
-        message: wpResult.message || 'Application submitted successfully!',
-      });
+      if (wpResponse.ok && wpResult.success) {
+        return NextResponse.json({
+          success: true,
+          message: wpResult.message || 'Application submitted successfully!',
+        });
+      }
     }
 
     // Fallback: Submit without file to regular endpoint
     console.log('Falling back to text-only submission');
-    const fallbackEndpoint = `${WORDPRESS_API_URL}/wp-json/voicecare/v1/submit-form/${formId}`;
     
     // Add file info to fields for reference
     const fieldsWithFileInfo = { ...fields };
@@ -72,24 +68,23 @@ export async function POST(request: NextRequest) {
       fieldsWithFileInfo[key] = `[Resume: ${file.name}] - Please request via email`;
     });
     
-    const fallbackResponse = await fetch(fallbackEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-VoiceCare-API-Key': API_KEY,
-      },
-      body: JSON.stringify(fieldsWithFileInfo),
-    });
+    const fallbackResponse = await wpPost(
+      `/wp-json/voicecare/v1/submit-form/${formId}`,
+      fieldsWithFileInfo,
+      { 'X-VoiceCare-API-Key': API_KEY }
+    );
 
-    const fallbackResult = await fallbackResponse.json();
-    
-    if (fallbackResponse.ok && fallbackResult.success) {
-      return NextResponse.json({
-        success: true,
-        message: fileNames.length > 0 
-          ? 'Application submitted! Please also email your resume to careers@voicecare.ai'
-          : 'Application submitted successfully!',
-      });
+    if (fallbackResponse) {
+      const fallbackResult = await fallbackResponse.json() as { success?: boolean };
+      
+      if (fallbackResponse.ok && fallbackResult.success) {
+        return NextResponse.json({
+          success: true,
+          message: fileNames.length > 0 
+            ? 'Application submitted! Please also email your resume to careers@voicecare.ai'
+            : 'Application submitted successfully!',
+        });
+      }
     }
 
     return NextResponse.json({

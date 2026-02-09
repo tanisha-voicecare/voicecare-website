@@ -5,27 +5,31 @@
  *
  * Strategy: Fetch from WP → deep merge with fallback → fallback fills any missing fields
  * This ensures WP updates take effect instantly while fallback protects against bad/missing data
+ * 
+ * Uses wp-fetch utility to connect directly to WordPress server IP
+ * with proper TLS SNI, bypassing DNS resolution issues when
+ * voicecare.ai points to Vercel instead of WordPress.
  */
+
+import { wpGet } from '@/lib/wp-fetch';
 
 // ============================================
 // Configuration
 // ============================================
 
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || '';
 const WORDPRESS_CONTENT_ENABLED = process.env.WORDPRESS_CONTENT_ENABLED === 'true';
 
-// Only set API base if WordPress content is explicitly enabled
-// Server-side calls go directly to WordPress IP via the configured URL
-const CONTENT_API_BASE = (WORDPRESS_CONTENT_ENABLED && WORDPRESS_API_URL) 
-  ? `${WORDPRESS_API_URL}/wp-json/voicecare/v1` 
-  : '';
+// Check if WordPress server is reachable (either via IP or URL)
+const WORDPRESS_SERVER_IP = process.env.WORDPRESS_SERVER_IP || '';
+const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || '';
+const CONTENT_ENABLED = WORDPRESS_CONTENT_ENABLED && (Boolean(WORDPRESS_SERVER_IP) || Boolean(WORDPRESS_API_URL));
 
-// WordPress hostname for Host header (needed when calling via IP on shared hosting)
-const WORDPRESS_HOST = 'voicecare.ai';
+// Content API path prefix
+const CONTENT_API_PATH = '/wp-json/voicecare/v1';
 
 // Revalidation time
 // - Development: 0 (no cache) for instant updates
-// - Production: 10 seconds for near-instant WP updates
+// - Production: 20 seconds for near-instant WP updates
 const isDevelopment = process.env.NODE_ENV === 'development';
 export const CONTENT_REVALIDATE_TIME = isDevelopment ? 0 : 20;
 
@@ -81,29 +85,6 @@ function deepMerge<T>(fallback: T, wpData: unknown): T {
   }
 
   return result as T;
-}
-
-/**
- * Fetch with timeout - returns null if request takes too long
- */
-async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response | null> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === 'AbortError') {
-      console.warn(`[Content] Request timed out after ${timeoutMs}ms`);
-    }
-    return null;
-  }
 }
 
 // ============================================
@@ -186,6 +167,7 @@ export interface ProductIntroContent {
 
 /**
  * Fetch single content block by slug
+ * Uses wpGet to connect directly to WordPress server IP
  * @param slug - The section identifier (e.g., "homepage-hero")
  * @param fallback - Optional fallback data if content not found
  */
@@ -193,23 +175,14 @@ export async function getContent<T = Record<string, unknown>>(
   slug: string,
   fallback?: T
 ): Promise<T | null> {
-  // If WordPress API not configured, immediately return fallback (no network request)
-  if (!CONTENT_API_BASE) {
+  // If WordPress content not enabled, immediately return fallback
+  if (!CONTENT_ENABLED) {
     return fallback || null;
   }
 
   try {
-    const response = await fetchWithTimeout(
-      `${CONTENT_API_BASE}/content/${slug}`,
-      {
-        headers: {
-          'Host': 'voicecare.ai',
-        },
-        next: {
-          revalidate: CONTENT_REVALIDATE_TIME,
-          tags: ['content', `content-${slug}`],
-        },
-      },
+    const response = await wpGet(
+      `${CONTENT_API_PATH}/content/${slug}`,
       FETCH_TIMEOUT_MS
     );
 
@@ -219,13 +192,10 @@ export async function getContent<T = Record<string, unknown>>(
     }
 
     if (!response.ok) {
-      if (response.status === 404) {
-        return fallback || null;
-      }
       return fallback || null;
     }
 
-    const result: ContentResponse<T> = await response.json();
+    const result = await response.json() as ContentResponse<T>;
     return result.data;
   } catch {
     return fallback || null;
@@ -234,32 +204,28 @@ export async function getContent<T = Record<string, unknown>>(
 
 /**
  * Fetch multiple content blocks at once
+ * Uses wpGet to connect directly to WordPress server IP
  * @param slugs - Array of section identifiers
  */
 export async function getContentBatch(
   slugs: string[]
 ): Promise<Record<string, unknown>> {
-  if (!CONTENT_API_BASE) {
-    console.warn('WordPress API not configured. Returning empty content.');
+  if (!CONTENT_ENABLED) {
+    console.warn('WordPress content not enabled. Returning empty content.');
     return {};
   }
 
   try {
-    const response = await fetch(
-      `${CONTENT_API_BASE}/content-batch?slugs=${slugs.join(',')}`,
-      {
-        next: {
-          revalidate: CONTENT_REVALIDATE_TIME,
-          tags: ['content', ...slugs.map((s) => `content-${s}`)],
-        },
-      }
+    const response = await wpGet(
+      `${CONTENT_API_PATH}/content-batch?slugs=${slugs.join(',')}`,
+      FETCH_TIMEOUT_MS
     );
 
-    if (!response.ok) {
-      throw new Error(`Content API Error: ${response.status}`);
+    if (!response || !response.ok) {
+      throw new Error(`Content API Error: ${response?.status || 'no response'}`);
     }
 
-    const result: ContentBatchResponse = await response.json();
+    const result = await response.json() as ContentBatchResponse;
     
     // Extract just the data from each content block
     const content: Record<string, unknown> = {};
@@ -283,20 +249,18 @@ export async function listAllContent(): Promise<Array<{
   slug: string;
   updated: string;
 }>> {
-  if (!CONTENT_API_BASE) {
+  if (!CONTENT_ENABLED) {
     return [];
   }
 
   try {
-    const response = await fetch(`${CONTENT_API_BASE}/content`, {
-      next: { revalidate: CONTENT_REVALIDATE_TIME },
-    });
+    const response = await wpGet(`${CONTENT_API_PATH}/content`);
 
-    if (!response.ok) {
-      throw new Error(`Content API Error: ${response.status}`);
+    if (!response || !response.ok) {
+      throw new Error(`Content API Error: ${response?.status || 'no response'}`);
     }
 
-    const result = await response.json();
+    const result = await response.json() as { content_blocks?: Array<{ id: number; title: string; slug: string; updated: string }> };
     return result.content_blocks || [];
   } catch (error) {
     console.error('Failed to list content:', error);
@@ -1415,5 +1379,5 @@ export async function getLayoutContent(): Promise<LayoutContent> {
  * Check if content API is configured
  */
 export function isContentAPIConfigured(): boolean {
-  return Boolean(CONTENT_API_BASE);
+  return CONTENT_ENABLED;
 }

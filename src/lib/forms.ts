@@ -1,9 +1,12 @@
 /**
  * Form utilities for dynamic WordPress/MetForm integration
  * Fetches form structure and handles submissions without hardcoding
+ * 
+ * IMPORTANT: Form field fetching goes through Next.js API proxy routes
+ * (/api/form-fields/[formId] and /api/forms) so that the browser never
+ * calls WordPress directly. This is critical when the main domain
+ * (voicecare.ai) points to Vercel instead of WordPress.
  */
-
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://voicecare.ai';
 
 // ============================================
 // Types
@@ -47,12 +50,13 @@ export interface FormListItem {
 // ============================================
 
 /**
- * Fetch all available forms from WordPress
+ * Fetch all available forms via the Next.js API proxy
+ * Uses /api/forms which proxies to WordPress server-side
  */
 export async function fetchAllForms(): Promise<FormListItem[]> {
   try {
-    const response = await fetch(`${WORDPRESS_API_URL}/wp-json/voicecare/v1/forms`, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
+    const response = await fetch(`/api/forms`, {
+      cache: 'no-store', // Always get fresh data via the proxy
     });
     
     if (!response.ok) {
@@ -69,12 +73,13 @@ export async function fetchAllForms(): Promise<FormListItem[]> {
 }
 
 /**
- * Fetch form fields for a specific form ID
+ * Fetch form fields for a specific form ID via the Next.js API proxy
+ * Uses /api/form-fields/[formId] which proxies to WordPress server-side
  */
 export async function fetchFormFields(formId: number | string): Promise<FormStructure | null> {
   try {
-    const response = await fetch(`${WORDPRESS_API_URL}/wp-json/voicecare/v1/form-fields/${formId}`, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
+    const response = await fetch(`/api/form-fields/${formId}`, {
+      cache: 'no-store', // Always get fresh data via the proxy
     });
     
     if (!response.ok) {

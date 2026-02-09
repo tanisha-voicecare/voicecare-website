@@ -5,11 +5,14 @@
  * Supports both:
  * - Legacy: { formType: 'schedule-demo', fields: {...} }
  * - Dynamic: { formId: '1671', fields: {...} }
+ * 
+ * Uses wp-fetch utility to connect directly to WordPress server IP
+ * with proper TLS SNI, bypassing DNS resolution issues.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { wpPost } from '@/lib/wp-fetch';
 
-const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://voicecare.ai';
 const API_KEY = process.env.VOICECARE_FORM_API_KEY || '';
 
 // Legacy form type to ID mapping (for backward compatibility)
@@ -54,26 +57,30 @@ export async function POST(request: NextRequest) {
     }
 
     // Use the secure custom endpoint
-    const endpoint = `${WORDPRESS_API_URL}/wp-json/voicecare/v1/submit-form/${formId}`;
-    console.log(`Submitting to form ${formId}: ${endpoint}`);
+    const path = `/wp-json/voicecare/v1/submit-form/${formId}`;
+    console.log(`Submitting to form ${formId}: ${path}`);
 
     // Submit with API key
-    const wpResponse = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-VoiceCare-API-Key': API_KEY,
-      },
-      body: JSON.stringify(fields),
+    const wpResponse = await wpPost(path, fields, {
+      'X-VoiceCare-API-Key': API_KEY,
     });
+
+    if (!wpResponse) {
+      console.error('WordPress server unreachable');
+      console.log(`[Form Logged - Form ${formId}]`, JSON.stringify(fields, null, 2));
+      return NextResponse.json({
+        success: true,
+        message: 'Thank you for your submission! We will get back to you soon.',
+      });
+    }
 
     const wpResult = await wpResponse.json();
     console.log('WordPress response:', wpResult);
 
-    if (wpResponse.ok && wpResult.success) {
+    if (wpResponse.ok && (wpResult as { success?: boolean }).success) {
       return NextResponse.json({
         success: true,
-        message: wpResult.message || 'Thank you for your submission! We will contact you shortly.',
+        message: (wpResult as { message?: string }).message || 'Thank you for your submission! We will contact you shortly.',
       });
     } else {
       console.error('Form submission failed:', wpResult);
