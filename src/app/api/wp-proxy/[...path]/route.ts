@@ -131,7 +131,7 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
       }
     }
 
-    return new NextResponse(wpResponse.body, {
+    return new NextResponse(new Uint8Array(wpResponse.body), {
       status: wpResponse.status,
       headers: responseHeaders,
     });
