@@ -135,6 +135,10 @@ async function handleRequest(request: NextRequest, params: { path: string[] }) {
       // Fix Location headers
       if (lowerKey === 'location') {
         let locationValue = Array.isArray(value) ? value[0] : value || '';
+        // After login POST: always redirect to wp-admin/index.php
+        if (wpPath === '/wp-login.php' && request.method === 'POST') {
+          locationValue = 'https://voicecare.ai/wp-admin/index.php';
+        }
         // Skip IONOS /backend and admin email confirmation - go straight to wp-admin
         if (locationValue.includes('/backend') || locationValue.includes('confirm_admin_email')) {
           locationValue = 'https://voicecare.ai/wp-admin/index.php';
