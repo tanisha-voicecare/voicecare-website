@@ -9,6 +9,7 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { TrustedBySection } from '@/components/sections/TrustedBySection';
 import { ValueMetricsSection } from '@/components/sections/ValueMetricsSection';
 import { InfiniteMarqueeSection } from '@/components/sections/InfiniteMarqueeSection';
+import { OurPartnersSection } from '@/components/sections/OurPartnersSection';
 import { SupportedEHRIntegrationsSection } from '@/components/sections/SupportedEHRIntegrationsSection';
 import { ProductIntroSection } from '@/components/sections/ProductIntroSection';
 import { generatePageMetadata } from '@/lib/seo';
@@ -76,6 +77,9 @@ export default async function HomePage() {
 
       {/* Infinite Marquee Section - Radical Efficiencies */}
       <InfiniteMarqueeSection content={radicalEfficienciesContent} />
+
+      {/* Our Partners Section */}
+      <OurPartnersSection />
 
       {/* Product Intro Section - Meet Your AI Workforce */}
       <ProductIntroSection content={productIntroContent} />
