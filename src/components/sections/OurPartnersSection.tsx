@@ -18,8 +18,8 @@ interface OurPartnersSectionProps {
 }
 
 // ============================================
-// Partner logos - PNG paths (public/images/partners/)
-// Mayo: 260×50px | Optum: 200×59px (designer proportions)
+// Partner logos - Mayo same as AdvisorsSection (company/investors, 200×112)
+// Optum: 200×58px (designer)
 // ============================================
 
 // ============================================
@@ -32,8 +32,8 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
       className={`relative py-20 bg-[#FAFBFC] ${className}`}
       aria-labelledby="our-partners-heading"
     >
-      <div className="container mx-auto px-6 md:px-16 max-w-7xl">
-        {/* Section Header - matching designer: text-center mb-12, 48px bold #06003F */}
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-16 flex flex-col items-center">
+        {/* Section Header - centered */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
             duration: 0.6,
             ease: [0.23, 1, 0.32, 1],
           }}
-          className="text-center mb-12"
+          className="w-full text-center mb-14"
         >
           <h2
             id="our-partners-heading"
@@ -52,7 +52,7 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
           </h2>
         </motion.div>
 
-        {/* Partner Logos Grid - matching designer */}
+        {/* Partner Logos - inline-flex so container is exact width of logos, no gap */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -62,41 +62,42 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
             delay: 0.2,
             ease: [0.23, 1, 0.32, 1],
           }}
-          className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16 max-w-5xl mx-auto mx-[64px] mt-[2px] mb-[0px]"
+          className="flex flex-col sm:flex-row items-center justify-center"
         >
-          {/* Mayo Clinic Logo - PNG */}
-          <motion.div
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="flex items-center justify-center"
-          >
-            <div className="w-[260px] h-[50px]">
-              <Image
-                src="/images/partners/mayo-clinic.png"
-                alt="Mayo Clinic"
-                width={260}
-                height={50}
-                className="w-full h-full object-contain"
-                sizes="260px"
-              />
-            </div>
-          </motion.div>
-
-          {/* Optum Logo - PNG */}
-          <motion.div
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="flex items-center justify-center"
-          >
-            <div className="relative w-[200px] h-[59px]">
-              <Image
-                src="/images/partners/optum.png"
-                alt="Optum"
-                width={200}
-                height={59}
-                className="w-full h-full object-contain"
-                sizes="200px"
-              />
-            </div>
-          </motion.div>
+          <div className="inline-flex flex-row items-center gap-0 m-0 p-0 [&>*]:m-0 [&>*]:p-0">
+            {/* Mayo Clinic Logo - same image & size as AdvisorsSection (200×112) */}
+            <motion.div
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="m-0 p-0 flex-shrink-0 leading-none -mr-6 sm:-mr-8"
+            >
+              <div className="w-[200px] h-[112px] flex items-center justify-center m-0 p-0">
+                <Image
+                  src="/images/company/investors/mayo-clinic.png"
+                  alt="Mayo Clinic"
+                  width={200}
+                  height={112}
+                  className="w-full h-full object-contain block"
+                  sizes="200px"
+                />
+              </div>
+            </motion.div>
+            {/* Optum Logo - flush against Mayo */}
+            <motion.div
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="m-0 p-0 flex-shrink-0 leading-none"
+            >
+              <div className="w-[200px] h-[58px] flex items-center justify-center m-0 p-0">
+                <Image
+                  src="/images/partners/optum.png"
+                  alt="Optum"
+                  width={200}
+                  height={58}
+                  className="w-full h-full object-contain block"
+                  sizes="200px"
+                />
+              </div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
 
