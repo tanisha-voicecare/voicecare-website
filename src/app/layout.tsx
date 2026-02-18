@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Header, Footer, ScrollToTop, AnnouncementBanner } from '@/components/layout';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { generateSiteMetadata } from '@/lib/seo';
 import { getLayoutContent } from '@/lib/content';
 import './globals.css';
@@ -45,6 +46,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-white font-sans antialiased">
+        <GoogleAnalytics />
         <ScrollToTop />
         <div className="flex min-h-screen flex-col">
           <Header />
