@@ -183,6 +183,10 @@ export function generateSiteMetadata(): Metadata {
       // google: 'your-google-verification-code',
       // yandex: 'your-yandex-verification-code',
     },
+    other: {
+      'ahrefs-site-verification':
+        '884da3c2afcc9dcab763ae6165f84a6b1fa091b6c9bca30f01ae79395a5ba46c',
+    },
   };
 }
 
