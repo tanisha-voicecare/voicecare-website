@@ -179,8 +179,9 @@ export function generateSiteMetadata(): Metadata {
     },
     manifest: '/site.webmanifest',
     verification: {
+
       // Add your verification codes here
-      // google: 'your-google-verification-code',
+      google: 'G-96937Q02TL',
       // yandex: 'your-yandex-verification-code',
     },
     other: {
