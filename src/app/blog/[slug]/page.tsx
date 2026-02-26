@@ -219,14 +219,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </figure>
           )}
 
-          {/* Content – WordPress block CSS loaded in Shadow DOM so editor styles match exactly */}
+          {/* Content – WordPress block library CSS in Shadow DOM so editor styles match. Uses CDN so it works even when WP URL isn’t reachable from browser. */}
           <BlogPostBody
             content={post.content}
-            wpBlockCssUrl={
-              process.env.WORDPRESS_API_URL
-                ? `${process.env.WORDPRESS_API_URL}/wp-includes/css/dist/block-library/style.min.css`
-                : ''
-            }
+            wpBlockCssUrl="https://unpkg.com/@wordpress/block-library@9.40.1/build-style/style.css"
           />
 
           {/* Tags/Categories */}
