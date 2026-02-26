@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Container, Text } from '@/components/ui';
+import { BlogPostBody } from '@/components/blog';
 import { CTASection } from '@/sections';
 import { generatePageMetadata, generateArticleSchema, generateBreadcrumbSchema, siteConfig } from '@/lib/seo';
 import { getPostBySlug, getAllPostSlugs, processPost } from '@/lib/wordpress';
@@ -218,10 +219,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </figure>
           )}
 
-          {/* Content – no typography overrides; render WordPress HTML as-is (spacing, bold, italic, font size, etc.) */}
-          <div
-            className="blog-post-body"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+          {/* Content – WordPress block CSS loaded in Shadow DOM so editor styles match exactly */}
+          <BlogPostBody
+            content={post.content}
+            wpBlockCssUrl={
+              process.env.WORDPRESS_API_URL
+                ? `${process.env.WORDPRESS_API_URL}/wp-includes/css/dist/block-library/style.min.css`
+                : ''
+            }
           />
 
           {/* Tags/Categories */}

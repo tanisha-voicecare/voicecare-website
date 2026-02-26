@@ -4,3 +4,4 @@
  */
 
 export { BlogHero } from './BlogHero';
+export { BlogPostBody } from './BlogPostBody';
