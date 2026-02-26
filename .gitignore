@@ -50,5 +50,4 @@ designer-src/
 
 # Local files - do not commit
 netlify.env
-wordpress-snippet-v2.php
-wordpress-snippet-v3-simple.php
+wordpress-snippet.php

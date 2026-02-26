@@ -55,7 +55,7 @@ const resourcesLinks: FooterLink[] = [
   { name: 'Pricing', href: '/pricing' },
   { name: 'Security', href: '/security' },
   { name: 'Careers', href: '/careers' },
-  { name: 'Blogs', href: '#', isDisabled: true }, // WordPress CMS not connected yet
+  { name: 'Blog', href: '/blog' },
 ];
 
 // Legal links - Privacy Policy & Terms of Service from designer-src, Cookie Policy added for compliance

@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/schedule-demo',
     // '/partner-with-us', // Commented out - not needed for now
     '/who-we-serve',
+    '/blog',
     '/privacy-policy',
     '/terms-of-service',
   ].map((route) => ({

@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Container, Prose, Heading, Text } from '@/components/ui';
+import { Container, Prose, Text } from '@/components/ui';
 import { CTASection } from '@/sections';
 import { generatePageMetadata, generateArticleSchema, generateBreadcrumbSchema, siteConfig } from '@/lib/seo';
 import { getPostBySlug, getAllPostSlugs, processPost } from '@/lib/wordpress';
@@ -98,38 +98,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     console.error('Error fetching post:', error);
   }
 
-  // Show placeholder content if no post found (for development)
   if (!post) {
-    // For development, show a placeholder
-    post = {
-      id: 1,
-      slug,
-      title: 'Sample Blog Post Title',
-      excerpt: 'This is a sample excerpt for the blog post.',
-      content: `
-        <p>This is placeholder content for development. When you connect your WordPress CMS, the actual post content will appear here.</p>
-        <h2>What You'll Learn</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-        <h2>Key Takeaways</h2>
-        <ul>
-          <li>First important point about health</li>
-          <li>Second important point about wellness</li>
-          <li>Third important point about medical care</li>
-        </ul>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <blockquote>
-          <p>"Healthcare is not just about treating illness, it's about promoting wellness and preventing disease."</p>
-        </blockquote>
-        <h2>Conclusion</h2>
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
-      `,
-      date: new Date().toISOString(),
-      modifiedDate: new Date().toISOString(),
-      author: { name: 'Dr. Jane Smith', avatar: '' },
-      featuredImage: null,
-      categories: [{ id: 1, name: 'Health Tips', slug: 'health-tips' }],
-      readingTime: 5,
-    };
+    notFound();
   }
 
   // JSON-LD Schema
@@ -164,42 +134,42 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="min-h-screen bg-white w-full overflow-x-hidden">
       <article className="pt-20 sm:pt-24 md:pt-32 pb-12 sm:pb-16 md:pb-20">
         <Container size="md">
-          {/* Breadcrumb */}
+          {/* Breadcrumb - matches Press/Blog brand styling */}
           <nav aria-label="Breadcrumb" className="mb-6 sm:mb-8">
-            <ol className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-neutral-500 flex-wrap">
+            <ol className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-[#06003F]/60 flex-wrap">
               <li>
-                <Link href="/" className="hover:text-primary-600 transition-colors">
+                <Link href="/" className="hover:text-[#FF4E3A] transition-colors">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li>
-                <Link href="/blog" className="hover:text-primary-600 transition-colors">
+                <Link href="/blog" className="hover:text-[#FF4E3A] transition-colors">
                   Blog
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li className="text-neutral-700 truncate max-w-[140px] sm:max-w-[200px]">{post.title}</li>
+              <li className="text-[#06003F] truncate max-w-[140px] sm:max-w-[200px]">{post.title}</li>
             </ol>
           </nav>
 
-          {/* Header */}
+          {/* Header - title matches Press/Blog hero typography */}
           <header className="mb-8 sm:mb-10 md:mb-12">
             {/* Category Badge */}
             {post.categories[0] && (
               <Link
                 href={`/blog/category/${post.categories[0].slug}`}
-                className="inline-block px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-primary-100 text-primary-700 rounded-full mb-3 sm:mb-4 hover:bg-primary-200 transition-colors"
+                className="inline-block px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-[#06003F]/10 text-[#06003F] rounded-full mb-3 sm:mb-4 hover:bg-[#06003F]/15 transition-colors"
               >
                 {post.categories[0].name}
               </Link>
             )}
 
-            <Heading as="h1" size="xl" className="mb-4 sm:mb-5 md:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+            <h1 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold tracking-tight text-[#06003F] mb-4 sm:mb-5 md:mb-6 leading-[1.1]">
               {post.title}
-            </Heading>
+            </h1>
 
-            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 md:gap-6 text-neutral-600 text-sm sm:text-base">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 md:gap-6 text-[#06003F]/60 text-sm sm:text-base">
               {/* Author */}
               {post.author && (
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -208,7 +178,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       {post.author.name.split(' ').map((n) => n[0]).join('')}
                     </span>
                   </div>
-                  <span className="font-medium text-neutral-900">{post.author.name}</span>
+                  <span className="font-medium text-[#06003F]">{post.author.name}</span>
                 </div>
               )}
 

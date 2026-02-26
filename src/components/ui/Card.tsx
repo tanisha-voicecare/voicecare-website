@@ -178,6 +178,7 @@ interface BlogCardProps {
   date: string;
   readingTime: number;
   href: string;
+  authorName?: string;
 }
 
 export function BlogCard({
@@ -188,7 +189,9 @@ export function BlogCard({
   date,
   readingTime,
   href,
+  authorName,
 }: BlogCardProps) {
+  const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   return (
     <article className="group flex flex-col h-full rounded-2xl overflow-hidden bg-white shadow-soft-md hover:shadow-soft-xl transition-all duration-300">
       {image && (
@@ -201,7 +204,7 @@ export function BlogCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {category && (
-            <span className="absolute top-4 left-4 px-3 py-1 text-sm font-medium bg-white/90 backdrop-blur-sm rounded-full text-primary-700">
+            <span className="absolute top-4 left-4 px-3 py-1 text-sm font-medium bg-white/90 backdrop-blur-sm rounded-full text-[#06003F]">
               {category}
             </span>
           )}
@@ -209,15 +212,20 @@ export function BlogCard({
       )}
       <div className="flex flex-col flex-1 p-6">
         <Link href={href}>
-          <h3 className="text-xl font-semibold text-[#06003F] mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          <h3 className="text-xl font-semibold text-[#06003F] mb-3 line-clamp-2 group-hover:text-[#FF4E3A] transition-colors">
             {title}
           </h3>
         </Link>
-        <p className="text-neutral-600 mb-4 line-clamp-3 flex-1">{excerpt}</p>
-        <div className="flex items-center text-sm text-neutral-500 pt-4 border-t border-neutral-100">
-          <time dateTime={date}>{new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time>
-          <span className="mx-2">·</span>
-          <span>{readingTime} min read</span>
+        <p className="text-[#06003F]/60 mb-4 line-clamp-3 flex-1 text-sm leading-relaxed">{excerpt}</p>
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-sm text-[#06003F]/60 pt-4 border-t border-[#06003F]/10">
+          <span className="flex items-center gap-x-2">
+            <time dateTime={date}>{dateStr}</time>
+            <span aria-hidden="true">·</span>
+            <span>{readingTime} min read</span>
+          </span>
+          {authorName && (
+            <span className="font-medium text-[#06003F]/80 shrink-0">{authorName}</span>
+          )}
         </div>
       </div>
     </article>

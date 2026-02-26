@@ -1,11 +1,12 @@
 /**
  * Blog Listing Page
- * Displays all blog posts with pagination
+ * Displays all blog posts with pagination and category filters
  */
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Container, Section, SectionHeader, Grid, BlogCard } from '@/components/ui';
+import { BlogHero } from '@/components/blog';
+import { Container, Section, Grid, BlogCard } from '@/components/ui';
 import { generatePageMetadata } from '@/lib/seo';
 import { getPosts, getCategories, processPost } from '@/lib/wordpress';
 import type { ProcessedPost, WPCategory } from '@/types';
@@ -31,10 +32,10 @@ export const revalidate = 600;
 // Data Fetching
 // ============================================
 
-async function getBlogData() {
+async function getBlogData(page: number = 1) {
   try {
     const [postsResult, categoriesResult] = await Promise.allSettled([
-      getPosts({ perPage: 9 }),
+      getPosts({ page, perPage: 9 }),
       getCategories(),
     ]);
 
@@ -48,11 +49,13 @@ async function getBlogData() {
 
     const totalPages =
       postsResult.status === 'fulfilled' ? postsResult.value.totalPages : 1;
+    const total =
+      postsResult.status === 'fulfilled' ? postsResult.value.total : 0;
 
-    return { posts, categories, totalPages };
+    return { posts, categories, totalPages, total };
   } catch (error) {
     console.error('Error fetching blog data:', error);
-    return { posts: [], categories: [], totalPages: 1 };
+    return { posts: [], categories: [], totalPages: 1, total: 0 };
   }
 }
 
@@ -90,15 +93,21 @@ function PlaceholderPostCard({ post, index }: { post: ProcessedPost; index: numb
         </Link>
         <p className="text-sm sm:text-base text-neutral-600 mb-3 sm:mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
         
-        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-neutral-100 text-xs sm:text-sm text-neutral-500">
-          <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </time>
-          <span>{post.readingTime} min read</span>
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 pt-3 sm:pt-4 border-t border-[#06003F]/10 text-xs sm:text-sm text-[#06003F]/60">
+          <span className="flex items-center gap-x-2">
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </time>
+            <span aria-hidden="true">·</span>
+            <span>{post.readingTime} min read</span>
+          </span>
+          {post.author?.name && (
+            <span className="font-medium text-[#06003F]/80 shrink-0">{post.author.name}</span>
+          )}
         </div>
       </div>
     </article>
@@ -106,23 +115,33 @@ function PlaceholderPostCard({ post, index }: { post: ProcessedPost; index: numb
 }
 
 // ============================================
-// Category Filter
+// Category Filter - matches site chip/button style (border, brand colors)
 // ============================================
 
-function CategoryFilter({ categories }: { categories: WPCategory[] }) {
+/** Only shows categories fetched from WordPress — no extra chips. */
+function CategoryFilter({
+  categories,
+  currentSlug,
+}: {
+  categories: WPCategory[];
+  currentSlug?: string | null;
+}) {
+  if (categories.length === 0) return null;
+
+  const base =
+    'inline-flex items-center px-4 py-2 text-[13px] sm:text-sm font-medium rounded-[6px] border transition-colors ';
+  const active =
+    'bg-[#06003F] text-white border-[#06003F] hover:bg-[#06003F]/90';
+  const inactive =
+    'bg-white text-[#06003F] border-[#06003F]/15 hover:border-[#06003F]/30 hover:bg-[#06003F]/5';
+
   return (
-    <div className="flex flex-wrap gap-2 justify-center mb-8 sm:mb-10 md:mb-12 px-2">
-      <Link
-        href="/blog"
-        className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-primary-600 text-white rounded-full transition-colors"
-      >
-        All Posts
-      </Link>
-      {categories.slice(0, 6).map((category) => (
+    <div className="flex flex-wrap gap-2 justify-center mb-6 sm:mb-8">
+      {categories.map((category) => (
         <Link
           key={category.id}
           href={`/blog/category/${category.slug}`}
-          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-primary-100 hover:text-primary-700 rounded-full transition-colors"
+          className={base + (currentSlug === category.slug ? active : inactive)}
         >
           {category.name}
         </Link>
@@ -132,108 +151,125 @@ function CategoryFilter({ categories }: { categories: WPCategory[] }) {
 }
 
 // ============================================
+// Pagination - functional links, site-themed styling
+// ============================================
+
+function BlogPagination({
+  currentPage,
+  totalPages,
+}: {
+  currentPage: number;
+  totalPages: number;
+}) {
+  if (totalPages <= 1) return null;
+
+  const prevPage = currentPage > 1 ? currentPage - 1 : null;
+  const nextPage = currentPage < totalPages ? currentPage + 1 : null;
+  const base =
+    'inline-flex items-center justify-center min-w-[44px] h-10 px-4 text-sm font-medium rounded-[6px] border transition-colors ';
+  const active = 'bg-[#06003F] text-white border-[#06003F]';
+  const inactive =
+    'bg-white text-[#06003F] border-[#06003F]/15 hover:border-[#06003F]/30 hover:bg-[#06003F]/5';
+  const disabled = 'bg-[#06003F]/5 text-[#06003F]/40 border-[#06003F]/10 cursor-not-allowed';
+
+  return (
+    <nav
+      aria-label="Blog pagination"
+      className="flex flex-wrap justify-center items-center gap-2 mt-8 sm:mt-10"
+    >
+      {prevPage ? (
+        <Link
+          href={prevPage === 1 ? '/blog' : `/blog?page=${prevPage}`}
+          className={base + inactive}
+        >
+          Previous
+        </Link>
+      ) : (
+        <span className={base + disabled}>Previous</span>
+      )}
+
+      <div className="flex items-center gap-1">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <Link
+            key={p}
+            href={p === 1 ? '/blog' : `/blog?page=${p}`}
+            className={base + (p === currentPage ? active : inactive)}
+            aria-current={p === currentPage ? 'page' : undefined}
+          >
+            {p}
+          </Link>
+        ))}
+      </div>
+
+      {nextPage ? (
+        <Link href={`/blog?page=${nextPage}`} className={base + inactive}>
+          Next
+        </Link>
+      ) : (
+        <span className={base + disabled}>Next</span>
+      )}
+    </nav>
+  );
+}
+
+// ============================================
 // Page Component
 // ============================================
 
-export default async function BlogPage() {
-  const { posts, categories } = await getBlogData();
+interface BlogPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
 
-  // Default placeholder posts if no CMS data
-  const defaultPosts: ProcessedPost[] = [
-    {
-      id: 1,
-      slug: 'understanding-preventive-care',
-      title: 'Understanding Preventive Care: Why Regular Check-ups Matter',
-      excerpt: 'Learn why regular health screenings and preventive care can help detect potential health issues early.',
-      content: '',
-      date: '2026-01-15',
-      modifiedDate: '2026-01-15',
-      author: { name: 'Dr. Sarah Johnson', avatar: '' },
-      featuredImage: null,
-      categories: [{ id: 1, name: 'Wellness', slug: 'wellness' }],
-      readingTime: 5,
-    },
-    {
-      id: 2,
-      slug: 'heart-health-tips',
-      title: '10 Simple Tips for Better Heart Health',
-      excerpt: 'Discover practical lifestyle changes you can make today to improve your cardiovascular health.',
-      content: '',
-      date: '2026-01-10',
-      modifiedDate: '2026-01-10',
-      author: { name: 'Dr. Michael Chen', avatar: '' },
-      featuredImage: null,
-      categories: [{ id: 2, name: 'Cardiology', slug: 'cardiology' }],
-      readingTime: 7,
-    },
-    {
-      id: 3,
-      slug: 'mental-health-awareness',
-      title: 'Breaking the Stigma: Mental Health in the Modern Age',
-      excerpt: 'Mental health is just as important as physical health. Learn about common conditions.',
-      content: '',
-      date: '2026-01-05',
-      modifiedDate: '2026-01-05',
-      author: { name: 'Dr. Emily Watson', avatar: '' },
-      featuredImage: null,
-      categories: [{ id: 3, name: 'Mental Health', slug: 'mental-health' }],
-      readingTime: 6,
-    },
-  ];
-
-  const displayPosts = posts.length > 0 ? posts : defaultPosts;
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const { page: pageParam } = await searchParams;
+  const currentPage = Math.max(1, parseInt(String(pageParam), 10) || 1);
+  const { posts, categories, totalPages } = await getBlogData(currentPage);
 
   return (
-    <div className="min-h-screen bg-neutral-50 w-full overflow-x-hidden">
-    <Section background="light" spacing="xl" className="pt-20 sm:pt-24 md:pt-32">
-      <Container>
-        <SectionHeader
-          eyebrow="Our Blog"
-          title="Health Insights & News"
-          description="Expert health advice, medical news, and wellness tips from our team of healthcare professionals."
-        />
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+      <BlogHero
+        headline="Health Insights & News"
+        description="Expert health advice, medical news, and wellness tips from our team of healthcare professionals."
+      />
 
-        {categories.length > 0 && <CategoryFilter categories={categories} />}
-
-        <Grid cols={3} gap="lg">
-          {displayPosts.map((post, index) =>
-            post.featuredImage?.src ? (
-              <BlogCard
-                key={post.id}
-                image={post.featuredImage.src}
-                category={post.categories[0]?.name}
-                title={post.title}
-                excerpt={post.excerpt}
-                date={post.date}
-                readingTime={post.readingTime}
-                href={`/blog/${post.slug}`}
-              />
-            ) : (
-              <PlaceholderPostCard key={post.id} post={post} index={index} />
-            )
+      <Section background="light" spacing="xl" className="pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
+        <Container>
+          {categories.length > 0 && (
+            <CategoryFilter categories={categories} currentSlug={null} />
           )}
-        </Grid>
 
-        {/* Pagination placeholder */}
-        <div className="flex flex-wrap justify-center mt-8 sm:mt-10 md:mt-12 gap-1.5 sm:gap-2">
-          <button
-            disabled
-            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-200 text-neutral-400 rounded-lg cursor-not-allowed"
-          >
-            Previous
-          </button>
-          <span className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-primary-600 text-white rounded-lg">
-            1
-          </span>
-          <button className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
-            2
-          </button>
-          <button className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors">
-            Next
-          </button>
-        </div>
-      </Container>
-    </Section>
+          {posts.length > 0 ? (
+            <>
+              <Grid cols={3} gap="lg">
+                {posts.map((post, index) =>
+                  post.featuredImage?.src ? (
+                    <BlogCard
+                      key={post.id}
+                      image={post.featuredImage.src}
+                      category={post.categories[0]?.name}
+                      title={post.title}
+                      excerpt={post.excerpt}
+                      date={post.date}
+                      readingTime={post.readingTime}
+                      href={`/blog/${post.slug}`}
+                      authorName={post.author?.name}
+                    />
+                  ) : (
+                    <PlaceholderPostCard key={post.id} post={post} index={index} />
+                  )
+                )}
+              </Grid>
+              <BlogPagination currentPage={currentPage} totalPages={totalPages} />
+            </>
+          ) : (
+            <div className="text-center py-12 sm:py-16">
+              <p className="text-[#06003F]/70 mb-4">
+                No posts yet. Add and publish posts from WordPress (React Site Content → Blog) to see them here.
+              </p>
+            </div>
+          )}
+        </Container>
+      </Section>
     </div>
   );
 }
