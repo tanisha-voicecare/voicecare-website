@@ -264,7 +264,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           ) : (
             <div className="text-center py-12 sm:py-16">
               <p className="text-[#06003F]/70 mb-4">
-                No posts yet. Add and publish posts from WordPress (React Site Content → Blog) to see them here.
+              No blog posts have been published yet.
               </p>
             </div>
           )}
