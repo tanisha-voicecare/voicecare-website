@@ -143,6 +143,35 @@
     background-color: #FFF0EE;
     color: #FF4E3A;
   }
+
+  /* Blog post body: no typography overrides. Only layout + WP block class support
+   * so admin styling (spacing, bold, italic, font size) from WordPress shows as-is. */
+  .blog-post-body {
+    font-family: inherit;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  .blog-post-body .has-bold-font-weight {
+    font-weight: 700;
+  }
+  .blog-post-body .has-italic-style {
+    font-style: italic;
+  }
+  .blog-post-body .has-small-font-size {
+    font-size: 0.875em;
+  }
+  .blog-post-body .has-medium-font-size {
+    font-size: 1.125em;
+  }
+  .blog-post-body .has-large-font-size {
+    font-size: 1.25em;
+  }
+  .blog-post-body .has-x-large-font-size {
+    font-size: 1.5em;
+  }
+  .blog-post-body .has-huge-font-size {
+    font-size: 2em;
+  }
 }
 
 /* ============================================

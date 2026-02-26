@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Container, Prose, Text } from '@/components/ui';
+import { Container, Text } from '@/components/ui';
 import { CTASection } from '@/sections';
 import { generatePageMetadata, generateArticleSchema, generateBreadcrumbSchema, siteConfig } from '@/lib/seo';
 import { getPostBySlug, getAllPostSlugs, processPost } from '@/lib/wordpress';
@@ -218,10 +218,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </figure>
           )}
 
-          {/* Content */}
-          <Prose>
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-          </Prose>
+          {/* Content – no typography overrides; render WordPress HTML as-is (spacing, bold, italic, font size, etc.) */}
+          <div
+            className="blog-post-body"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
           {/* Tags/Categories */}
           {post.categories.length > 0 && (
