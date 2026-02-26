@@ -144,13 +144,23 @@
     color: #FF4E3A;
   }
 
-  /* Blog post body: no typography overrides. Only layout + WP block class support
-   * so admin styling (spacing, bold, italic, font size) from WordPress shows as-is. */
+  /* Blog post body: render exactly as WordPress admin created (no overrides).
+   * Support semantic tags, WP block classes, and alignment so bold/italic/size/spacing show as-is. */
   .blog-post-body {
     font-family: inherit;
     max-width: 100%;
     word-wrap: break-word;
   }
+  /* Semantic tags – ensure they always show (in case of resets elsewhere) */
+  .blog-post-body strong,
+  .blog-post-body b {
+    font-weight: 700;
+  }
+  .blog-post-body em,
+  .blog-post-body i {
+    font-style: italic;
+  }
+  /* WordPress block typography classes */
   .blog-post-body .has-bold-font-weight {
     font-weight: 700;
   }
@@ -171,6 +181,39 @@
   }
   .blog-post-body .has-huge-font-size {
     font-size: 2em;
+  }
+  /* Block-level font size (class on same element, e.g. <p class="has-large-font-size">) */
+  .blog-post-body.has-medium-font-size,
+  .blog-post-body p.has-medium-font-size,
+  .blog-post-body h1.has-medium-font-size,
+  .blog-post-body h2.has-medium-font-size,
+  .blog-post-body h3.has-medium-font-size,
+  .blog-post-body blockquote.has-medium-font-size {
+    font-size: 1.125em;
+  }
+  .blog-post-body.has-large-font-size,
+  .blog-post-body p.has-large-font-size,
+  .blog-post-body h1.has-large-font-size,
+  .blog-post-body h2.has-large-font-size,
+  .blog-post-body h3.has-large-font-size,
+  .blog-post-body blockquote.has-large-font-size {
+    font-size: 1.25em;
+  }
+  .blog-post-body.has-huge-font-size,
+  .blog-post-body p.has-huge-font-size,
+  .blog-post-body h2.has-huge-font-size,
+  .blog-post-body h3.has-huge-font-size {
+    font-size: 2em;
+  }
+  /* Text alignment from block editor */
+  .blog-post-body .has-text-align-left {
+    text-align: left;
+  }
+  .blog-post-body .has-text-align-center {
+    text-align: center;
+  }
+  .blog-post-body .has-text-align-right {
+    text-align: right;
   }
 }
 
