@@ -26,7 +26,7 @@ export const metadata: Metadata = generatePageMetadata({
 // ISR Configuration
 // ============================================
 
-export const revalidate = 600;
+export const revalidate = 30; // 1 min – draft/publish changes appear sooner
 
 // ============================================
 // Data Fetching

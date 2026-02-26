@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: BlogCategoryPageProps): Promi
 // ISR Configuration
 // ============================================
 
-export const revalidate = 600;
+export const revalidate = 30; // 1 min – draft/publish changes appear sooner
 
 // ============================================
 // Data Fetching
@@ -79,7 +79,11 @@ async function getCategoryBlogData(slug: string) {
     let posts: ProcessedPost[] = [];
     if (postsResult.status === 'fulfilled' && Array.isArray(postsResult.value?.posts)) {
       try {
-        posts = postsResult.value.posts.map((p) => processPost(p));
+        const raw = postsResult.value.posts.map((p) => processPost(p));
+        // Ensure we only show posts that actually belong to this category (WP API can return others)
+        posts = raw.filter((p) =>
+          p.categories.some((c) => c.id === category.id || c.slug === category.slug)
+        );
       } catch {
         posts = [];
       }
@@ -210,11 +214,13 @@ export default async function BlogCategoryPage({ params }: BlogCategoryPageProps
     (data?.category && typeof data.category.name === 'string')
       ? data.category.name
       : slugToTitle(safeSlug || 'category');
+  const posts = Array.isArray(data?.posts) ? data.posts : [];
   const categoryDescription =
     (data?.category && typeof data.category.description === 'string' && data.category.description)
       ? data.category.description
-      : `No posts in "${categoryName}" yet. Browse all posts or choose another category.`;
-  const posts = Array.isArray(data?.posts) ? data.posts : [];
+      : posts.length > 0
+        ? `Latest posts in ${categoryName}.`
+        : `No posts in "${categoryName}" yet. Browse all posts or choose another category.`;
   let categories: WPCategory[] = Array.isArray(data?.categories) ? data.categories : [];
   if (categories.length === 0) {
     try {
