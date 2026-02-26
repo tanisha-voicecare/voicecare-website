@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@wordpress/block-library": "^9.40.1",
     "clsx": "^2.1.0",
     "lucide-react": "^0.563.0",
     "motion": "^12.27.5",
