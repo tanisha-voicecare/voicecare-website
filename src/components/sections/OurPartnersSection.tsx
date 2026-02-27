@@ -48,7 +48,7 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
             id="our-partners-heading"
             className="text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.05]"
           >
-            Our Partners
+            Strategic Partnership with World Class Companies 
           </h2>
         </motion.div>
 
