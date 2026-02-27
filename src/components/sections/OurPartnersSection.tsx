@@ -65,6 +65,22 @@ export function OurPartnersSection({ className = '' }: OurPartnersSectionProps) 
           className="flex flex-col sm:flex-row items-center justify-center"
         >
           <div className="inline-flex flex-row items-center gap-0 m-0 p-0 [&>*]:m-0 [&>*]:p-0">
+            {/* Cencora Logo - same size as Mayo (200×112) */}
+            <motion.div
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="m-0 p-0 flex-shrink-0 leading-none -mr-6 sm:-mr-8"
+            >
+              <div className="w-[200px] h-[112px] flex items-center justify-center m-0 p-0">
+                <Image
+                  src="/images/partners/cencora-standard.png"
+                  alt="Cencora"
+                  width={200}
+                  height={112}
+                  className="w-full h-full object-contain block"
+                  sizes="200px"
+                />
+              </div>
+            </motion.div>
             {/* Mayo Clinic Logo - same image & size as AdvisorsSection (200×112) */}
             <motion.div
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
