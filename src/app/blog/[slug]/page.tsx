@@ -173,14 +173,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 md:gap-6 text-[#06003F]/60 text-sm sm:text-base">
               {/* Author */}
               {post.author && (
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
-                    <span className="text-xs sm:text-sm font-medium text-primary-700">
-                      {post.author.name.split(' ').map((n) => n[0]).join('')}
-                    </span>
-                  </div>
-                  <span className="font-medium text-[#06003F]">{post.author.name}</span>
-                </div>
+                <span className="font-medium text-[#06003F]">{post.author.name}</span>
               )}
 
               {/* Date */}

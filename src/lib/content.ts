@@ -1293,25 +1293,33 @@ export interface TrustedByContent {
   logos: TrustedByLogoContent[];
 }
 
+/** Shared default payor/trusted-by logos (alphabetical). Used by TrustedBySection and InfiniteMarqueeSection. */
+export const TRUSTED_BY_DEFAULT_LOGOS: TrustedByLogoContent[] = [
+  { name: 'Aetna', src: '/images/logos/aetna.png', size: 'normal' },
+  { name: 'American Specialty Health', src: '/images/logos/american-specialty-health.png', size: 'normal' },
+  { name: 'Ameritas', src: '/images/logos/ameritas.png', size: 'large' },
+  { name: 'Anthem', src: '/images/logos/anthem.png', size: 'normal' },
+  { name: 'Blue Shield of California', src: '/images/logos/blue-shield-california.png', size: 'large' },
+  { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'xlarge' },
+  { name: 'Guardian', src: '/images/logos/guardian.png', size: 'normal' },
+  { name: 'Principal', src: '/images/logos/principal.png', size: 'large' },
+  { name: 'Quantum Health', src: '/images/logos/quantum-health.png', size: 'normal' },
+  { name: 'UMR', src: '/images/logos/umr.png', size: 'large' },
+  { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'large' },
+];
+
 /**
- * Get TrustedBy section content with fallback
+ * Get TrustedBy section content with fallback.
+ * Logos are always taken from TRUSTED_BY_DEFAULT_LOGOS so new payors show without WP updates.
  */
 export async function getTrustedByContent(): Promise<TrustedByContent> {
-  const fallback: TrustedByContent = {
-    logos: [
-      { name: 'American Specialty Health', src: '/images/logos/american-specialty-health.png', size: 'normal' },
-      { name: 'Anthem', src: '/images/logos/anthem.png', size: 'normal' },
-      { name: 'Aetna', src: '/images/logos/aetna.png', size: 'normal' },
-      { name: 'Blue Shield of California', src: '/images/logos/blue-shield-california.png', size: 'large' },
-      { name: 'Cigna Healthcare', src: '/images/logos/cigna-healthcare.png', size: 'xlarge' },
-      { name: 'Quantum Health', src: '/images/logos/quantum-health.png', size: 'normal' },
-      { name: 'UMR', src: '/images/logos/umr.png', size: 'large' },
-      { name: 'United Healthcare', src: '/images/logos/united-healthcare.png', size: 'large' },
-    ],
-  };
+  const fallback: TrustedByContent = { logos: TRUSTED_BY_DEFAULT_LOGOS };
 
   const wpData = await getContent<TrustedByContent>('trusted-by');
-  return deepMerge(fallback, wpData);
+  const merged = deepMerge(fallback, wpData);
+  // Always use our default logos so the section shows the full list (Ameritas, Guardian, Principal, etc.)
+  merged.logos = TRUSTED_BY_DEFAULT_LOGOS;
+  return merged;
 }
 
 // ============================================
