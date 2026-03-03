@@ -6,6 +6,8 @@ import { useEffect, useRef } from 'react';
  * Renders WordPress post content inside a Shadow DOM and loads the WordPress
  * block library CSS so every class and style from the editor (bold, italic,
  * font size, spacing, alignment, etc.) appears exactly as the admin set it.
+ * Also injects WP global styles (Gutenberg font-size presets, typography
+ * variables) so editor choices like Pullquote S/M/L/XL reflect in the UI.
  */
 export function BlogPostBody({
   content,
@@ -26,6 +28,19 @@ export function BlogPostBody({
     }
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: 'open' });
+
+    // Inject WordPress global styles (Gutenberg presets, font-size S/M/L/XL, etc.)
+    // so WP editor typography changes reflect inside the Shadow DOM only.
+    fetch('/api/wp-global-styles')
+      .then((res) => (res.ok ? res.text() : ''))
+      .then((css) => {
+        if (!css || !host.shadowRoot) return;
+        const style = document.createElement('style');
+        style.setAttribute('id', 'wp-global-styles-inline-css');
+        style.textContent = css;
+        host.shadowRoot.insertBefore(style, host.shadowRoot.firstChild);
+      })
+      .catch(() => {});
 
     if (wpBlockCssUrl) {
       const link = document.createElement('link');
