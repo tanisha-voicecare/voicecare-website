@@ -51,14 +51,14 @@ export function BlogPostBody({
 
     const style = document.createElement('style');
     style.textContent = `
-      /* Gutenberg font-size presets (S/M/L/XL) – larger for readability */
+      /* Gutenberg font-size presets (S/M/L/XL) – medium and below as-is; large+ bigger */
       :host {
         --wp--preset--font-size--x-small: 0.9375rem;
         --wp--preset--font-size--small: 1.0625rem;
         --wp--preset--font-size--medium: 1.25rem;
-        --wp--preset--font-size--large: 1.5625rem;
-        --wp--preset--font-size--x-large: 1.875rem;
-        --wp--preset--font-size--xx-large: 2.5rem;
+        --wp--preset--font-size--large: 2.25rem;
+        --wp--preset--font-size--x-large: 2.75rem;
+        --wp--preset--font-size--xx-large: 3.25rem;
       }
       .has-x-small-font-size { font-size: var(--wp--preset--font-size--x-small); }
       .has-small-font-size { font-size: var(--wp--preset--font-size--small); }
