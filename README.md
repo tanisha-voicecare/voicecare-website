@@ -222,12 +222,12 @@ Pages are statically generated with ISR revalidation:
 
 ```typescript
 // Default: Revalidate every 10 minutes
-export const revalidate = 600;
+export const revalidate = 30;
 ```
 
 Adjust in `lib/wordpress.ts`:
 ```typescript
-export const REVALIDATE_TIME = 600; // seconds
+export const REVALIDATE_TIME = 30; // seconds
 ```
 
 ### Image Optimization

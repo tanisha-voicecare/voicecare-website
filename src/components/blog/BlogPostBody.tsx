@@ -51,7 +51,24 @@ export function BlogPostBody({
 
     const style = document.createElement('style');
     style.textContent = `
-      .wp-block-content { font-family: inherit; color: inherit; max-width: 100%; word-wrap: break-word; }
+      /* Gutenberg font-size presets (S/M/L/XL) – variables so has-*-font-size classes work */
+      :host {
+        --wp--preset--font-size--x-small: 0.75rem;
+        --wp--preset--font-size--small: 0.8125rem;
+        --wp--preset--font-size--medium: 1rem;
+        --wp--preset--font-size--large: 1.25rem;
+        --wp--preset--font-size--x-large: 1.5rem;
+        --wp--preset--font-size--xx-large: 2rem;
+      }
+      .has-x-small-font-size { font-size: var(--wp--preset--font-size--x-small); }
+      .has-small-font-size { font-size: var(--wp--preset--font-size--small); }
+      .has-medium-font-size { font-size: var(--wp--preset--font-size--medium); }
+      .has-large-font-size { font-size: var(--wp--preset--font-size--large); }
+      .has-x-large-font-size { font-size: var(--wp--preset--font-size--x-large); }
+      .has-xx-large-font-size { font-size: var(--wp--preset--font-size--xx-large); }
+
+      /* Base typography for blog content only – no font-size so block classes apply */
+      .wp-block-content { font-family: inherit; color: inherit; line-height: 1.6; max-width: 100%; word-wrap: break-word; }
       .wp-block-content p { margin: 0 0 1em; line-height: 1.6; }
       .wp-block-content p:last-child { margin-bottom: 0; }
       .wp-block-content strong, .wp-block-content b { font-weight: 700; }

@@ -38,7 +38,7 @@ export function isWordPressConfigured(): boolean {
 }
 
 // ISR revalidation time in seconds (10 minutes default)
-export const REVALIDATE_TIME = 600;
+export const REVALIDATE_TIME = 30;
 
 // ============================================
 // Fetch Wrapper with Error Handling
@@ -222,7 +222,7 @@ export async function getSiteSettings(): Promise<WPSiteSettings> {
   // Note: This endpoint might need custom REST route in WordPress
   const url = `${WORDPRESS_API_URL}/wp-json`;
   const response = await fetch(url, {
-    next: { revalidate: REVALIDATE_TIME * 6, tags: ['settings'] },
+    next: { revalidate: REVALIDATE_TIME, tags: ['settings'] },
   });
 
   if (!response.ok) {
