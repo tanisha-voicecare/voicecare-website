@@ -392,10 +392,10 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                                 key={idx}
                                 src={logo.src}
                                 alt={logo.alt}
-                                width={100}
-                                height={64}
-                                sizes="100px"
-                                className="h-12 sm:h-14 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                                width={120}
+                                height={56}
+                                sizes="120px"
+                                className="h-10 sm:h-11 md:h-12 w-auto max-w-[140px] object-contain object-left grayscale hover:grayscale-0 transition-all duration-300"
                               />
                             ))}
                           </div>
