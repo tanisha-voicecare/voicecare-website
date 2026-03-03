@@ -21,6 +21,7 @@ export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
     id: index + 1,
     highlight: item.highlightText,
     text: item.regularText,
+    linkUrl: item.linkUrl?.trim() || undefined,
   }));
 
   return (
@@ -43,35 +44,69 @@ export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
             className="flex gap-8 whitespace-nowrap items-center"
           >
             {/* First set of announcements */}
-            {displayAnnouncements.map((announcement) => (
-              <div
-                key={`first-${announcement.id}`}
-                className="flex items-center gap-8"
-              >
+            {displayAnnouncements.map((announcement) => {
+              const inner = (
                 <div className="text-[15px] text-white/90">
                   <span className="font-semibold text-white">
                     {announcement.highlight}
                   </span>{' '}
                   {announcement.text}
                 </div>
-                <span className="text-white/30">|</span>
-              </div>
-            ))}
+              );
+              return (
+                <div
+                  key={`first-${announcement.id}`}
+                  className="flex items-center gap-8"
+                >
+                  {announcement.linkUrl ? (
+                    <a
+                      href={announcement.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline focus:outline-none focus:underline"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    inner
+                  )}
+                  <span className="text-white/30">|</span>
+                </div>
+              );
+            })}
             {/* Duplicate set for seamless loop */}
-            {displayAnnouncements.map((announcement) => (
-              <div
-                key={`second-${announcement.id}`}
-                className="flex items-center gap-8"
-              >
+            {displayAnnouncements.map((announcement) => {
+              const inner = (
                 <div className="text-[15px] text-white/90">
                   <span className="font-semibold text-white">
                     {announcement.highlight}
                   </span>{' '}
                   {announcement.text}
                 </div>
-                <span className="text-white/30">|</span>
-              </div>
-            ))}
+              );
+              return (
+                <div
+                  key={`second-${announcement.id}`}
+                  className="flex items-center gap-8"
+                >
+                  {announcement.linkUrl ? (
+                    <a
+                      href={announcement.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline focus:outline-none focus:underline"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    inner
+                  )}
+                  <span className="text-white/30">|</span>
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </div>

@@ -1333,6 +1333,8 @@ export async function getTrustedByContent(): Promise<TrustedByContent> {
 export interface AnnouncementItem {
   highlightText: string;
   regularText: string;
+  /** Optional URL; when set, the banner is clickable and redirects to this link */
+  linkUrl?: string;
 }
 
 export interface AnnouncementBannerContent {
