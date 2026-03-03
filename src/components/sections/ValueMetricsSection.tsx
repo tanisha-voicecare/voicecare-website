@@ -23,7 +23,7 @@ interface ValueMetricsSectionProps {
 // ============================================
 
 const DEFAULT_CONTENT: ValueMetricsContent = {
-  sectionTitle: 'Why VoiceCare.',
+  sectionTitle: 'Why VoiceCare',
   sectionDescription: 'Our agentic AI goes beyond traditional automation to take meaningful action, delivering measurable outcomes that transform healthcare operations.',
   metrics: [
     {

@@ -307,7 +307,7 @@ export async function getHomepageHeroContent(): Promise<HomepageHeroContent> {
  */
 export async function getValueMetricsContent(): Promise<ValueMetricsContent> {
   const fallback: ValueMetricsContent = {
-    sectionTitle: 'Why VoiceCare.',
+    sectionTitle: 'Why VoiceCare',
     sectionDescription: 'Our agentic AI goes beyond traditional automation to take meaningful action, delivering measurable outcomes that transform healthcare operations.',
     metrics: [
       {
@@ -1290,6 +1290,7 @@ export interface TrustedByLogoContent {
 }
 
 export interface TrustedByContent {
+  title?: string;
   logos: TrustedByLogoContent[];
 }
 
@@ -1312,11 +1313,14 @@ export const TRUSTED_BY_DEFAULT_LOGOS: TrustedByLogoContent[] = [
  * Get TrustedBy section content with fallback.
  * Logos are always taken from TRUSTED_BY_DEFAULT_LOGOS so new payors show without WP updates.
  */
+const TRUSTED_BY_DEFAULT_TITLE = 'AI Agents that call';
+
 export async function getTrustedByContent(): Promise<TrustedByContent> {
-  const fallback: TrustedByContent = { logos: TRUSTED_BY_DEFAULT_LOGOS };
+  const fallback: TrustedByContent = { title: TRUSTED_BY_DEFAULT_TITLE, logos: TRUSTED_BY_DEFAULT_LOGOS };
 
   const wpData = await getContent<TrustedByContent>('trusted-by');
   const merged = deepMerge(fallback, wpData);
+  merged.title = merged.title || TRUSTED_BY_DEFAULT_TITLE;
   // Always use our default logos so the section shows the full list (Ameritas, Guardian, Principal, etc.)
   merged.logos = TRUSTED_BY_DEFAULT_LOGOS;
   return merged;

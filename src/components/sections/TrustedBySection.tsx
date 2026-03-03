@@ -16,7 +16,7 @@ import type { TrustedByLogoContent } from '@/lib/content';
 
 interface TrustedBySectionProps {
   className?: string;
-  content?: { logos: TrustedByLogoContent[] };
+  content?: { title?: string; logos: TrustedByLogoContent[] };
 }
 
 // ============================================
@@ -53,9 +53,14 @@ export function TrustedBySection({ className = '', content }: TrustedBySectionPr
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-      className={`border-y border-black/[0.04] py-6 sm:py-8 md:py-10 bg-white/50 mt-[-30px] sm:mt-[-40px] md:mt-[-60px] overflow-hidden ${className}`}
-      aria-label="Trusted by leading healthcare organizations"
+      className={`border-y border-black/[0.04] pt-12 sm:pt-16 md:pt-20 pb-6 sm:pb-8 md:pb-10 bg-white/50 mt-[-30px] sm:mt-[-40px] md:mt-[-60px] overflow-hidden ${className}`}
+      aria-label={content?.title ?? 'Trusted by leading healthcare organizations'}
     >
+      {content?.title && (
+        <h2 className="text-center text-[16px] sm:text-[19px] md:text-[23px] font-bold text-[#06003F] tracking-tight mb-4 sm:mb-6 px-4">
+          {content.title}
+        </h2>
+      )}
       <div className="relative">
         <motion.div
           className="flex gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center"
