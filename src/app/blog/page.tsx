@@ -234,9 +234,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       <Section background="light" spacing="xl" className="pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
         <Container>
-          {categories.length > 0 && (
+          {/* Category filter temporarily disabled */}
+          {/* {categories.length > 0 && (
             <CategoryFilter categories={categories} currentSlug={null} />
-          )}
+          )} */}
 
           {posts.length > 0 ? (
             <>
