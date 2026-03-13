@@ -204,7 +204,7 @@ function NumberInput({ label, value, onChange, min = 0, max = 100000, prefix = '
         )}
         <input
           type="number"
-          value={value}
+          value={value === 0 ? '' : value}
           onChange={(e) => {
             const val = Number(e.target.value);
             if (val >= min && val <= max) {
@@ -213,6 +213,8 @@ function NumberInput({ label, value, onChange, min = 0, max = 100000, prefix = '
           }}
           min={min}
           max={max}
+          placeholder="0"
+          inputMode="decimal"
           className={`w-full bg-white border border-[#06003F]/10 rounded-lg py-2.5 text-[#06003F] text-[14px] sm:text-[15px] focus:outline-none focus:border-[#FF4E3A]/50 focus:ring-2 focus:ring-[#FF4E3A]/10 transition-all ${
             prefix ? 'pl-7 pr-3' : 'px-3'
           }`}
