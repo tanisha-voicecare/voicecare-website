@@ -539,8 +539,8 @@ export interface WhoWeServeTabCard {
 }
 
 export interface WhoWeServeTabContent {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   cards: WhoWeServeTabCard[];
 }
 

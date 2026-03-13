@@ -58,8 +58,8 @@ interface Card {
 }
 
 interface TabContent {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   cards: Card[];
 }
 
@@ -106,8 +106,8 @@ const ICON_MAP: Record<string, IconComponent> = {
 
 const DEFAULT_TABS_CONTENT: WhoWeServeContent['tabs'] = {
   healthcareStakeholders: {
-    title: 'Healthcare Stakeholders',
-    subtitle: 'We collaborate with stakeholders across different verticals within the healthcare domain.',
+    // title: 'Healthcare Stakeholders',
+    // subtitle: 'We collaborate with stakeholders across different verticals within the healthcare domain.',
     cards: [
       { title: 'Health Systems', description: 'Streamline administrative processes by automating insurance verification and authorization calls, reducing wait times and improving patient flow. Empower healthcare teams to concentrate on delivering quality care rather than handling repetitive administrative tasks.' },
       { title: 'Labs & Diagnostics', description: 'Optimize operational efficiency by automating insurance pre-authorization calls and patient follow-ups, allowing lab technicians and diagnostic professionals to focus on accurate and timely test results.' },
@@ -116,8 +116,8 @@ const DEFAULT_TABS_CONTENT: WhoWeServeContent['tabs'] = {
     ],
   },
   specialistPractice: {
-    title: 'Specialist Practice Providers',
-    subtitle: 'We specialize in providing efficient, customized solutions for specialized segments within the healthcare industry.',
+    // title: 'Specialist Practice Providers',
+    // subtitle: 'We specialize in providing efficient, customized solutions for specialized segments within the healthcare industry.',
     cards: [
       { title: 'Orthopedics', description: 'Empower rheumatology teams to deliver personalized care and effective treatments with enhanced administrative efficiency.' },
       { title: 'Cardiology', description: 'Improve patient satisfaction and outcomes by automating insurance interactions, facilitating quicker approvals for cardiac treatments and procedures.' },
@@ -134,15 +134,15 @@ const DEFAULT_TABS_CONTENT: WhoWeServeContent['tabs'] = {
     ],
   },
   revenueCycle: {
-    title: 'Revenue Cycle Management',
-    subtitle: 'Optimizing financial operations for healthcare organizations.',
+    // title: 'Revenue Cycle Management',
+    // subtitle: 'Optimizing financial operations for healthcare organizations.',
     cards: [
       { title: 'Revenue Cycle Management', description: 'Improve revenue integrity with AI-driven automation of insurance eligibility verification and denial management processes. Ensure accurate billing and coding to maximize reimbursements and minimize revenue leakage.' },
     ],
   },
   dental: {
-    title: 'Dental',
-    subtitle: 'Transforming dental practice operations with AI-powered automation.',
+    // title: 'Dental',
+    // subtitle: 'Transforming dental practice operations with AI-powered automation.',
     cards: [
       { title: 'Dental', description: 'Improve revenue integrity with AI-driven automation of insurance eligibility verification and denial management processes. Ensure accurate billing and coding to maximize reimbursements and minimize revenue leakage.' },
     ],
@@ -165,32 +165,32 @@ const getTabContent = (activeTab: TabId, tabsContent: WhoWeServeContent['tabs'])
   switch (activeTab) {
     case 'healthcare-stakeholders':
       return {
-        title: tabsContent.healthcareStakeholders.title,
-        subtitle: tabsContent.healthcareStakeholders.subtitle,
+        title: tabsContent.healthcareStakeholders?.title,
+        subtitle: tabsContent.healthcareStakeholders?.subtitle,
         cards: mapCardsWithIcons(tabsContent.healthcareStakeholders.cards),
       };
     case 'specialist-practice':
       return {
-        title: tabsContent.specialistPractice.title,
-        subtitle: tabsContent.specialistPractice.subtitle,
+        title: tabsContent.specialistPractice?.title,
+        subtitle: tabsContent.specialistPractice?.subtitle,
         cards: mapCardsWithIcons(tabsContent.specialistPractice.cards),
       };
     case 'revenue-cycle':
       return {
-        title: tabsContent.revenueCycle.title,
-        subtitle: tabsContent.revenueCycle.subtitle,
+        title: tabsContent.revenueCycle?.title,
+        subtitle: tabsContent.revenueCycle?.subtitle,
         cards: mapCardsWithIcons(tabsContent.revenueCycle.cards),
       };
     case 'dental':
       return {
-        title: tabsContent.dental.title,
-        subtitle: tabsContent.dental.subtitle,
+        title: tabsContent.dental?.title,
+        subtitle: tabsContent.dental?.subtitle,
         cards: mapCardsWithIcons(tabsContent.dental.cards),
       };
     default:
       return {
-        title: tabsContent.healthcareStakeholders.title,
-        subtitle: tabsContent.healthcareStakeholders.subtitle,
+        title: tabsContent.healthcareStakeholders?.title,
+        subtitle: tabsContent.healthcareStakeholders?.subtitle,
         cards: mapCardsWithIcons(tabsContent.healthcareStakeholders.cards),
       };
   }
@@ -240,15 +240,15 @@ export function WhoWeServeTabs({ content }: WhoWeServeTabsProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Title and Subtitle */}
-          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          {/* Title and Subtitle - commented out for now */}
+          {/* <div className="text-center mb-8 sm:mb-10 md:mb-12">
             <h2 className="text-[28px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#06003F] tracking-tight leading-[1.1] mb-2 sm:mb-3">
               {currentContent.title}
             </h2>
             <p className="text-[14px] sm:text-[15px] md:text-[16px] text-[#06003F]/60 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed px-2">
               {currentContent.subtitle}
             </p>
-          </div>
+          </div> */}
 
           {/* Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
