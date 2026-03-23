@@ -43,6 +43,12 @@ interface DynamicFormProps {
   placeholderOverrides?: Record<string, string>;
   /** Optional: Override required status for fields (key: field name, value: true/false) */
   requiredOverrides?: Record<string, boolean>;
+  /** Optional: Text for the submit button */
+  submitButtonText?: string;
+  /** Optional: URL to redirect to after successful submission */
+  redirectUrl?: string;
+  /** Optional: HubSpot Meeting URL to embed on success */
+  successEmbedUrl?: string;
 }
 
 // ============================================
@@ -61,13 +67,26 @@ interface FieldRendererProps {
   field: FormField;
   value: string;
   onChange: (name: string, value: string) => void;
+  onBlur: (name: string) => void;
   showLabel?: boolean;
+  error?: string;
 }
 
-function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRendererProps) {
+function FieldRenderer({ field, value, onChange, onBlur, showLabel = true, error }: FieldRendererProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     onChange(field.name, e.target.value);
   };
+
+  const handleBlur = () => {
+    onBlur(field.name);
+  };
+
+  const getBorderColor = () => {
+    if (error) return "border-red-500 focus:border-red-500";
+    return "border-[#06003F]/10 focus:border-[#FF4E3A]";
+  };
+
+  const inputClasses = `w-full min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 bg-white border rounded-[6px] focus:outline-none transition-colors text-base md:text-[inherit] ${getBorderColor()}`;
 
   const renderLabel = () => {
     if (!showLabel) return null;
@@ -90,7 +109,8 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
             required={field.required}
             value={value}
             onChange={handleChange}
-            className={`${inputBaseStyles} appearance-none pr-10 cursor-pointer`}
+            onBlur={handleBlur}
+            className={`${inputClasses} appearance-none pr-10 cursor-pointer`}
           >
             <option value="" disabled className="text-gray-400">
               {field.placeholder || `Select ${field.label.toLowerCase()}`}
@@ -132,10 +152,12 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
           required={field.required}
           value={value}
           onChange={handleChange}
+          onBlur={handleBlur}
           rows={field.rows || 5}
           placeholder={field.placeholder}
-          className={`${inputBaseStyles} resize-none`}
+          className={`${inputClasses} resize-none`}
         />
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
     );
   }
@@ -250,10 +272,12 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
             if (file) {
               // For now, just store the filename - file uploads need separate handling
               onChange(field.name, file.name);
+              onBlur(field.name);
             }
           }}
-          className={`${inputBaseStyles} file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#FF4E3A]/10 file:text-[#FF4E3A] hover:file:bg-[#FF4E3A]/20`}
+          className={`${inputClasses} file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#FF4E3A]/10 file:text-[#FF4E3A] hover:file:bg-[#FF4E3A]/20`}
         />
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
     );
   }
@@ -282,12 +306,14 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
         required={field.required}
         value={value}
         onChange={handleChange}
+        onBlur={handleBlur}
         placeholder={field.placeholder}
         min={field.min}
         max={field.max}
         step={field.step}
-        className={inputBaseStyles}
+        className={inputClasses}
       />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 }
@@ -299,49 +325,113 @@ function FieldRenderer({ field, value, onChange, showLabel = true }: FieldRender
 interface SuccessMessageProps {
   message: string;
   onReset: () => void;
+  embedUrl?: string;
+  formData?: Record<string, string>;
 }
 
-function SuccessMessage({ message, onReset }: SuccessMessageProps) {
+function SuccessMessage({ message, onReset, embedUrl, formData }: SuccessMessageProps) {
+  // Construct pre-filled HubSpot URL if embedUrl is present
+  const getPrefilledUrl = () => {
+    if (!embedUrl) return '';
+    
+    // Base URL with embed=true parameter (ensuring no double ?)
+    let finalUrl = embedUrl + (embedUrl.includes('?') ? '&' : '?') + 'embed=true';
+    
+    if (formData) {
+      // HubSpot accepts various parameter formats depending on account settings
+      const name = formData['name'] || formData['firstname'] || formData['First Name'] || '';
+      const email = formData['mf-email'] || formData['email'] || formData['Email Address'] || '';
+      const company = formData['company___'] || formData['company'] || formData['Company Name'] || '';
+      
+      const emailEncoded = encodeURIComponent(email);
+      if (email) {
+        finalUrl += `&email=${emailEncoded}`;
+      }
+      
+      if (company) {
+        finalUrl += `&company=${encodeURIComponent(company)}`;
+      }
+      
+      if (name) {
+        const nameParts = name.trim().split(/\s+/);
+        if (nameParts.length > 0) {
+          const first = encodeURIComponent(nameParts[0]);
+          finalUrl += `&firstname=${first}&first_name=${first}&firstName=${first}`;
+          
+          if (nameParts.length > 1) {
+            const last = encodeURIComponent(nameParts.slice(1).join(' '));
+            finalUrl += `&lastname=${last}&last_name=${last}&lastName=${last}`;
+          }
+        }
+      }
+    }
+    
+    return finalUrl;
+  };
+
+  const prefilledUrl = getPrefilledUrl();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
-      className="max-w-md mx-auto text-center py-12"
+      className={`mx-auto text-center ${embedUrl ? 'max-w-3xl' : 'max-w-md py-12'}`}
     >
-      <div className="bg-white rounded-xl p-8 shadow-lg border border-[#06003F]/10">
-        {/* Checkmark Icon */}
-        <div className="w-16 h-16 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-green-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      <div className={embedUrl ? 'w-full' : 'bg-white rounded-xl p-6 sm:p-8 shadow-lg border border-[#06003F]/10'}>
+        {/* Only show "Thank you" and checkmark if NOT embedding */}
+        {!embedUrl && (
+          <div className="mb-6">
+            {/* Checkmark Icon */}
+            <div className="w-16 h-16 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            
+            <h3 className="text-xl font-semibold text-[#06003F] mb-3">
+              Thank you!
+            </h3>
+            <p className="text-[#06003F]/70 mb-6">
+              {message}
+            </p>
+          </div>
+        )}
+
+        {/* HubSpot Embed */}
+        {embedUrl && (
+          <div className="w-full bg-white min-h-[900px] overflow-visible">
+            <iframe
+              src={prefilledUrl}
+              width="100%"
+              height="1000"
+              frameBorder="0"
+              title="Schedule a Demo"
+              className="w-full"
+              style={{ minHeight: '1000px' }}
+            ></iframe>
+          </div>
+        )}
+        
+        {/* Submit Another Button - Only show if NOT embedding */}
+        {!embedUrl && (
+          <button
+            onClick={onReset}
+            className="text-[#FF4E3A] font-medium hover:underline transition-all"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        </div>
-        
-        {/* Success Message */}
-        <h3 className="text-xl font-semibold text-[#06003F] mb-3">
-          Thank you!
-        </h3>
-        <p className="text-[#06003F]/70 mb-6">
-          {message}
-        </p>
-        
-        {/* Submit Another Button */}
-        <button
-          onClick={onReset}
-          className="text-[#FF4E3A] font-medium hover:underline transition-all"
-        >
-          Submit another response
-        </button>
+            Submit another response
+          </button>
+        )}
       </div>
     </motion.div>
   );
@@ -363,11 +453,15 @@ export function DynamicForm({
   labelOverrides = {},
   placeholderOverrides = {},
   requiredOverrides = {},
+  submitButtonText = 'Submit',
+  redirectUrl,
+  successEmbedUrl,
 }: DynamicFormProps) {
   const [formStructure, setFormStructure] = useState<FormStructure | null>(null);
   const [formData, setFormData] = useState<Record<string, string>>(initialValues);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
   const [statusMessage, setStatusMessage] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -482,12 +576,85 @@ export function DynamicForm({
     };
   }, [formId]); // Only depend on formId, not initialValues
 
+  const validateField = (name: string, value: string, field: FormField): string => {
+    if (field.required && !value) {
+      return 'This field is required';
+    }
+
+    if (value) {
+      if (field.type === 'email' || name.includes('email')) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email address';
+        }
+      }
+
+      if (field.type === 'tel' || name.toLowerCase().includes('telephone') || name.toLowerCase().includes('phone')) {
+        // Only allow digits, spaces, hyphens, and parentheses
+        const validCharsRegex = /^[\d\s\+\-\(\)]*$/;
+        if (!validCharsRegex.test(value)) {
+          return 'Only numbers and +, -, (), spaces are allowed';
+        }
+        
+        const digits = value.replace(/\D/g, '');
+        if (digits.length < 7) {
+          return 'Phone number is too short (min 7 digits)';
+        }
+        if (digits.length > 15) {
+          return 'Phone number is too long (max 15 digits)';
+        }
+      }
+    }
+
+    return '';
+  };
+
   const handleFieldChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleBlur = (name: string) => {
+    if (formStructure) {
+      const field = formStructure.fields.find(f => f.name === name);
+      if (field) {
+        const fieldError = validateField(name, formData[name] || '', applyOverrides(field));
+        setErrors(prev => ({ ...prev, [name]: fieldError }));
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate all fields before submission
+    const newErrors: Record<string, string> = {};
+    let hasErrors = false;
+    
+    if (formStructure) {
+      formStructure.fields.forEach(field => {
+        const fieldError = validateField(field.name, formData[field.name] || '', applyOverrides(field));
+        if (fieldError) {
+          newErrors[field.name] = fieldError;
+          hasErrors = true;
+        }
+      });
+    }
+    
+    setErrors(newErrors);
+    
+    if (hasErrors) {
+      return;
+    }
+
     setSubmitStatus('loading');
     setStatusMessage('');
 
@@ -496,7 +663,18 @@ export function DynamicForm({
     if (result.success) {
       setSubmitStatus('success');
       setStatusMessage(successMessage);
+      
+      // Call onSuccess callback if provided
       onSuccess?.();
+
+      // Redirect if redirectUrl is provided
+      if (redirectUrl) {
+        // We use window.open for meeting links to keep the website open, 
+        // or window.location.href to redirect. 
+        // Given the requirement "as soon as a user clicks", 
+        // we'll open it in a new tab so they don't lose the success state on the site.
+        window.open(redirectUrl, '_blank');
+      }
     } else {
       setSubmitStatus('error');
       setStatusMessage(result.message);
@@ -538,7 +716,12 @@ export function DynamicForm({
   if (submitStatus === 'success') {
     return (
       <div className={className}>
-        <SuccessMessage message={statusMessage} onReset={handleReset} />
+        <SuccessMessage 
+          message={statusMessage} 
+          onReset={handleReset} 
+          embedUrl={successEmbedUrl}
+          formData={formData}
+        />
       </div>
     );
   }
@@ -574,7 +757,9 @@ export function DynamicForm({
                       field={overriddenField}
                       value={formData[field.name] || ''}
                       onChange={handleFieldChange}
+                      onBlur={handleBlur}
                       showLabel={showLabels}
+                      error={errors[field.name]}
                     />
                   </div>
                 );
@@ -592,13 +777,17 @@ export function DynamicForm({
                         field={overriddenField}
                         value={formData[field.name] || ''}
                         onChange={handleFieldChange}
+                        onBlur={handleBlur}
                         showLabel={showLabels}
+                        error={errors[field.name]}
                       />
                       <FieldRenderer
                         field={overriddenNextField}
                         value={formData[nextField.name] || ''}
                         onChange={handleFieldChange}
+                        onBlur={handleBlur}
                         showLabel={showLabels}
+                        error={errors[nextField.name]}
                       />
                     </div>
                   );
@@ -610,7 +799,9 @@ export function DynamicForm({
                         field={overriddenField}
                         value={formData[field.name] || ''}
                         onChange={handleFieldChange}
+                        onBlur={handleBlur}
                         showLabel={showLabels}
+                        error={errors[field.name]}
                       />
                     </div>
                   );
@@ -627,7 +818,9 @@ export function DynamicForm({
               field={applyOverrides(field)}
               value={formData[field.name] || ''}
               onChange={handleFieldChange}
+              onBlur={handleBlur}
               showLabel={showLabels}
+              error={errors[field.name]}
             />
           ))
         )}
@@ -646,7 +839,7 @@ export function DynamicForm({
             disabled={submitStatus === 'loading'}
             className={buttonStyles}
           >
-            {submitStatus === 'loading' ? 'Submitting...' : 'Submit'}
+            {submitStatus === 'loading' ? 'Submitting...' : submitButtonText}
           </button>
         </div>
       </form>

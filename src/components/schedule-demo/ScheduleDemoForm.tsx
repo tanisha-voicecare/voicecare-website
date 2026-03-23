@@ -74,6 +74,8 @@ export function ScheduleDemoForm() {
         labelOverrides={LABEL_OVERRIDES}
         placeholderOverrides={PLACEHOLDER_OVERRIDES}
         requiredOverrides={REQUIRED_OVERRIDES}
+        submitButtonText="Select Slot"
+        successEmbedUrl="https://meetings-na2.hubspot.com/parag-j/voicecare-ai-demo"
       />
     </section>
   );
