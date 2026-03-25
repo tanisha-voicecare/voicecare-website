@@ -334,7 +334,7 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                     <h3 className="text-[18px] sm:text-[19px] md:text-[20px] font-bold text-[#06003F] mb-1 group-hover:text-[#FF4E3A] transition-colors duration-200">
                       {advisor.name}
                     </h3>
-                    <p className="text-[14px] sm:text-[15px] text-[#06003F]/50 leading-relaxed line-clamp-2">
+                    <p className="text-[14px] sm:text-[15px] text-[#06003F]/50 leading-relaxed">
                       {advisor.designation}
                     </p>
                   </div>
