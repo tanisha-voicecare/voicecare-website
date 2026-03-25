@@ -160,6 +160,7 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const selectedAdvisorData = selectedAdvisor !== null ? advisors[selectedAdvisor] : null;
 
   // Check scroll position and update arrow visibility
   const checkScrollPosition = () => {
@@ -426,42 +427,57 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                       </p>
                     </div>
 
-                    {advisors[selectedAdvisor].logos &&
-                      advisors[selectedAdvisor].logos.length > 0 && (
+                    {selectedAdvisorData?.logos &&
+                      selectedAdvisorData.logos.length > 0 && (
                         <div>
                           <h3 className="text-[12px] font-bold uppercase tracking-widest text-[#06003F]/40 mb-3 sm:mb-4">
                             Affiliations
                           </h3>
-                          <div className="grid grid-cols-3 gap-x-4 gap-y-4 items-center justify-items-center">
-                            {advisors[selectedAdvisor].logos.map((logo, idx) => (
-                              <div
-                                key={idx}
-                                className="w-full flex items-center justify-center"
-                              >
-                                <Image
-                                  src={logo.src}
-                                  alt={logo.alt}
-                                  width={140}
-                                  height={56}
-                                  sizes="(max-width: 640px) 95px, (max-width: 768px) 110px, 140px"
-                                  className="h-10 sm:h-11 md:h-12 w-full max-w-[110px] sm:max-w-[125px] md:max-w-[140px] object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                                />
-                              </div>
-                            ))}
-                          </div>
+                          {/* Logo row layout tuned to keep short lists on one line. */}
+                          {selectedAdvisorData.logos.length === 4 ? (
+                            <div className="inline-grid grid-cols-4 gap-x-6 gap-y-3 items-center justify-items-center">
+                              {selectedAdvisorData.logos.map((logo, idx) => (
+                                <div key={idx} className="w-full flex items-center justify-center">
+                                  <Image
+                                    src={logo.src}
+                                    alt={logo.alt}
+                                    width={140}
+                                    height={56}
+                                    sizes="(max-width: 640px) 95px, (max-width: 768px) 110px, 130px"
+                                    className="h-11 sm:h-12 md:h-[52px] w-auto max-w-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="inline-grid grid-cols-3 gap-x-8 gap-y-4 items-center justify-items-center">
+                              {selectedAdvisorData.logos.map((logo, idx) => (
+                                <div key={idx} className="w-full flex items-center justify-center">
+                                  <Image
+                                    src={logo.src}
+                                    alt={logo.alt}
+                                    width={160}
+                                    height={56}
+                                    sizes="(max-width: 640px) 110px, (max-width: 768px) 130px, 150px"
+                                    className="h-11 sm:h-12 md:h-[52px] w-auto max-w-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )}
 
                     {/* Text-based affiliations (when no logos are available) */}
-                    {(!advisors[selectedAdvisor].logos || advisors[selectedAdvisor].logos.length === 0) &&
-                      advisors[selectedAdvisor].affiliationTexts &&
-                      advisors[selectedAdvisor].affiliationTexts!.length > 0 && (
+                    {(!selectedAdvisorData?.logos || selectedAdvisorData.logos.length === 0) &&
+                      selectedAdvisorData?.affiliationTexts &&
+                      selectedAdvisorData.affiliationTexts.length > 0 && (
                         <div>
                           <h3 className="text-[12px] font-bold uppercase tracking-widest text-[#06003F]/40 mb-3 sm:mb-4">
                             Affiliations
                           </h3>
                           <div className="flex gap-2 sm:gap-3 items-center flex-wrap justify-center md:justify-start">
-                            {advisors[selectedAdvisor].affiliationTexts!.map((text, idx) => (
+                            {selectedAdvisorData.affiliationTexts.map((text, idx) => (
                               <span
                                 key={idx}
                                 className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-[8px] bg-[#06003F]/5 text-[13px] sm:text-[14px] text-[#06003F]/70 font-medium"
