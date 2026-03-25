@@ -73,6 +73,45 @@ const DEFAULT_CONTENT: AdvisorsSectionContent = {
       ],
     },
     {
+      name: 'Brian Colao',
+      role: 'Customer Advisory, Dental',
+      designation: 'Member & Director of the Dental Service Organization Industry Group at Dykema',
+      description: 'Brian A. Colao specializes in complex commercial litigation nationwide, handling a wide range of business disputes such as contracts, franchise issues, fiduciary duty breaches, intellectual property infringement, unfair competition, and other related claims.',
+      image: '/images/company/advisors/photos/brian-colao-dental.jpg',
+      logos: [
+        { src: '/images/company/advisors/logos/dykema.png', alt: 'Dykema' },
+        { src: '/images/company/advisors/logos/vanderbilt-university.png', alt: 'Vanderbilt University Law School' },
+      ],
+      affiliationTexts: ['Dykema', 'Vanderbilt University Law School'],
+    },
+    {
+      name: 'Kate Smith',
+      role: 'Customer Advisory, Dental',
+      designation: 'Director of Revenue Cycle, OMS360',
+      description: '15 years of experience as a revenue cycle leader helping healthcare organizations improve profitability and efficiency. She specializes in strategy execution, KPI optimization, contract analysis, training, and educating teams on revenue cycle best practices.',
+      image: '/images/company/advisors/photos/kate-smith-dental.JPG',
+      logos: [
+        { src: '/images/company/advisors/logos/oms360.png', alt: 'OMS360' },
+        { src: '/images/company/advisors/logos/guidehouse.png', alt: 'Guidehouse' },
+        { src: '/images/company/advisors/logos/central-michigan-university.png', alt: 'Central Michigan University' },
+      ],
+      affiliationTexts: ['OMS360', 'Guidehouse', 'Central Michigan University'],
+    },
+    {
+      name: 'Charles Bush-Joseph, MD',
+      role: 'Customer Advisory, Specialty',
+      designation: 'Orthopedic Surgeon, Professor, Rush University Medical Center, Team Physician Chicago White Sox',
+      description: 'Dr. Charles Bush-Joseph is a renowned sports medicine and arthroscopic surgical specialist, known for his warm and compassionate bedside manner. He is currently a Professor at Rush University Medical Center, where he also serves as the Associate Director of the Rush Orthopaedic Sports Medicine Fellowship Program. He is a team physician for the Chicago White Sox (MLB) and an Associate Team Physician for the Chicago Bulls (NBA).',
+      image: '/images/company/advisors/photos/bush-joseph-charles-ortho.jpg',
+      logos: [
+        { src: '/images/company/advisors/logos/midwest-ortho.png', alt: 'Midwest Orthopaedics at Rush' },
+        { src: '/images/company/advisors/logos/rush-university.png', alt: 'Rush University' },
+        { src: '/images/company/advisors/logos/chicago-white-sox.png', alt: 'Chicago White Sox' },
+        { src: '/images/company/advisors/logos/chicago-bulls.png', alt: 'Chicago Bulls' },
+      ],
+      affiliationTexts: ['Midwest Orthopaedics at Rush', 'Rush University', 'Chicago White Sox', 'Chicago Bulls'],
+    },
+    {
       name: 'Mark Nathan',
       role: 'Advisor',
       designation: 'CEO and Founder, Mangoose Health and Burrow Software',
@@ -253,6 +292,9 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
 
+                      {/* Brand consistent glow overlay (bottom-left) */}
+                      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-[#FF4E3A]/25 blur-[40px] rounded-full pointer-events-none z-10" />
+
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-[#06003F]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
@@ -276,7 +318,9 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                             ? 'bg-[#FF4E3A] text-white'
                             : advisor.role === 'Board Member'
                               ? 'bg-[#06003F] text-white'
-                              : 'bg-white text-[#06003F]'
+                              : advisor.role.startsWith('Customer Advisory')
+                                ? 'bg-white text-[#06003F]'
+                                : 'bg-white text-[#06003F]'
                         }`}
                       >
                         {advisor.role}
@@ -358,6 +402,8 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                           sizes="(max-width: 640px) 240px, (max-width: 768px) 280px, 320px"
                           className="w-full h-full object-cover"
                         />
+                        {/* Brand consistent glow overlay (bottom-left) */}
+                        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-[#FF4E3A]/25 blur-[60px] rounded-full pointer-events-none z-10" />
                       </div>
                     </div>
                   </div>
@@ -386,17 +432,42 @@ export function AdvisorsSection({ content }: AdvisorsSectionProps) {
                           <h3 className="text-[12px] font-bold uppercase tracking-widest text-[#06003F]/40 mb-3 sm:mb-4">
                             Affiliations
                           </h3>
-                          <div className="flex gap-4 sm:gap-6 items-center flex-wrap justify-center md:justify-start">
+                          <div className="grid grid-cols-3 gap-x-4 gap-y-4 items-center justify-items-center">
                             {advisors[selectedAdvisor].logos.map((logo, idx) => (
-                              <Image
+                              <div
                                 key={idx}
-                                src={logo.src}
-                                alt={logo.alt}
-                                width={120}
-                                height={56}
-                                sizes="120px"
-                                className="h-10 sm:h-11 md:h-12 w-auto max-w-[140px] object-contain object-left grayscale hover:grayscale-0 transition-all duration-300"
-                              />
+                                className="w-full flex items-center justify-center"
+                              >
+                                <Image
+                                  src={logo.src}
+                                  alt={logo.alt}
+                                  width={140}
+                                  height={56}
+                                  sizes="(max-width: 640px) 95px, (max-width: 768px) 110px, 140px"
+                                  className="h-10 sm:h-11 md:h-12 w-full max-w-[110px] sm:max-w-[125px] md:max-w-[140px] object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    {/* Text-based affiliations (when no logos are available) */}
+                    {(!advisors[selectedAdvisor].logos || advisors[selectedAdvisor].logos.length === 0) &&
+                      advisors[selectedAdvisor].affiliationTexts &&
+                      advisors[selectedAdvisor].affiliationTexts!.length > 0 && (
+                        <div>
+                          <h3 className="text-[12px] font-bold uppercase tracking-widest text-[#06003F]/40 mb-3 sm:mb-4">
+                            Affiliations
+                          </h3>
+                          <div className="flex gap-2 sm:gap-3 items-center flex-wrap justify-center md:justify-start">
+                            {advisors[selectedAdvisor].affiliationTexts!.map((text, idx) => (
+                              <span
+                                key={idx}
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-[8px] bg-[#06003F]/5 text-[13px] sm:text-[14px] text-[#06003F]/70 font-medium"
+                              >
+                                {text}
+                              </span>
                             ))}
                           </div>
                         </div>

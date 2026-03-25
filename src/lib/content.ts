@@ -803,11 +803,12 @@ export interface PrinciplesSectionContent {
 
 export interface AdvisorItem {
   name: string;
-  role: 'Investor' | 'Board Member' | 'Advisor';
+  role: 'Investor' | 'Board Member' | 'Advisor' | 'Customer Advisory, Dental' | 'Customer Advisory, Specialty';
   designation: string;
   description: string;
   image: string;
   logos: Array<{ src: string; alt: string }>;
+  affiliationTexts?: string[];
 }
 
 export interface AdvisorsSectionContent {
@@ -911,6 +912,33 @@ export async function getCompanyContent(): Promise<CompanyContent> {
           ],
         },
         {
+          name: 'Brian Colao',
+          role: 'Customer Advisory, Dental',
+          designation: 'Member & Director of the Dental Service Organization Industry Group at Dykema',
+          description: 'Brian A. Colao specializes in complex commercial litigation nationwide, handling a wide range of business disputes such as contracts, franchise issues, fiduciary duty breaches, intellectual property infringement, unfair competition, and other related claims.',
+          image: '/images/company/advisors/photos/brian-colao-dental.jpg',
+          logos: [],
+          affiliationTexts: ['Dykema', 'Vanderbilt University Law School'],
+        },
+        {
+          name: 'Kate Smith',
+          role: 'Customer Advisory, Dental',
+          designation: 'Director of Revenue Cycle, OMS360',
+          description: '15 years of experience as a revenue cycle leader helping healthcare organizations improve profitability and efficiency. She specializes in strategy execution, KPI optimization, contract analysis, training, and educating teams on revenue cycle best practices.',
+          image: '/images/company/advisors/photos/kate-smith-dental.JPG',
+          logos: [],
+          affiliationTexts: ['OMS360', 'Guidehouse', 'Central Michigan University'],
+        },
+        {
+          name: 'Charles Bush-Joseph, MD',
+          role: 'Customer Advisory, Specialty',
+          designation: 'Orthopedic Surgeon, Professor, Rush University Medical Center, Team Physician Chicago White Sox',
+          description: 'Dr. Charles Bush-Joseph is a renowned sports medicine and arthroscopic surgical specialist, known for his warm and compassionate bedside manner. He is currently a Professor at Rush University Medical Center, where he also serves as the Associate Director of the Rush Orthopaedic Sports Medicine Fellowship Program. He is a team physician for the Chicago White Sox (MLB) and an Associate Team Physician for the Chicago Bulls (NBA).',
+          image: '/images/company/advisors/photos/bush-joseph-charles-ortho.jpg',
+          logos: [],
+          affiliationTexts: ['Midwest Orthopaedics at Rush', 'Rush University', 'Chicago White Sox', 'Chicago Bulls'],
+        },
+        {
           name: 'Mark Nathan',
           role: 'Advisor',
           designation: 'CEO and Founder, Mangoose Health and Burrow Software',
@@ -949,7 +977,62 @@ export async function getCompanyContent(): Promise<CompanyContent> {
   };
 
   const wpData = await getContent<CompanyContent>('company');
-  return deepMerge(fallback, wpData);
+  const result = deepMerge(fallback, wpData);
+
+  // Customer Advisory advisors — always injected after Andrew Vaz
+  // (these are hardcoded here because they are not yet in WordPress)
+  const customerAdvisoryAdvisors: AdvisorItem[] = [
+    {
+      name: 'Brian Colao',
+      role: 'Customer Advisory, Dental',
+      designation: 'Member & Director of the Dental Service Organization Industry Group at Dykema',
+      description: 'Brian A. Colao specializes in complex commercial litigation nationwide, handling a wide range of business disputes such as contracts, franchise issues, fiduciary duty breaches, intellectual property infringement, unfair competition, and other related claims.',
+      image: '/images/company/advisors/photos/brian-colao-dental.jpg',
+      logos: [
+        { src: '/images/company/advisors/logos/dykema.png', alt: 'Dykema' },
+        { src: '/images/company/advisors/logos/vanderbilt-university.png', alt: 'Vanderbilt University Law School' },
+      ],
+      affiliationTexts: ['Dykema', 'Vanderbilt University Law School'],
+    },
+    {
+      name: 'Kate Smith',
+      role: 'Customer Advisory, Dental',
+      designation: 'Director of Revenue Cycle, OMS360',
+      description: '15 years of experience as a revenue cycle leader helping healthcare organizations improve profitability and efficiency. She specializes in strategy execution, KPI optimization, contract analysis, training, and educating teams on revenue cycle best practices.',
+      image: '/images/company/advisors/photos/kate-smith-dental.JPG',
+      logos: [
+        { src: '/images/company/advisors/logos/oms360.png', alt: 'OMS360' },
+        { src: '/images/company/advisors/logos/guidehouse.png', alt: 'Guidehouse' },
+        { src: '/images/company/advisors/logos/central-michigan-university.png', alt: 'Central Michigan University' },
+      ],
+      affiliationTexts: ['OMS360', 'Guidehouse', 'Central Michigan University'],
+    },
+    {
+      name: 'Charles Bush-Joseph, MD',
+      role: 'Customer Advisory, Specialty',
+      designation: 'Orthopedic Surgeon, Professor, Rush University Medical Center, Team Physician Chicago White Sox',
+      description: 'Dr. Charles Bush-Joseph is a renowned sports medicine and arthroscopic surgical specialist, known for his warm and compassionate bedside manner. He is currently a Professor at Rush University Medical Center, where he also serves as the Associate Director of the Rush Orthopaedic Sports Medicine Fellowship Program. He is a team physician for the Chicago White Sox (MLB) and an Associate Team Physician for the Chicago Bulls (NBA).',
+      image: '/images/company/advisors/photos/bush-joseph-charles-ortho.jpg',
+      logos: [
+        { src: '/images/company/advisors/logos/midwest-ortho.png', alt: 'Midwest Orthopaedics at Rush' },
+        { src: '/images/company/advisors/logos/rush-university.png', alt: 'Rush University' },
+        { src: '/images/company/advisors/logos/chicago-white-sox.png', alt: 'Chicago White Sox' },
+        { src: '/images/company/advisors/logos/chicago-bulls.png', alt: 'Chicago Bulls' },
+      ],
+      affiliationTexts: ['Midwest Orthopaedics at Rush', 'Rush University', 'Chicago White Sox', 'Chicago Bulls'],
+    },
+  ];
+
+  // Remove duplicates in case they already exist in the WP/fallback data
+  const newNames = new Set(customerAdvisoryAdvisors.map(a => a.name));
+  result.advisors.advisors = result.advisors.advisors.filter(a => !newNames.has(a.name));
+
+  // Insert after Andrew Vaz, or append at the end
+  const vazIndex = result.advisors.advisors.findIndex(a => a.name === 'Andrew Vaz');
+  const insertAt = vazIndex !== -1 ? vazIndex + 1 : result.advisors.advisors.length;
+  result.advisors.advisors.splice(insertAt, 0, ...customerAdvisoryAdvisors);
+
+  return result;
 }
 
 // ============================================
