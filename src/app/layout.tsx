@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Header, Footer, ScrollToTop, AnnouncementBanner } from '@/components/layout';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { HubSpotTracking } from '@/components/HubSpotTracking';
 import { RB2B } from '@/components/RB2B';
 import { generateSiteMetadata } from '@/lib/seo';
 import { getLayoutContent } from '@/lib/content';
@@ -48,6 +49,7 @@ export default async function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-white font-sans antialiased">
         <GoogleAnalytics />
+        <HubSpotTracking />
         <RB2B />
         <ScrollToTop />
         <div className="flex min-h-screen flex-col">
