@@ -36,8 +36,10 @@ export function ConferenceBanner({ className = '' }: ConferenceBannerProps) {
           <div className="text-[14px] sm:text-[15px] text-white/90">
             <span className="font-semibold text-white">
               {announcement.highlight}
-            </span>{' '}
-            {announcement.text}
+            </span>
+            <span className="hidden sm:inline">
+              {' '}{announcement.text}
+            </span>
           </div>
           <ArrowRight className="w-4 h-4 text-[#FF4E3A] transition-transform group-hover:translate-x-1 flex-shrink-0 mt-1 " />
         </Link>
