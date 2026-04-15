@@ -13,9 +13,10 @@ import type { AnnouncementBannerContent } from '@/lib/content';
 
 interface AnnouncementBannerProps {
   content?: AnnouncementBannerContent;
+  className?: string;
 }
 
-export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
+export function AnnouncementBanner({ content, className = '' }: AnnouncementBannerProps) {
   // Use announcements from WP content, or default fallback
   const displayAnnouncements = (content?.announcements || []).map((item, index) => ({
     id: index + 1,
@@ -29,7 +30,7 @@ export function AnnouncementBanner({ content }: AnnouncementBannerProps) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-      className="relative mt-14 bg-gradient-to-r from-[#06003F] via-[#06003F]/95 to-[#06003F] border-b border-[#FF4E3A]/20 overflow-hidden"
+      className={`relative bg-gradient-to-r from-[#06003F] via-[#06003F]/95 to-[#06003F] border-b border-[#FF4E3A]/20 overflow-hidden ${className}`}
     >
       <div className="flex items-center gap-3 py-3">
         <Sparkles className="w-4 h-4 text-[#FF4E3A] flex-shrink-0 ml-4 sm:ml-6" />

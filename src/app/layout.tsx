@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import { Header, Footer, ScrollToTop, AnnouncementBanner } from '@/components/layout';
+import { Header, Footer, ScrollToTop, AnnouncementBanner, ConferenceBanner } from '@/components/layout';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { HubSpotTracking } from '@/components/HubSpotTracking';
 import { RB2B } from '@/components/RB2B';
@@ -54,6 +54,7 @@ export default async function RootLayout({
         <ScrollToTop />
         <div className="flex min-h-screen flex-col">
           <Header />
+          <ConferenceBanner className="mt-14" />
           <AnnouncementBanner content={layoutContent.announcementBanner} />
           <main className="flex-1">{children}</main>
           <Footer content={layoutContent.footer} />
