@@ -1,31 +1,29 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from 'next';
+import { siteConfig } from '@/lib/seo';
 
-import { siteConfig } from "@/lib/site-config";
-
-/**
- * Generates /sitemap.xml via Next.js Metadata API.
- *
- * Add new routes here as pages are created.
- * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
- */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-  const routes = [
-    "",
-    "/solutions",
-    "/company",
-    "/pricing",
-    "/schedule-demo",
-    "/blog",
-    "/careers",
-    "/security",
-    "/partner-with-us",
-  ];
+  const baseUrl = siteConfig.url;
 
-  return routes.map((route) => ({
-    url: `${siteConfig.url}${route}`,
-    lastModified: now,
-    changeFrequency: route === "" || route === "/solutions" ? "weekly" : "monthly",
-    priority: route === "" ? 1.0 : route === "/solutions" ? 0.8 : 0.6,
-  })) as MetadataRoute.Sitemap;
+  // Static routes - all implemented pages
+  const routes = [
+    '',
+    '/platform',
+    '/security',
+    '/company',
+    '/careers',
+    '/press',
+    '/schedule-demo',
+    // '/partner-with-us', // Commented out - not needed for now
+    '/who-we-serve',
+    '/blog',
+    '/privacy-policy',
+    '/terms-of-service',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: route === '' ? 1 : 0.8,
+  }));
+
+  return routes;
 }

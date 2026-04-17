@@ -1,51 +1,64 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import { Header, Footer, ScrollToTop, AnnouncementBanner, ConferenceBanner } from '@/components/layout';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { HubSpotTracking } from '@/components/HubSpotTracking';
+import { RB2B } from '@/components/RB2B';
+import { generateSiteMetadata } from '@/lib/seo';
+import { getLayoutContent } from '@/lib/content';
+import './globals.css';
 
-import { GoogleAnalytics, HubSpotTracking, RB2B } from "@/components/analytics";
-import { generateSiteMetadata } from "@/lib/seo";
-import { OrganizationJsonLd } from "@/lib/json-ld";
+// ============================================
+// Font Configuration - Inter (EXACT from designer-src)
+// ============================================
 
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700', '800'],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+// ============================================
+// Metadata
+// ============================================
 
 export const metadata: Metadata = generateSiteMetadata();
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#06003f" },
-  ],
-  width: "device-width",
+  themeColor: '#06003F',
+  width: 'device-width',
   initialScale: 1,
+  maximumScale: 5,
 };
 
-export default function RootLayout({
+// ============================================
+// Root Layout
+// ============================================
+
+export const revalidate = 10; // Revalidate layout content every 10 minutes
+
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const layoutContent = await getLayoutContent();
+
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={inter.variable}>
+      <body className="min-h-screen bg-white font-sans antialiased">
         <GoogleAnalytics />
         <HubSpotTracking />
         <RB2B />
-        <OrganizationJsonLd />
-        {children}
+        <ScrollToTop />
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <ConferenceBanner className="mt-14" />
+          <AnnouncementBanner content={layoutContent.announcementBanner} />
+          <main className="flex-1">{children}</main>
+          <Footer content={layoutContent.footer} />
+        </div>
       </body>
     </html>
   );

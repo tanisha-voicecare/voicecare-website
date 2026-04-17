@@ -1,27 +1,36 @@
-import { NextRequest, NextResponse } from "next/server";
+/**
+ * API Route: Proxy for WordPress Form Fields
+ * Fetches form field definitions from WordPress server-side,
+ * so the client never needs to call WordPress directly.
+ * 
+ * Uses wp-fetch utility to connect directly to WordPress server IP
+ * with proper TLS SNI, bypassing DNS resolution issues.
+ */
 
-import { wpGet } from "@/lib/wp-fetch";
+import { NextRequest, NextResponse } from 'next/server';
+import { wpGet } from '@/lib/wp-fetch';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ formId: string }> }
 ) {
   const { formId } = await params;
-  void request;
 
   try {
     const response = await wpGet(`/wp-json/voicecare/v1/form-fields/${formId}`);
 
     if (!response) {
+      console.error(`[Form Fields Proxy] No response for form ${formId}`);
       return NextResponse.json(
-        { success: false, message: "WordPress server unreachable" },
+        { success: false, message: 'WordPress server unreachable' },
         { status: 502 }
       );
     }
 
     if (!response.ok) {
+      console.error(`[Form Fields Proxy] Failed to fetch form ${formId}:`, response.status);
       return NextResponse.json(
-        { success: false, message: "Form not found" },
+        { success: false, message: 'Form not found' },
         { status: response.status }
       );
     }
@@ -31,7 +40,7 @@ export async function GET(
   } catch (error) {
     console.error(`[Form Fields Proxy] Error fetching form ${formId}:`, error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch form fields" },
+      { success: false, message: 'Failed to fetch form fields' },
       { status: 500 }
     );
   }
